@@ -45,7 +45,7 @@ public class Cards implements MouseMotionListener{
         System.out.println(x);
         System.out.println(y);
         
-        this.myDraw(g);
+        //this.myDraw(g);
     }
     public void mouseMoved(MouseEvent e) {
     }
