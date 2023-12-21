@@ -13,22 +13,21 @@ public class Battle extends JPanel {
     private JLabel messageLabel;
 
     private JPanel cardPanel = new JPanel() {
-        @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
 
             // Display player's cards
             for (int i = 0; i < 8; i++) {
-                player.deck[i].setX(10 + i * 150);
-                player.deck[i].setY(10);
+                player.deck[i].setX(-80 + i * 100);
+                player.deck[i].setY(800);
                 player.deck[i].myDraw(g);
                 drawCardInfo(g, player.deck[i]);
             }
 
             // Display enemy's cards
             for (int i = 0; i < 8; i++) {
-                enemy.deck[i].setX(10 + i * 150);
-                enemy.deck[i].setY(150);
+                enemy.deck[i].setX(1380 + i * -100);
+                enemy.deck[i].setY(800);
                 enemy.deck[i].myDraw(g);
                 drawCardInfo(g, enemy.deck[i]);
             }
