@@ -22,7 +22,7 @@ public class Cards implements MouseMotionListener {
     }
 
     public boolean isInside(int mx, int my) {
-        return (x - 80 < mx && y - 120 < my && x + 150 > mx && y + 220 > my);
+        return (x - 10 < mx && y - 10 < my && x + 110 > mx && y + 210 > my);
     }
 
     public void setHealth(int newHealth) {
