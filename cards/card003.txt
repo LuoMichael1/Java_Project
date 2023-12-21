@@ -1,0 +1,4 @@
+name elixer
+damage 1
+ambrosiaCost 0
+ambrosiaGive 2

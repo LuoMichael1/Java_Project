@@ -1,0 +1,4 @@
+name strong
+damage 4
+ambrosiaCost 1
+ambrosiaGive 0

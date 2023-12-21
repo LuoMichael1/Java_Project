@@ -1,0 +1,4 @@
+name punch
+damage 2
+ambrosiaCost 0
+ambrosiaGive 0
