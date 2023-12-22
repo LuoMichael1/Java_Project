@@ -34,7 +34,7 @@ public class GamePanel extends JPanel implements MouseMotionListener, MouseListe
         this.addMouseListener(this);
 
         instructionLabel = new JLabel(
-                "This is a card-based auto battler. Drag four cards into the boxes to take into battle, then press Start Battle");
+                "This is a card-based auto battler. Drag exactly four cards into the boxes to take into battle, then press Start Battle");
         instructionLabel.setHorizontalAlignment(SwingConstants.CENTER);
         instructionLabel.setFont(new Font("Arial", Font.BOLD, 16));
         this.add(instructionLabel, BorderLayout.NORTH);
