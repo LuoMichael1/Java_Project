@@ -1,7 +1,7 @@
 // This is the abstract class that encompasses both player and enemy
 public abstract class Battler {
 
-    public int cardsUsed;
+    public int cardsUsed = 0;
 
     protected Cards deck[] = new Cards[8];
 
@@ -13,7 +13,7 @@ public abstract class Battler {
     public Battler() {
 
         // create the players deck
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < GamePanel.deckSize; i++) {
             deck[i] = new Cards(i * 150 + 20, 600);
             System.out.println("hello");
             System.out.println(i);

@@ -7,6 +7,9 @@ public class Battle extends JPanel {
     private Player player;
     private Enemy enemy;
 
+    private int round = 0;
+    private int turn; 
+
     // space for messages
     private JLabel messageLabel;
     private JLabel instructionLabel;
@@ -18,16 +21,16 @@ public class Battle extends JPanel {
             super.paintComponent(g);
 
             // display player's cards
-            for (int i = 0; i < 4; i++) {
-                playerSelectedCards.get(i).setX(20 + i * 100);
+            for (int i = 0; i < GamePanel.deckSize; i++) {
+                playerSelectedCards.get(i).setX(20 + i * 106);
                 playerSelectedCards.get(i).setY(750);
                 playerSelectedCards.get(i).myDraw(g);
                 drawCardInfo(g, playerSelectedCards.get(i));
             }
 
             // display enemy's cards
-            for (int i = 0; i < 4; i++) {
-                enemy.deck[i].setX(1200 + i * -100);
+            for (int i = 0; i < GamePanel.deckSize; i++) {
+                enemy.deck[i].setX(1200 + i * -106);
                 enemy.deck[i].setY(100);
                 enemy.deck[i].myDraw(g);
                 drawCardInfo(g, enemy.deck[i]);
@@ -88,12 +91,22 @@ public class Battle extends JPanel {
 
         repaint();
 
+        // fix this while true statement
         while (true) {
+
+            // if round is even, it is the player's turn, if round is odd, its the enemy's turn. turn is 0 or 1 to make using an array easier
+            round++;
+            if (round%2 == 0)
+                turn = 0;
+            else
+                turn = 1;
 
             messageLabel.setText("Player card " + player.cardsUsed + " attacks enemy card " + enemy.cardsUsed);
             performAttack(playerSelectedCards.get(player.cardsUsed), enemy.deck[enemy.cardsUsed]);
 
             repaint();
+
+            
 
             if (enemy.deck[enemy.cardsUsed].getHealth() <= 0) {
 
@@ -101,7 +114,7 @@ public class Battle extends JPanel {
                 enemy.cardsUsed++;
             }
 
-            if (enemy.cardsUsed == 4) {
+            if (enemy.cardsUsed == GamePanel.deckSize) {
                 System.out.println("Enemy loses!");
                 break;
             }
@@ -115,7 +128,8 @@ public class Battle extends JPanel {
 
             messageLabel.setText("Enemy card " + enemy.cardsUsed + " attacks player card " + player.cardsUsed);
             performAttack(enemy.deck[enemy.cardsUsed], playerSelectedCards.get(player.cardsUsed));
-
+            
+            //enemy.deck[enemy.cardsUsed];
             repaint();
 
             if (playerSelectedCards.get(player.cardsUsed).getHealth() <= 0) {
@@ -124,7 +138,7 @@ public class Battle extends JPanel {
                 player.cardsUsed++;
             }
 
-            if (player.cardsUsed == 4) {
+            if (player.cardsUsed == GamePanel.deckSize) {
                 System.out.println("Player loses!");
                 break;
             }
