@@ -8,17 +8,40 @@ public class Cards implements MouseMotionListener {
     private ImageIcon cardtest;
     private int health, attack;
     // private JLabel cardtest2;
+    private int originalX, originalY;
+    private int selectionIndex = -1;
 
     public Cards(int x, int y) {
         cardtest = new ImageIcon("card.png");
+
         this.x = x;
         this.y = y;
+        this.originalX = x;
+        this.originalY = y;
 
         health = (int) (Math.random() * 10 + 1);
         attack = (int) (Math.random() * 3 + 1);
         // cardtest2 = new JLabel(cardtest);
         // cardtest2.setOpaque(false);
         // cardtest2.addMouseMotionListener(this);
+    }
+
+    public Cards(int x, int y, int health, int attack, int originalX, int originalY, int selectionIndex) {
+
+        cardtest = new ImageIcon("card.png");
+
+        this.x = x;
+        this.y = y;
+        this.health = health;
+        this.attack = attack;
+        this.originalX = originalX;
+        this.originalY = originalY;
+        this.selectionIndex = selectionIndex;
+    }
+
+    public Cards makeCopy() {
+
+        return new Cards(x, y, health, attack, originalX, originalY, selectionIndex);
     }
 
     public boolean isInside(int mx, int my) {
@@ -58,6 +81,22 @@ public class Cards implements MouseMotionListener {
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    public int getOriginalX() {
+        return originalX;
+    }
+
+    public int getOriginalY() {
+        return originalY;
+    }
+
+    public int getSelectionIndex() {
+        return selectionIndex;
+    }
+
+    public void setSelectionIndex(int index) {
+        selectionIndex = index;
     }
 
     public void myDraw(Graphics g) {
