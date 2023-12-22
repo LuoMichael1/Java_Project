@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Battle extends JPanel {
 
     private JLabel playerLabel;
-    private JLabel opponentLabel;
+    private JLabel enemyLabel;
 
     private Player player;
     private Enemy enemy;
@@ -21,10 +21,10 @@ public class Battle extends JPanel {
 
             // Display player's cards
             for (int i = 0; i < 4; i++) {
-                player.deck[i].setX(20 + i * 100);
-                player.deck[i].setY(750);
-                player.deck[i].myDraw(g);
-                drawCardInfo(g, player.deck[i]);
+                playerSelectedCards.get(i).setX(20 + i * 100);
+                playerSelectedCards.get(i).setY(750);
+                playerSelectedCards.get(i).myDraw(g);
+                drawCardInfo(g, playerSelectedCards.get(i));
             }
 
             // Display enemy's cards
@@ -45,13 +45,30 @@ public class Battle extends JPanel {
     };
 
     public Battle(Player player, ArrayList<Cards> playerSelectedCards) {
+
+        // check if cards are selected correctly
+        for (Cards card : playerSelectedCards) {
+            System.out.println(card.getHealth() + " " + card.getAttack());
+        }
+
         // Set up the panel
         setLayout(new BorderLayout());
 
         // space for messages
         messageLabel = new JLabel("");
-        messageLabel.setBounds(500, 500, 300, 20); // Set absolute coordinates for the message label
+        messageLabel.setBounds(500, 500, 300, 20);
+        messageLabel.setFont(new Font("Arial", Font.BOLD, 16));
         add(messageLabel);
+
+        playerLabel = new JLabel("Player");
+        playerLabel.setBounds(100, 500, 300, 20);
+        playerLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        add(messageLabel);
+
+        enemyLabel = new JLabel("Enemy");
+        enemyLabel.setBounds(1000, 300, 300, 20);
+        enemyLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        add(enemyLabel);
 
         // Create components
         add(cardPanel, BorderLayout.CENTER);

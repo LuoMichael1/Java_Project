@@ -62,18 +62,9 @@ public class Cards implements MouseMotionListener {
 
     public void myDraw(Graphics g) {
 
-        // check if card is being drawn
-        System.out.println("Drawing card at (" + x + ", " + y + ")");
-
         // cardtest.paintIcon(null, g, x - 60, y - 100);
-        if (cardtest.getImage() != null) {
-            g.drawImage(cardtest.getImage(), x, y, null);
-        } else {
-            g.setColor(Color.RED);
-            g.fillRect(x, y, 50, 70); // Draw a red rectangle if the image is not loaded
-        }
+        g.drawImage(cardtest.getImage(), x, y, null);
 
-        System.out.println(x + " " + y);
         // Draw the health and attack values
         g.setColor(Color.BLACK);
         g.setFont(new Font("Arial", Font.BOLD, 14));

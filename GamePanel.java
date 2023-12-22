@@ -25,11 +25,18 @@ public class GamePanel extends JPanel implements MouseMotionListener, MouseListe
     private JLabel[] cardBoxes = new JLabel[5];
     private ArrayList<Cards> selectedCards = new ArrayList<>();
 
+    private JLabel instructionLabel;
+
     public GamePanel() {
         this.setLayout(new BorderLayout());
 
         this.addMouseMotionListener(this);
         this.addMouseListener(this);
+
+        instructionLabel = new JLabel("Drag four cards into the boxes to take into battle, then press Start Battle");
+        instructionLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        instructionLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        this.add(instructionLabel, BorderLayout.NORTH);
 
         // cardx = 0;
         // cardy = 0;
@@ -65,6 +72,7 @@ public class GamePanel extends JPanel implements MouseMotionListener, MouseListe
         });
 
         // add the battle button to the panel
+
         this.add(battleButton, BorderLayout.SOUTH);
 
     }
