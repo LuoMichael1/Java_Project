@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class Battle extends JPanel {
 
@@ -12,22 +13,24 @@ public class Battle extends JPanel {
     // space for messages
     private JLabel messageLabel;
 
+    private ArrayList<Cards> playerSelectedCards;
+
     private JPanel cardPanel = new JPanel() {
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
 
             // Display player's cards
-            for (int i = 0; i < 8; i++) {
-                player.deck[i].setX(-80 + i * 100);
-                player.deck[i].setY(800);
+            for (int i = 0; i < 4; i++) {
+                player.deck[i].setX(20 + i * 100);
+                player.deck[i].setY(750);
                 player.deck[i].myDraw(g);
                 drawCardInfo(g, player.deck[i]);
             }
 
             // Display enemy's cards
-            for (int i = 0; i < 8; i++) {
-                enemy.deck[i].setX(1380 + i * -100);
-                enemy.deck[i].setY(800);
+            for (int i = 0; i < 4; i++) {
+                enemy.deck[i].setX(1200 + i * -100);
+                enemy.deck[i].setY(100);
                 enemy.deck[i].myDraw(g);
                 drawCardInfo(g, enemy.deck[i]);
             }
@@ -41,28 +44,28 @@ public class Battle extends JPanel {
         }
     };
 
-    public Battle(Player player) {
+    public Battle(Player player, ArrayList<Cards> playerSelectedCards) {
         // Set up the panel
         setLayout(new BorderLayout());
 
         // space for messages
         messageLabel = new JLabel("");
-        add(messageLabel, BorderLayout.NORTH);
+        messageLabel.setBounds(500, 500, 300, 20); // Set absolute coordinates for the message label
+        add(messageLabel);
 
         // Create components
-        playerLabel = new JLabel("Player's Pokemon");
-        opponentLabel = new JLabel("Opponent's Pokemon");
-        add(playerLabel, BorderLayout.WEST);
-        add(opponentLabel, BorderLayout.EAST);
         add(cardPanel, BorderLayout.CENTER);
 
         // Get player
         this.player = player;
 
+        // Get selected cards
+        this.playerSelectedCards = playerSelectedCards;
+
         // create other player's cards
         enemy = new Enemy();
 
-        // NOT ORIGINAL, CITE CODE
+        // NOT ORIGINAL BUT NECESSARY TO WORK (CITE CODE)
         SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
             @Override
             protected Void doInBackground() throws Exception {
@@ -80,7 +83,7 @@ public class Battle extends JPanel {
         while (true) {
 
             messageLabel.setText("Player card " + player.cardsUsed + " attacks enemy card " + enemy.cardsUsed);
-            performAttack(player.deck[player.cardsUsed], enemy.deck[enemy.cardsUsed]);
+            performAttack(playerSelectedCards.get(player.cardsUsed), enemy.deck[enemy.cardsUsed]);
 
             repaint();
 
@@ -90,35 +93,35 @@ public class Battle extends JPanel {
                 enemy.cardsUsed++;
             }
 
-            if (enemy.cardsUsed == 8) {
+            if (enemy.cardsUsed == 4) {
                 System.out.println("Enemy loses!");
                 break;
             }
 
             try {
-                Thread.sleep(500); // Pause for 1 second
+                Thread.sleep(1000); // Pause for 1 second
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
             messageLabel.setText("Enemy card " + enemy.cardsUsed + " attacks player card " + player.cardsUsed);
-            performAttack(enemy.deck[enemy.cardsUsed], player.deck[player.cardsUsed]);
+            performAttack(enemy.deck[enemy.cardsUsed], playerSelectedCards.get(player.cardsUsed));
 
             repaint();
 
-            if (player.deck[player.cardsUsed].getHealth() <= 0) {
+            if (playerSelectedCards.get(player.cardsUsed).getHealth() <= 0) {
 
                 messageLabel.setText("Player card defeated!");
                 player.cardsUsed++;
             }
 
-            if (player.cardsUsed == 8) {
+            if (player.cardsUsed == 4) {
                 System.out.println("Player loses!");
                 break;
             }
 
             try {
-                Thread.sleep(500); // Pause for 1 second
+                Thread.sleep(1000); // Pause for 1 second
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

@@ -4,6 +4,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.*;
 
 public class GamePanel extends JPanel implements MouseMotionListener, MouseListener, ActionListener {
 
@@ -21,6 +22,9 @@ public class GamePanel extends JPanel implements MouseMotionListener, MouseListe
     // initialize button
     private JButton battleButton;
 
+    private JLabel[] cardBoxes = new JLabel[5];
+    private ArrayList<Cards> selectedCards = new ArrayList<>();
+
     public GamePanel() {
         this.setLayout(new BorderLayout());
 
@@ -33,16 +37,30 @@ public class GamePanel extends JPanel implements MouseMotionListener, MouseListe
         // create the players deck
         player = new Player();
 
+        for (int i = 0; i < 5; i++) {
+            cardBoxes[i] = new JLabel();
+            cardBoxes[i].setBounds(10 + i * 150, 400, 100, 200);
+            cardBoxes[i].setBorder(BorderFactory.createLineBorder(Color.BLACK));
+            this.add(cardBoxes[i]);
+        }
+
         // create the battle button
         battleButton = new JButton("Start Battle");
         battleButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // create a new instance of Battle class here
-                Battle battle = new Battle(player);
-                add(battle, BorderLayout.CENTER);
-                revalidate();
-                repaint();
+                if (e.getSource() == battleButton) {
+                    // Check if exactly 4 cards are selected for battle
+                    if (selectedCards.size() == 4) {
+                        // Create a new instance of Battle class with selected cards
+                        Battle battle = new Battle(player, selectedCards);
+                        add(battle, BorderLayout.CENTER);
+                        revalidate();
+                        repaint();
+                    } else {
+                        System.out.println("Please select exactly 4 cards for the battle.");
+                    }
+                }
             }
         });
 
@@ -86,8 +104,25 @@ public class GamePanel extends JPanel implements MouseMotionListener, MouseListe
     }
 
     public void mouseReleased(MouseEvent e) {
+        if (selected != null) {
+            for (int i = 0; i < 4; i++) {
+                if (e.getX() >= cardBoxes[i].getX() && e.getX() <= cardBoxes[i].getX() + cardBoxes[i].getWidth()
+                        && e.getY() >= cardBoxes[i].getY()
+                        && e.getY() <= cardBoxes[i].getY() + cardBoxes[i].getHeight()) {
+                    // Assign the selected card to the box
+                    cardBoxes[i].setIcon(new ImageIcon(selected.getImage()));
+                    cardBoxes[i].setText(""); // Clear any existing text
+                    cardBoxes[i].setHorizontalAlignment(SwingConstants.CENTER);
+                    cardBoxes[i].setVerticalAlignment(SwingConstants.CENTER);
+                    cardBoxes[i].setForeground(Color.WHITE); // Set text color to white for visibility
 
-        selected = null;
+                    // Add the selected card to the list for battle
+                    selectedCards.add(selected);
+                }
+            }
+            selected = null;
+            repaint();
+        }
     }
 
     public void mouseDragged(MouseEvent e) {

@@ -95,4 +95,8 @@ public class Cards implements MouseMotionListener {
     public void mouseMoved(MouseEvent e) {
     }
 
+    public Image getImage() {
+        return cardtest.getImage();
+    }
+
 }
