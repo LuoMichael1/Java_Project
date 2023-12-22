@@ -33,7 +33,8 @@ public class GamePanel extends JPanel implements MouseMotionListener, MouseListe
         this.addMouseMotionListener(this);
         this.addMouseListener(this);
 
-        instructionLabel = new JLabel("Drag four cards into the boxes to take into battle, then press Start Battle");
+        instructionLabel = new JLabel(
+                "This is a card-based auto battler. Drag four cards into the boxes to take into battle, then press Start Battle");
         instructionLabel.setHorizontalAlignment(SwingConstants.CENTER);
         instructionLabel.setFont(new Font("Arial", Font.BOLD, 16));
         this.add(instructionLabel, BorderLayout.NORTH);
@@ -46,7 +47,7 @@ public class GamePanel extends JPanel implements MouseMotionListener, MouseListe
 
         for (int i = 0; i < 5; i++) {
             cardBoxes[i] = new JLabel();
-            cardBoxes[i].setBounds(10 + i * 150, 400, 100, 200);
+            cardBoxes[i].setBounds(320 + i * 150, 350, 100, 200);
             cardBoxes[i].setBorder(BorderFactory.createLineBorder(Color.BLACK));
             this.add(cardBoxes[i]);
         }
@@ -57,9 +58,12 @@ public class GamePanel extends JPanel implements MouseMotionListener, MouseListe
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (e.getSource() == battleButton) {
-                    // Check if exactly 4 cards are selected for battle
                     if (selectedCards.size() == 4) {
-                        // Create a new instance of Battle class with selected cards
+
+                        removeAll();
+                        revalidate();
+                        repaint();
+
                         Battle battle = new Battle(player, selectedCards);
                         add(battle, BorderLayout.CENTER);
                         revalidate();
@@ -112,19 +116,15 @@ public class GamePanel extends JPanel implements MouseMotionListener, MouseListe
     }
 
     public void mouseReleased(MouseEvent e) {
+
         if (selected != null) {
             for (int i = 0; i < 4; i++) {
                 if (e.getX() >= cardBoxes[i].getX() && e.getX() <= cardBoxes[i].getX() + cardBoxes[i].getWidth()
                         && e.getY() >= cardBoxes[i].getY()
                         && e.getY() <= cardBoxes[i].getY() + cardBoxes[i].getHeight()) {
-                    // Assign the selected card to the box
-                    cardBoxes[i].setIcon(new ImageIcon(selected.getImage()));
-                    cardBoxes[i].setText(""); // Clear any existing text
-                    cardBoxes[i].setHorizontalAlignment(SwingConstants.CENTER);
-                    cardBoxes[i].setVerticalAlignment(SwingConstants.CENTER);
-                    cardBoxes[i].setForeground(Color.WHITE); // Set text color to white for visibility
 
-                    // Add the selected card to the list for battle
+                    // put the card in the box
+                    cardBoxes[i].setIcon(new ImageIcon(selected.getImage()));
                     selectedCards.add(selected);
                 }
             }
