@@ -63,10 +63,6 @@ public class Cards implements MouseMotionListener {
         return attack;
     }
 
-    // public ImageIcon getImage() {
-    // return card;
-    // }
-
     public int getX() {
         return x;
     }
