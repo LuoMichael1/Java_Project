@@ -12,12 +12,13 @@ public class Battle extends JPanel {
     private int round = 1;
     private int turn;        // player or enemys turn to act
     private int altTurn;     // the party that is not currently able to act
+    private boolean isWon = false;
 
     // space for messages
     private JLabel messageLabel;
     private JLabel instructionLabel;
 
-    private Cards[] playerSelectedCards;
+    //private Cards[] playerSelectedCards;
 
     private JPanel cardPanel = new JPanel() {
         protected void paintComponent(Graphics g) {
@@ -74,7 +75,7 @@ public class Battle extends JPanel {
 
         // get player and cards
         this.player = player;
-        this.playerSelectedCards = playerSelectedCards;
+        //this.playerSelectedCards = playerSelectedCards;
 
 
         playersArray[0] = player;
@@ -99,7 +100,7 @@ public class Battle extends JPanel {
         repaint();
 
         // fix this while true statement
-        while (true) {
+        while (!isWon) {
 
             // if round is even, it is the player's turn, if round is odd, its the enemy's
             // turn. turn is 0 or 1 to make using an array easier
@@ -125,17 +126,17 @@ public class Battle extends JPanel {
 
             // removes attacked card if is has no health left
             if (playersArray[altTurn].deck[playersArray[altTurn].cardsUsed].getHealth() <= 0) {
-                System.out.println("testlol");
                 messageLabel.setText(playersArray[altTurn] + "card defeated!");
                 playersArray[altTurn].cardsUsed++;
             }
-            
-            if (playersArray[altTurn].cardsUsed == GamePanel.deckSize) {
-                System.out.println(playersArray[altTurn] + "loses!");
-                break;
-            }
 
             repaint();
+
+            if (playersArray[altTurn].cardsUsed == GamePanel.deckSize) {
+                System.out.println(playersArray[altTurn] + "loses!");
+                isWon = true;
+            }
+
             // 1 second pause
             try {
                 Thread.sleep(1000);
