@@ -4,11 +4,14 @@ import java.util.ArrayList;
 
 public class Battle extends JPanel {
 
-    private Player player;
-    private Enemy enemy;
+    private Battler player; //= new Player(); <--- player is made in the constructor
+    private Battler enemy = new Enemy();
 
-    private int round = 0;
-    private int turn;
+    private Battler playersArray[] = new Battler[2];
+
+    private int round = 1;
+    private int turn;        // player or enemys turn to act
+    private int altTurn;     // the party that is not currently able to act
 
     // space for messages
     private JLabel messageLabel;
@@ -22,10 +25,10 @@ public class Battle extends JPanel {
 
             // display player's cards
             for (int i = 0; i < GamePanel.deckSize; i++) {
-                playerSelectedCards[i].setX(20 + i * 106);
-                playerSelectedCards[i].setY(750);
-                playerSelectedCards[i].myDraw(g);
-                drawCardInfo(g, playerSelectedCards[i]);
+                player.deck[i].setX(20 + i * 106);
+                player.deck[i].setY(750);
+                player.deck[i].myDraw(g);
+                drawCardInfo(g, player.deck[i]);
             }
 
             // display enemy's cards
@@ -73,8 +76,12 @@ public class Battle extends JPanel {
         this.player = player;
         this.playerSelectedCards = playerSelectedCards;
 
+
+        playersArray[0] = player;
+        playersArray[1] = enemy;
+        
         // create other player's cards
-        enemy = new Enemy();
+        //enemy = new Enemy();
 
         // NOT ORIGINAL BUT NECESSARY TO WORK (CITE CODE)
         SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
@@ -97,27 +104,38 @@ public class Battle extends JPanel {
             // if round is even, it is the player's turn, if round is odd, its the enemy's
             // turn. turn is 0 or 1 to make using an array easier
             round++;
-            if (round % 2 == 0)
+            altTurn = (round+1)%2;
+            if (round % 2 == 0) {
                 turn = 0;
-            else
+                messageLabel.setText("Player card " + player.cardsUsed + " attacks enemy card " + enemy.cardsUsed);  
+                System.out.println("Playerturn");    
+            }
+            else {
                 turn = 1;
-
-            messageLabel.setText("Player card " + player.cardsUsed + " attacks enemy card " + enemy.cardsUsed);
-            performAttack(playerSelectedCards[player.cardsUsed], enemy.deck[enemy.cardsUsed]);
-
-            repaint();
-
-            if (enemy.deck[enemy.cardsUsed].getHealth() <= 0) {
-
-                messageLabel.setText("Enemy card defeated!");
-                enemy.cardsUsed++;
+                messageLabel.setText("Enemy card " + enemy.cardsUsed + " attacks player card " + player.cardsUsed);
+                System.out.println("Enemyturn");  
             }
 
-            if (enemy.cardsUsed == GamePanel.deckSize) {
-                System.out.println("Enemy loses!");
+            System.out.println(turn);
+            performAttack(playersArray[turn].deck[playersArray[turn].cardsUsed], playersArray[altTurn].deck[playersArray[altTurn].cardsUsed]);
+            
+            //playersArray[turn].cardsUsed++;
+            //playersArray[altTurn].cardsUsed++;
+            
+
+            // removes attacked card if is has no health left
+            if (playersArray[altTurn].deck[playersArray[altTurn].cardsUsed].getHealth() <= 0) {
+                System.out.println("testlol");
+                messageLabel.setText(playersArray[altTurn] + "card defeated!");
+                playersArray[altTurn].cardsUsed++;
+            }
+            
+            if (playersArray[altTurn].cardsUsed == GamePanel.deckSize) {
+                System.out.println(playersArray[altTurn] + "loses!");
                 break;
             }
 
+            repaint();
             // 1 second pause
             try {
                 Thread.sleep(1000);
@@ -125,36 +143,20 @@ public class Battle extends JPanel {
                 e.printStackTrace();
             }
 
-            messageLabel.setText("Enemy card " + enemy.cardsUsed + " attacks player card " + player.cardsUsed);
-            performAttack(enemy.deck[enemy.cardsUsed], playerSelectedCards[player.cardsUsed]);
-
-            // enemy.deck[enemy.cardsUsed];
-            repaint();
-
-            if (playerSelectedCards[player.cardsUsed].getHealth() <= 0) {
-
-                messageLabel.setText("Player card defeated!");
-                player.cardsUsed++;
-            }
-
-            if (player.cardsUsed == GamePanel.deckSize) {
-                System.out.println("Player loses!");
-                break;
-            }
-
-            // 1 second pause
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
         end();
     }
 
     public void end() {
-
         System.out.println("Game Over");
+        
+        // 3 second pause
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
         System.exit(0);
     }
 

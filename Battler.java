@@ -5,13 +5,14 @@ public abstract class Battler {
 
     protected Cards deck[] = new Cards[8];
 
+    private String name;
     // players stats
     private int health = 0;
     private int ambrosia = 0;
     private int shield = 0;
 
-    public Battler() {
-
+    public Battler(String name) {
+        this.name = name;
         // create the players deck
         for (int i = 0; i < GamePanel.deckSize; i++) {
             deck[i] = new Cards(i * 150 + 20, 600);
@@ -38,5 +39,11 @@ public abstract class Battler {
     public int getHealth() {
         return health;
     }
+    //public String getName() {
+    //    return name;
+    //}
 
+    public String toString() {
+        return name;
+    }
 }
