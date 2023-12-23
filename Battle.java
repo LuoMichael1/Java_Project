@@ -1,8 +1,9 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 import java.util.ArrayList;
 
-public class Battle extends JPanel {
+public class Battle extends JPanel implements ActionListener{
 
     private Battler player; //= new Player(); <--- player is made in the constructor
     private Battler enemy = new Enemy();
@@ -10,14 +11,15 @@ public class Battle extends JPanel {
     private Battler playersArray[] = new Battler[2];
 
     private int round = 1;
-    private int turn;        // player or enemys turn to act
-    private int altTurn;     // the party that is not currently able to act
+    private int turn;         // player or enemys turn to act
+    private int altTurn;      // the party that is not currently able to act
     private boolean isWon = false;
 
+    private int speed = 1000; // how many milliseconds before a card acts, set lower for a faster game
     // space for messages
     private JLabel messageLabel;
     private JLabel instructionLabel;
-
+    private Timer timer;
     //private Cards[] playerSelectedCards;
 
     private JPanel cardPanel = new JPanel() {
@@ -81,29 +83,57 @@ public class Battle extends JPanel {
         playersArray[0] = player;
         playersArray[1] = enemy;
         
+        timer = new Timer(speed, this);
+        timer.start(); 
+        
+        //battle();
         // create other player's cards
         //enemy = new Enemy();
 
         // NOT ORIGINAL BUT NECESSARY TO WORK (CITE CODE)
-        SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
-            @Override
-            protected Void doInBackground() throws Exception {
-                battle();
-                return null;
-            }
-        };
-        worker.execute();
+        //SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+        //    @Override
+         //   protected Void doInBackground() throws Exception {
+         //       battle();
+        //        return null;
+        //    }
+        //};
+        //worker.execute();
     }
 
+    /* 
     public void battle() {
+end();
+    }
 
-        repaint();
+        public void end() {
+            System.out.println("Game Over");
+            
+            // 3 second pause
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
-        // fix this while true statement
-        while (!isWon) {
+            System.exit(0);
+        }
+    }
+    */
 
-            // if round is even, it is the player's turn, if round is odd, its the enemy's
-            // turn. turn is 0 or 1 to make using an array easier
+    private void performAttack(Cards attackerCard, Cards defenderCard) {
+
+        defenderCard.setHealth(defenderCard.getHealth() - attackerCard.getAttack());
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        
+    
+        if (e.getSource() == timer) {
+        
+        // if round is even, it is the player's turn, if round is odd, its the enemy's
+        // turn. turn is 0 or 1 to make using an array easier
+        
             round++;
             altTurn = (round+1)%2;
             if (round % 2 == 0) {
@@ -137,32 +167,17 @@ public class Battle extends JPanel {
                 isWon = true;
             }
 
-            // 1 second pause
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            if (isWon) {
+                System.exit(0);
             }
+            // 1 second pause
+            //try {
+            //    Thread.sleep(1000);
+            //} catch (InterruptedException e) {
+            //    e.printStackTrace();
+            //}
 
         }
-        end();
-    }
-
-    public void end() {
-        System.out.println("Game Over");
-        
-        // 3 second pause
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-        System.exit(0);
-    }
-
-    private void performAttack(Cards attackerCard, Cards defenderCard) {
-
-        defenderCard.setHealth(defenderCard.getHealth() - attackerCard.getAttack());
+    
     }
 }
