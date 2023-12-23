@@ -20,14 +20,18 @@ public class GamePanel extends JPanel implements MouseMotionListener, MouseListe
     // initialize player
     private Player player;
 
-    // initialize button
-    private JButton battleButton;
+    // initialize buttons
+    private JButton battleButton; // start battle
+    private JButton leftButton; // scroll left
+    private JButton rightButton; // scroll right
 
     private JLabel[] cardBoxes = new JLabel[deckSize + 1];
     private Cards[] selectedCards = new Cards[8];
     private int cardsSelected = 0;
 
     private JLabel instructionLabel;
+
+    private int scrollValue = 0;
 
     public GamePanel() {
         this.setLayout(new BorderLayout());
@@ -47,6 +51,8 @@ public class GamePanel extends JPanel implements MouseMotionListener, MouseListe
 
         // create the players deck
         player = new Player();
+        // deck logic: card from deck remains in deck until put in selectedCards. Then x
+        // values of all remaining cards are updated to remove gaps
 
         for (int i = 0; i < deckSize + 1; i++) {
             cardBoxes[i] = new JLabel();
@@ -82,6 +88,37 @@ public class GamePanel extends JPanel implements MouseMotionListener, MouseListe
 
         this.add(battleButton, BorderLayout.SOUTH);
 
+        // Create the left button
+        leftButton = new JButton("<");
+        leftButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("left button");
+                for (Cards card : player.deck) {
+
+                    card.setX(card.getX() + 50);
+                }
+                repaint();
+                scrollValue += 50;
+            }
+        });
+        this.add(leftButton, BorderLayout.WEST);
+
+        // Create the right button
+        rightButton = new JButton(">");
+        rightButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("right button");
+                for (Cards card : player.deck) {
+
+                    card.setX(card.getX() - 50);
+                }
+                repaint();
+                scrollValue -= 50;
+            }
+        });
+        this.add(rightButton, BorderLayout.EAST);
     }
 
     public void paintComponent(Graphics g) {
@@ -92,18 +129,35 @@ public class GamePanel extends JPanel implements MouseMotionListener, MouseListe
          * test.paintIcon(this, g, cardx - 60, cardy - 100);
          * deck[1].myDraw(g);
          */
-        for (int i = 0; i < 8; i++) {
-            player.deck[i].myDraw(g);
+        for (Cards card : player.deck) {
+            card.myDraw(g);
+        }
+        for (Cards card : selectedCards) {
+            if (card != null)
+                card.myDraw(g);
         }
     }
 
     public void mousePressed(MouseEvent e) {
 
-        for (int i = 0; i < cardsInDeck; i++) {
+        for (Cards card : player.deck) {
 
-            if (player.deck[i].isInside(e.getX(), e.getY())) {
+            if (card != null && card.isInside(e.getX(), e.getY())) {
 
-                selected = player.deck[i];
+                selected = card;
+
+                // set offsets
+                offsetX = e.getX() - selected.getX();
+                offsetY = e.getY() - selected.getY();
+
+                break;
+            }
+        }
+        for (Cards card : selectedCards) {
+
+            if (card != null && card.isInside(e.getX(), e.getY())) {
+
+                selected = card;
 
                 // set offsets
                 offsetX = e.getX() - selected.getX();
@@ -127,6 +181,7 @@ public class GamePanel extends JPanel implements MouseMotionListener, MouseListe
                         && e.getY() >= cardBoxes[i].getY()
                         && e.getY() <= cardBoxes[i].getY() + cardBoxes[i].getHeight()) {
 
+                    // if there is already a card in the box, remove the card
                     if (selectedCards[i] != null) {
 
                         selectedCards[i].setX(selectedCards[i].getOriginalX());
@@ -137,15 +192,18 @@ public class GamePanel extends JPanel implements MouseMotionListener, MouseListe
 
                     // remove card from current position in selection if applicable to support
                     // reordering
-                    if (selected.getSelectionIndex() != -1)
+                    if (selected.getSelectionIndex() != -1) {
                         removeCard(selected);
-
+                    }
                     // put the card in the box
                     selected.setX(cardBoxes[i].getX());
                     selected.setY(cardBoxes[i].getY());
                     selected.setSelectionIndex(i);
                     selectedCards[i] = selected;
                     cardsSelected++;
+                    // remove the card from the deck
+                    player.deck.remove(selected);
+                    removeGaps();
 
                     putInBox = true;
                 }
@@ -157,16 +215,34 @@ public class GamePanel extends JPanel implements MouseMotionListener, MouseListe
 
                 selected.setX(selected.getOriginalX());
                 selected.setY(selected.getOriginalY());
+
+                removeGaps();
             }
 
             selected = null;
             repaint();
         }
-        System.out.println("Update");
+        System.out.println("selected");
         for (Cards card : selectedCards) {
 
             if (card != null)
                 System.out.println(card.getHealth() + " " + card.getAttack());
+        }
+        System.out.println("deck");
+        for (Cards card : player.deck) {
+
+            if (card != null)
+                System.out.println(card.getHealth() + " " + card.getAttack());
+        }
+    }
+
+    public void removeGaps() {
+
+        // remove gaps between cards in the deck
+        int deckX = 20;
+        for (Cards card : player.deck) {
+            card.setX(deckX + scrollValue);
+            deckX += 150;
         }
     }
 
@@ -175,6 +251,8 @@ public class GamePanel extends JPanel implements MouseMotionListener, MouseListe
         selectedCards[card.getSelectionIndex()] = null;
         card.setSelectionIndex(-1);
         cardsSelected--;
+        // add card back to deck
+        player.deck.add(card);
     }
 
     public void mouseDragged(MouseEvent e) {

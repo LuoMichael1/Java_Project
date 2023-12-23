@@ -1,9 +1,11 @@
+import java.util.*;
+
 // This is the abstract class that encompasses both player and enemy
 public abstract class Battler {
 
     public int cardsUsed = 0;
 
-    protected Cards deck[] = new Cards[8];
+    public ArrayList<Cards> deck = new ArrayList<>();
 
     private String name;
     // players stats
@@ -15,7 +17,7 @@ public abstract class Battler {
         this.name = name;
         // create the players deck
         for (int i = 0; i < GamePanel.deckSize; i++) {
-            deck[i] = new Cards(i * 150 + 20, 600);
+            deck.add(new Cards(i * 150 + 20, 600));
             System.out.println("hello");
             System.out.println(i);
         }
@@ -24,24 +26,29 @@ public abstract class Battler {
     public void setShield(int shield) {
         this.shield = shield;
     }
+
     public void setAmbrosia(int ambrosia) {
         this.ambrosia = ambrosia;
     }
+
     public void setHealth(int health) {
         this.health = health;
     }
+
     public int getShield() {
         return shield;
     }
+
     public int getAmbrosia() {
         return ambrosia;
     }
+
     public int getHealth() {
         return health;
     }
-    //public String getName() {
-    //    return name;
-    //}
+    // public String getName() {
+    // return name;
+    // }
 
     public String toString() {
         return name;
