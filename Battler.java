@@ -6,6 +6,7 @@ public abstract class Battler {
     public int cardsUsed = 0;
 
     public ArrayList<Cards> deck = new ArrayList<>();
+    public Cards[] hand = new Cards[8];
 
     private String name;
     // players stats
