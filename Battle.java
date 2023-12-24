@@ -21,16 +21,21 @@ public class Battle extends JPanel implements ActionListener {
     private JLabel messageLabel;
     private JLabel instructionLabel;
     private Timer timer;
+    private ImageIcon playerSprite = new ImageIcon("images/player.png");
+    private ImageIcon enemySprite = new ImageIcon("images/enemy.png");
     // private Cards[] playerSelectedCards;
 
     //
     private JPanel cardPanel = new JPanel() {
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
-
+            
+            // draw the characters
+            g.drawImage(playerSprite.getImage(), 10, 400, null);
+            g.drawImage(enemySprite.getImage(), 1000, 350, null);
             // display player's cards
             for (int i = 0; i < GamePanel.deckSize; i++) {
-                player.hand[i].setX(20 + i * 106);
+                player.hand[i].setX(20 + i * 70);
                 player.hand[i].setY(740);
 
                 // moves the currently acting card upwards to make it more visible
@@ -43,7 +48,7 @@ public class Battle extends JPanel implements ActionListener {
 
             // display enemy's cards
             for (int i = 0; i < GamePanel.deckSize; i++) {
-                enemy.hand[i].setX(1200 + i * -106);
+                enemy.hand[i].setX(1200 + i * -70);
                 enemy.hand[i].setY(100);
 
                 System.out.println("round: " + round);
