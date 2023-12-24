@@ -10,7 +10,7 @@ public abstract class Battler {
 
     private String name;
     // players stats
-    private int health = 100;
+    private int health = 1000;
     private int ambrosia = 0;
     private int shield = 0;
 

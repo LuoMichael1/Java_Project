@@ -106,7 +106,7 @@ public class Battle extends JPanel implements ActionListener {
 
     private void performAttack(Cards attackerCard, Battler defender) {
 
-        defender.setHealth(defender.getHealth() - attackerCard.getAttack());
+        defender.setHealth(defender.getHealth() - 10*(attackerCard.getAttack()));
     }
 
     public void actionPerformed(ActionEvent e) {
