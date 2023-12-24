@@ -10,6 +10,8 @@ public class Cards implements MouseMotionListener {
     // private JLabel cardtest2;
     private int originalX, originalY;
     private int selectionIndex = -1;
+    public static final int CARDWIDTH = 100;
+    public static final int CARDHIGHT = 200;
 
     public Cards(int x, int y) {
         cardtest = new ImageIcon("card.png");
