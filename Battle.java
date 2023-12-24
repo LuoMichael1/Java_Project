@@ -33,6 +33,26 @@ public class Battle extends JPanel implements ActionListener {
             // draw the characters
             g.drawImage(playerSprite.getImage(), 10, 400, null);
             g.drawImage(enemySprite.getImage(), 1000, 350, null);
+
+            // health bar
+            g.drawRect(35,180, 251,25);
+            g.setColor(Color.red);
+            g.fillRect(36, 181, player.getHealth()/(player.getMaxHealth()/250), 24);
+
+
+            // display their stats
+            g.setColor(Color.black);
+            g.setFont(new Font("Arial", Font.BOLD, 20));
+            g.drawString("Health: " + player.getHealth() +"/"+ player.getMaxHealth(), 40, 200);
+            g.drawString("Health: " + enemy.getHealth() +"/"+ enemy.getMaxHealth(), 1100, 700);
+            
+           
+            //g.drawRect(40,190, 250,20);
+
+            //g.drawString("Health: " + card.getHealth(), card.getX() + 10, card.getY() + 30);
+            //g.drawString("Health: " + card.getHealth(), card.getX() + 10, card.getY() + 30);
+
+
             // display player's cards
             for (int i = 0; i < GamePanel.deckSize; i++) {
                 player.hand[i].setX(20 + i * 70);
@@ -111,7 +131,7 @@ public class Battle extends JPanel implements ActionListener {
 
     private void performAttack(Cards attackerCard, Battler defender) {
 
-        defender.setHealth(defender.getHealth() - 10*(attackerCard.getAttack()));
+        defender.setHealth(defender.getHealth() - (10*(attackerCard.getAttack())));
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -125,13 +145,13 @@ public class Battle extends JPanel implements ActionListener {
             altTurn = (round + 1) % 2;
             if (round % 2 == 0) {
                 turn = 0;
-                messageLabel.setText("Player attacks  |   Enemy health: " + playersArray[altTurn].getHealth());
+                messageLabel.setText("Player attacks");
             } else {
                 turn = 1;
-                messageLabel.setText("Enemy attacks   |   Player health: " + playersArray[altTurn].getHealth());
+                messageLabel.setText("Enemy attacks");
             }
 
-            performAttack(playersArray[turn].hand[round % 8], playersArray[altTurn]);
+            performAttack(playersArray[turn].hand[(round-1)/2 % 8], playersArray[altTurn]);
 
             repaint();
 
