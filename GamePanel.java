@@ -74,7 +74,7 @@ public class GamePanel extends JPanel implements MouseMotionListener, MouseListe
 
         for (int i = 0; i < deckSize + 1; i++) {
             cardBoxes[i] = new JLabel();
-            cardBoxes[i].setBounds(120 + i * 130, 350, 120, 220);
+            cardBoxes[i].setBounds(120 + i * 130, 170, 120, 220);
             cardBoxes[i].setBorder(BorderFactory.createLineBorder(Color.BLACK));
             this.add(cardBoxes[i]);
         }

@@ -20,7 +20,7 @@ class Main {
         p.add(p2, "Game");
 
         f.setVisible(true);
-        f.setSize(1300, 1000);
+        f.setSize(1280, 720);
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         

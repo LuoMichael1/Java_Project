@@ -31,30 +31,30 @@ public class Battle extends JPanel implements ActionListener {
             super.paintComponent(g);
             
             // draw the characters
-            g.drawImage(playerSprite.getImage(), 100, 350, null);
-            g.drawImage(enemySprite.getImage(), 900, 350, null);
+            g.drawImage(playerSprite.getImage(), 100, 120, null);
+            g.drawImage(enemySprite.getImage(), 900, 120, null);
 
             // healthbars
-            g.drawRect(35,180, 251,25);
-            g.drawRect(1000,180, 251,25);
+            g.drawRect(35,60, 251,25);
+            g.drawRect(1000,60, 251,25);
             g.setColor(Color.red);
-            g.fillRect(36, 181, player.getHealth()/(player.getMaxHealth()/250), 24);
-            g.fillRect(1001, 181, enemy.getHealth()/(enemy.getMaxHealth()/250), 24);
+            g.fillRect(36, 61, player.getHealth()/(player.getMaxHealth()/250), 24);
+            g.fillRect(1001, 61, enemy.getHealth()/(enemy.getMaxHealth()/250), 24);
 
             g.setColor(Color.black);
             g.setFont(new Font("Arial", Font.BOLD, 20));
-            g.drawString("Health: " + player.getHealth() +"/"+ player.getMaxHealth(), 40, 200);
-            g.drawString("Health: " + enemy.getHealth() +"/"+ enemy.getMaxHealth(), 1005, 200);
+            g.drawString("Health: " + player.getHealth() +"/"+ player.getMaxHealth(), 40, 80);
+            g.drawString("Health: " + enemy.getHealth() +"/"+ enemy.getMaxHealth(), 1005, 80);
             
 
             // display player's cards
             for (int i = 0; i < GamePanel.deckSize; i++) {
-                player.hand[i].setX(15 + i * 70);
-                player.hand[i].setY(720);
+                player.hand[i].setX(5 + i * 70);
+                player.hand[i].setY(440);
 
                 // moves the currently acting card upwards to make it more visible
                 if (turn == 0 && i == (round-1)/2 %8)
-                    player.hand[i].setY(700);
+                    player.hand[i].setY(420);
 
                 player.hand[i].myDraw(g);
                 //drawCardInfo(g, player.hand[i]);
@@ -62,14 +62,14 @@ public class Battle extends JPanel implements ActionListener {
 
             // display enemy's cards
             for (int i = 0; i < GamePanel.deckSize; i++) {
-                enemy.hand[i].setX(1170 + i * -70);
-                enemy.hand[i].setY(720);
+                enemy.hand[i].setX(1140 + i * -70);
+                enemy.hand[i].setY(440);
 
                 System.out.println("round: " + round);
 
                 // moves the currently acting card upwards to make it more visible
                 if (turn == 1 && i == ((round-1)/2-1) % 8)
-                    enemy.hand[i].setY(700);
+                    enemy.hand[i].setY(420);
 
                 enemy.hand[i].myDraw(g);
                 //drawCardInfo(g, enemy.hand[i]);
@@ -107,7 +107,7 @@ public class Battle extends JPanel implements ActionListener {
 
         // space for messages
         messageLabel = new JLabel("");
-        messageLabel.setBounds(500, 500, 300, 20);
+        messageLabel.setBounds(550, 200, 300, 20);
         messageLabel.setFont(new Font("Arial", Font.BOLD, 16));
         add(messageLabel);
 
