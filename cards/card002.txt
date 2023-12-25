@@ -1,5 +1,5 @@
 Card Description
-deal 4 damage 
+Deal 4 DMG 
 
 rarity 0
 name Kick     

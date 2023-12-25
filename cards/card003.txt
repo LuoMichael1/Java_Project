@@ -1,5 +1,5 @@
 Card Description
-ambrosia +2 \n deal 1 DMG 
+Ambrosia +2 \n deal 1 DMG 
 
 rarity 0
 name Wand     

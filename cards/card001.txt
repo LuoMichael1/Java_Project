@@ -1,5 +1,5 @@
 Card Description
-deal 2 damage 
+Deal 2 DMG 
 
 rarity 0
 name Punch     
