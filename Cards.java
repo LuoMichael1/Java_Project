@@ -105,8 +105,8 @@ public class Cards implements MouseMotionListener {
         // Draw the health and attack values
         g.setColor(Color.BLACK);
         g.setFont(new Font("Arial", Font.BOLD, 14));
-        g.drawString("Health: " + getHealth(), getX() + 10, getY() + 30);
-        g.drawString("Attack: " + getAttack(), getX() + 10, getY() + 50);
+        g.drawString("Health: " + getHealth(), getX() + 15, getY() + 50);
+        g.drawString("Attack: " + getAttack(), getX() + 15, getY() + 70);
     }
 
     public void mouseDragged(MouseEvent e) {
