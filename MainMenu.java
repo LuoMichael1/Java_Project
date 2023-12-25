@@ -1,9 +1,9 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
+//import java.awt.event.ActionListener;
 
-public class MainMenu extends JFrame {
+public class MainMenu extends JPanel implements MouseListener{
 
     private static final int LAYER_SPEED_PLANETS = 2;
     private static final int LAYER_SPEED_STARS = 1;
@@ -24,11 +24,13 @@ public class MainMenu extends JFrame {
     private int layer2X2_stars = IMAGE_WIDTH;
 
     public MainMenu() {
-        setTitle("Main Menu");
-        setSize(1280, 720);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-
+        //setTitle("Main Menu");
+        //setSize(1280, 720);
+        //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //setLocationRelativeTo(null);
+        this.setLayout(new BorderLayout());
+        this.addMouseListener(this);
+        
         JLayeredPane layeredPane = new JLayeredPane();
         layeredPane.setPreferredSize(new Dimension(1280, 720));
 
@@ -102,8 +104,9 @@ public class MainMenu extends JFrame {
         });
 
         timer.start();
-
-        setContentPane(layeredPane);
+        this.add(layeredPane, BorderLayout.CENTER);
+        this.setVisible(true);
+        //setContentPane(layeredPane);
     }
 
     private JLabel createBackgroundLabel(String imagePath, int width, int height) {
@@ -127,5 +130,25 @@ public class MainMenu extends JFrame {
                 new MainMenu().setVisible(true);
             }
         });
+    }
+
+
+    public void mouseClicked(MouseEvent e) {
+    }
+
+    public void mousePressed(MouseEvent e) {
+        System.out.println("hi1");
+        CardLayout cardLayout = (CardLayout) getParent().getLayout();
+        cardLayout.next(getParent());
+        System.out.println("hi2");
+    }
+
+    public void mouseReleased(MouseEvent e) {
+    }
+
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    public void mouseExited(MouseEvent e) {
     }
 }
