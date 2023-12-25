@@ -1,17 +1,26 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.util.Scanner; 
 
 public class Cards implements MouseMotionListener {
 
     private int x, y;
     private ImageIcon cardtest;
-    private int health, attack;
+    private int health = 0, attack = 0;
     // private JLabel cardtest2;
     private int originalX, originalY;
     private int selectionIndex = -1;
-    public static final int CARDWIDTH = 100;
-    public static final int CARDHIGHT = 200;
+    private Scanner filesc;
+    private int cardDataPoints = 15;  // the number of different pieces of data stored in a card template
+    private String cardDataArray[] = new String[cardDataPoints];
+    private int rand; // index of a randomly chosen card
+    private int count = 0;
+    private String description;
+    private String name;
+    public static final int CARDWIDTH = 120;
+    public static final int CARDHIGHT = 220;
 
     public Cards(int x, int y) {
         cardtest = new ImageIcon("card.png");
@@ -21,11 +30,31 @@ public class Cards implements MouseMotionListener {
         this.originalX = x;
         this.originalY = y;
 
-        health = (int) (Math.random() * 10 + 1);
-        attack = (int) (Math.random() * 3 + 1);
-        // cardtest2 = new JLabel(cardtest);
-        // cardtest2.setOpaque(false);
-        // cardtest2.addMouseMotionListener(this);
+        // randomly generate a card
+        rand = (int) (Math.random() * 3 + 1);
+
+        try {
+            // get card details from file
+            filesc = new Scanner (new File("cards/card00"+ rand +".txt"));
+            
+            while (filesc.hasNextLine()) {                                    
+                cardDataArray[count] = (filesc.nextLine()); 
+                count++;	
+            }	
+        }
+        catch(Exception e) {
+            System.out.print(e);
+        }
+
+        System.out.println("card: " + rand);
+        for(int i = 0; i < cardDataArray.length; i++) {
+            System.out.println(cardDataArray[i]);
+        }
+        
+        description = cardDataArray[1];
+        name = cardDataArray[4].substring(5);
+        attack = Integer.parseInt(cardDataArray[5].substring(7));
+        
     }
 
     public Cards(int x, int y, int health, int attack, int originalX, int originalY, int selectionIndex) {
