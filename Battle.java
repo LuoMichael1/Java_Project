@@ -31,25 +31,25 @@ public class Battle extends JPanel implements ActionListener {
             super.paintComponent(g);
             
             // draw the characters
-            g.drawImage(playerSprite.getImage(), 10, 400, null);
-            g.drawImage(enemySprite.getImage(), 1000, 350, null);
+            g.drawImage(playerSprite.getImage(), 100, 350, null);
+            g.drawImage(enemySprite.getImage(), 900, 350, null);
 
             // healthbars
             g.drawRect(35,180, 251,25);
-            g.drawRect(1000,680, 251,25);
+            g.drawRect(1000,180, 251,25);
             g.setColor(Color.red);
             g.fillRect(36, 181, player.getHealth()/(player.getMaxHealth()/250), 24);
-            g.fillRect(1001, 681, enemy.getHealth()/(enemy.getMaxHealth()/250), 24);
+            g.fillRect(1001, 181, enemy.getHealth()/(enemy.getMaxHealth()/250), 24);
 
             g.setColor(Color.black);
             g.setFont(new Font("Arial", Font.BOLD, 20));
             g.drawString("Health: " + player.getHealth() +"/"+ player.getMaxHealth(), 40, 200);
-            g.drawString("Health: " + enemy.getHealth() +"/"+ enemy.getMaxHealth(), 1005, 700);
+            g.drawString("Health: " + enemy.getHealth() +"/"+ enemy.getMaxHealth(), 1005, 200);
             
 
             // display player's cards
             for (int i = 0; i < GamePanel.deckSize; i++) {
-                player.hand[i].setX(20 + i * 70);
+                player.hand[i].setX(15 + i * 70);
                 player.hand[i].setY(740);
 
                 // moves the currently acting card upwards to make it more visible
@@ -62,14 +62,14 @@ public class Battle extends JPanel implements ActionListener {
 
             // display enemy's cards
             for (int i = 0; i < GamePanel.deckSize; i++) {
-                enemy.hand[i].setX(1200 + i * -70);
-                enemy.hand[i].setY(100);
+                enemy.hand[i].setX(1170 + i * -70);
+                enemy.hand[i].setY(740);
 
                 System.out.println("round: " + round);
 
                 // moves the currently acting card upwards to make it more visible
                 if (turn == 1 && i == (round/2 % 8)-1)
-                    enemy.hand[i].setY(80);
+                    enemy.hand[i].setY(720);
 
                 enemy.hand[i].myDraw(g);
                 drawCardInfo(g, enemy.hand[i]);
