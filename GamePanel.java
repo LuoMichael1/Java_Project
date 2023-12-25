@@ -74,7 +74,7 @@ public class GamePanel extends JPanel implements MouseMotionListener, MouseListe
 
         for (int i = 0; i < deckSize + 1; i++) {
             cardBoxes[i] = new JLabel();
-            cardBoxes[i].setBounds(50 + i * 110, 350, 100, 200);
+            cardBoxes[i].setBounds(120 + i * 130, 350, 120, 220);
             cardBoxes[i].setBorder(BorderFactory.createLineBorder(Color.BLACK));
             this.add(cardBoxes[i]);
         }
@@ -246,10 +246,10 @@ public class GamePanel extends JPanel implements MouseMotionListener, MouseListe
     public void removeGaps() {
 
         // remove gaps between cards in the deck
-        int deckX = 20;
+        int deckX = 200;
         for (Cards card : player.deck) {
             card.setX(deckX + scrollValue);
-            deckX += 150;
+            deckX += 110;
         }
     }
 

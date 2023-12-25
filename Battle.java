@@ -21,50 +21,73 @@ public class Battle extends JPanel implements ActionListener {
     private JLabel messageLabel;
     private JLabel instructionLabel;
     private Timer timer;
+    private ImageIcon playerSprite = new ImageIcon("images/player.png");
+    private ImageIcon enemySprite = new ImageIcon("images/enemy.png");
     // private Cards[] playerSelectedCards;
 
     //
     private JPanel cardPanel = new JPanel() {
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
+            
+            // draw the characters
+            g.drawImage(playerSprite.getImage(), 100, 350, null);
+            g.drawImage(enemySprite.getImage(), 900, 350, null);
+
+            // healthbars
+            g.drawRect(35,180, 251,25);
+            g.drawRect(1000,180, 251,25);
+            g.setColor(Color.red);
+            g.fillRect(36, 181, player.getHealth()/(player.getMaxHealth()/250), 24);
+            g.fillRect(1001, 181, enemy.getHealth()/(enemy.getMaxHealth()/250), 24);
+
+            g.setColor(Color.black);
+            g.setFont(new Font("Arial", Font.BOLD, 20));
+            g.drawString("Health: " + player.getHealth() +"/"+ player.getMaxHealth(), 40, 200);
+            g.drawString("Health: " + enemy.getHealth() +"/"+ enemy.getMaxHealth(), 1005, 200);
+            
 
             // display player's cards
             for (int i = 0; i < GamePanel.deckSize; i++) {
-                player.hand[i].setX(20 + i * 106);
-                player.hand[i].setY(740);
+                player.hand[i].setX(15 + i * 70);
+                player.hand[i].setY(720);
 
                 // moves the currently acting card upwards to make it more visible
-                if (turn == 0 && i == playersArray[turn].cardsUsed)
-                    player.hand[i].setY(720);
+                if (turn == 0 && i == (round-1)/2 %8)
+                    player.hand[i].setY(700);
 
                 player.hand[i].myDraw(g);
-                drawCardInfo(g, player.hand[i]);
+                //drawCardInfo(g, player.hand[i]);
             }
 
             // display enemy's cards
             for (int i = 0; i < GamePanel.deckSize; i++) {
-                enemy.hand[i].setX(1200 + i * -106);
-                enemy.hand[i].setY(100);
+                enemy.hand[i].setX(1170 + i * -70);
+                enemy.hand[i].setY(720);
+
+                System.out.println("round: " + round);
 
                 // moves the currently acting card upwards to make it more visible
-                if (turn == 1 && i == playersArray[turn].cardsUsed)
-                    enemy.hand[i].setY(80);
+                if (turn == 1 && i == ((round-1)/2-1) % 8)
+                    enemy.hand[i].setY(700);
 
                 enemy.hand[i].myDraw(g);
-                drawCardInfo(g, enemy.hand[i]);
+                //drawCardInfo(g, enemy.hand[i]);
             }
 
             // if is players turn and the card represented by i is the card currently
             // acting, setY to 800 instead
         }
 
-        // display health and attack
+        // display health and attack 
+        /* 
         private void drawCardInfo(Graphics g, Cards card) {
             g.setColor(Color.BLACK);
             g.setFont(new Font("Arial", Font.BOLD, 14));
             g.drawString("Health: " + card.getHealth(), card.getX() + 10, card.getY() + 30);
             g.drawString("Attack: " + card.getAttack(), card.getX() + 10, card.getY() + 50);
-        }
+        } 
+        */
     };
 
     public Battle(Player player, Cards[] playerSelectedCards) {
@@ -102,13 +125,13 @@ public class Battle extends JPanel implements ActionListener {
 
     }
 
-    private void performAttack(Cards attackerCard, Cards defenderCard) {
+    private void performAttack(Cards attackerCard, Battler defender) {
 
-        defenderCard.setHealth(defenderCard.getHealth() - attackerCard.getAttack());
+        defender.setHealth(defender.getHealth() - (10*(attackerCard.getAttack())));
     }
 
     public void actionPerformed(ActionEvent e) {
-
+        
         if (e.getSource() == timer) {
 
             // if round is even, it is the player's turn, if round is odd, its the enemy's
@@ -118,31 +141,17 @@ public class Battle extends JPanel implements ActionListener {
             altTurn = (round + 1) % 2;
             if (round % 2 == 0) {
                 turn = 0;
-                messageLabel.setText("Player card " + player.cardsUsed + " attacks enemy card " + enemy.cardsUsed);
-                System.out.println("Playerturn");
+                messageLabel.setText("Player attacks");
             } else {
                 turn = 1;
-                messageLabel.setText("Enemy card " + enemy.cardsUsed + " attacks player card " + player.cardsUsed);
-                System.out.println("Enemyturn");
+                messageLabel.setText("Enemy attacks");
             }
 
-            System.out.println(turn);
-            performAttack(playersArray[turn].hand[playersArray[turn].cardsUsed],
-                    playersArray[altTurn].hand[playersArray[altTurn].cardsUsed]);
-
-            // moves card currently acting so the game is more clear and easy to follow
-            playersArray[turn].hand[playersArray[turn].cardsUsed]
-                    .setY(playersArray[turn].hand[playersArray[turn].cardsUsed].getY() + 100);
-
-            // removes attacked card if is has no health left
-            if (playersArray[altTurn].hand[playersArray[altTurn].cardsUsed].getHealth() <= 0) {
-                messageLabel.setText(playersArray[altTurn] + "card defeated!");
-                playersArray[altTurn].cardsUsed++;
-            }
+            performAttack(playersArray[turn].hand[(round-1)/2 % 8], playersArray[altTurn]);
 
             repaint();
 
-            if (playersArray[altTurn].cardsUsed == GamePanel.deckSize) {
+            if (playersArray[altTurn].getHealth() <= 0) {
                 System.out.println(playersArray[altTurn] + "loses!");
                 isWon = true;
             }
