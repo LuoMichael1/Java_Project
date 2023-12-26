@@ -3,7 +3,7 @@ import java.awt.*;
 import java.awt.event.*;
 //import java.awt.event.ActionListener;
 
-public class MainMenu extends JPanel implements MouseListener{
+public class MainMenu extends JPanel implements MouseListener {
 
     private static final int LAYER_SPEED_PLANETS = 2;
     private static final int LAYER_SPEED_STARS = 1;
@@ -24,13 +24,13 @@ public class MainMenu extends JPanel implements MouseListener{
     private int layer2X2_stars = IMAGE_WIDTH;
 
     public MainMenu() {
-        //setTitle("Main Menu");
-        //setSize(1280, 720);
-        //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //setLocationRelativeTo(null);
+        // setTitle("Main Menu");
+        // setSize(1280, 720);
+        // setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // setLocationRelativeTo(null);
         this.setLayout(new BorderLayout());
         this.addMouseListener(this);
-        
+
         JLayeredPane layeredPane = new JLayeredPane();
         layeredPane.setPreferredSize(new Dimension(1280, 720));
 
@@ -106,7 +106,7 @@ public class MainMenu extends JPanel implements MouseListener{
         timer.start();
         this.add(layeredPane, BorderLayout.CENTER);
         this.setVisible(true);
-        //setContentPane(layeredPane);
+        // setContentPane(layeredPane);
     }
 
     private JLabel createBackgroundLabel(String imagePath, int width, int height) {
@@ -131,7 +131,6 @@ public class MainMenu extends JPanel implements MouseListener{
             }
         });
     }
-
 
     public void mouseClicked(MouseEvent e) {
     }
