@@ -25,6 +25,8 @@ public abstract class Battler {
         }
     }
 
+
+    // Setters -----------------------------------
     public void setShield(int shield) {
         this.shield = shield;
     }
@@ -39,7 +41,8 @@ public abstract class Battler {
     public void setMaxHealth(int maxHealth) {
         this.maxHealth = maxHealth;
     }
-
+    
+    // Getters -----------------------------------
     public int getShield() {
         return shield;
     }

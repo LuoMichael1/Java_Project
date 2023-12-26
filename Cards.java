@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.io.IOException;
 import java.util.Scanner; 
 
 public class Cards implements MouseMotionListener {
@@ -21,7 +22,8 @@ public class Cards implements MouseMotionListener {
     private String name;
     public static final int CARDWIDTH = 120;
     public static final int CARDHIGHT = 220;
-
+    
+    
     public Cards(int x, int y) {
         cardtest = new ImageIcon("card.png");
 
@@ -132,13 +134,16 @@ public class Cards implements MouseMotionListener {
     }
 
     public void myDraw(Graphics g) {
+        // enables antialiasing on the font which makes it look way better
+        Graphics2D g2d = (Graphics2D)g;
+        g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
         // cardtest.paintIcon(null, g, x - 60, y - 100);
         g.drawImage(cardtest.getImage(), x, y, null);
 
         // Draw the health and attack values
         g.setColor(Color.BLACK);
-        g.setFont(new Font("Arial", Font.BOLD, 14));
+        g.setFont(Main.Lexend14);
         
         // write the description of the card
         count = 50;
@@ -173,5 +178,4 @@ public class Cards implements MouseMotionListener {
     public Image getImage() {
         return cardtest.getImage();
     }
-
 }

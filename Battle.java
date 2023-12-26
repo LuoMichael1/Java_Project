@@ -25,11 +25,16 @@ public class Battle extends JPanel implements ActionListener {
     private ImageIcon enemySprite = new ImageIcon("images/enemy.png");
     // private Cards[] playerSelectedCards;
 
-    //
+    
     private JPanel cardPanel = new JPanel() {
-        protected void paintComponent(Graphics g) {
+
+        protected void paintComponent(Graphics g) {            
             super.paintComponent(g);
             
+            // enables antialiasing on the font which makes it look way better
+            Graphics2D g2d = (Graphics2D)g;
+            g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+
             // draw the characters
             g.drawImage(playerSprite.getImage(), 100, 120, null);
             g.drawImage(enemySprite.getImage(), 900, 120, null);
@@ -42,9 +47,9 @@ public class Battle extends JPanel implements ActionListener {
             g.fillRect(1001, 61, enemy.getHealth()/(enemy.getMaxHealth()/250), 24);
 
             g.setColor(Color.black);
-            g.setFont(new Font("Arial", Font.BOLD, 20));
-            g.drawString("Health: " + player.getHealth() +"/"+ player.getMaxHealth(), 40, 80);
-            g.drawString("Health: " + enemy.getHealth() +"/"+ enemy.getMaxHealth(), 1005, 80);
+            g.setFont(Main.Lexend18);
+            g.drawString("" + player.getHealth() +"/"+ player.getMaxHealth(), 40, 80);
+            g.drawString("" + enemy.getHealth() +"/"+ enemy.getMaxHealth(), 1005, 80);
             
 
             // display player's cards
@@ -91,7 +96,7 @@ public class Battle extends JPanel implements ActionListener {
     };
 
     public Battle(Player player, Cards[] playerSelectedCards) {
-
+        
         // put playerSelectedCards into player.hand
         for (int i = 0; i < playerSelectedCards.length; i++) {
             player.hand[i] = playerSelectedCards[i];
