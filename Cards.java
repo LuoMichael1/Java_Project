@@ -12,6 +12,7 @@ public class Cards implements MouseMotionListener {
     private int health = 0, attack = 0;
     private int ambrosiaCost = 0;
     private int ambrosiaGive = 0;
+    private int vulnerableStacks = 0;
     private int originalX, originalY;
     private int selectionIndex = -1;
     private Scanner filesc;
@@ -34,7 +35,7 @@ public class Cards implements MouseMotionListener {
         this.originalY = y;
 
         // randomly generate a card
-        rand = (int) (Math.random() * 3 + 1);
+        rand = (int) (Math.random() * 4 + 1);
 
         try {
             // get card details from file
@@ -60,6 +61,7 @@ public class Cards implements MouseMotionListener {
         attack = Integer.parseInt(cardDataArray[5].substring(7));
         ambrosiaCost = Integer.parseInt(cardDataArray[6].substring(13));
         ambrosiaGive = Integer.parseInt(cardDataArray[7].substring(13));
+        vulnerableStacks = Integer.parseInt(cardDataArray[12].substring(17));
     }
 
     public Cards(int x, int y, int health, int attack, int originalX, int originalY, int selectionIndex) {
@@ -131,6 +133,9 @@ public class Cards implements MouseMotionListener {
         return ambrosiaGive;
     }
 
+    public int getVulnerableStacks() {
+        return vulnerableStacks;
+    }
     public int getSelectionIndex() {
         return selectionIndex;
     }
@@ -149,7 +154,7 @@ public class Cards implements MouseMotionListener {
 
         // Draw the health and attack values
         g.setColor(Color.BLACK);
-        g.setFont(Main.Lexend14);
+        g.setFont(Main.Lexend12);
         
         // write the description of the card
         count = 50;

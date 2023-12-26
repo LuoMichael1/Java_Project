@@ -1,0 +1,26 @@
+Card Description
+Shield +2:Deal 1 DMG 
+
+rarity 1
+name Stance     
+damage 1
+ambrosiaCost 0
+ambrosiaGive 0
+heal 0
+healingStacks 0
+addMaxHP 0
+addShieldHp 2
+vulnerableStacks 0
+strengthenStacks 0
+defenceStacks 0
+bleedStacks 0
+isWildCard 0
+
+// rarity changes colour of card; 0 is common(green), 1 is rare(blue), etc
+// damage based on ambrosia stored
+// remove all healing stacks to deal damage based on number of stacks
+// deal damage based on shieldhp
+// stacks decrease every turn
+// card is not used if there is not enough ambrosia (energy)
+// wildcard can level up any card 
+// need to add a way to store the stats of level 2 and 3 cards

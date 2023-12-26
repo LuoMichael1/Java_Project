@@ -55,6 +55,11 @@ public class Battle extends JPanel implements ActionListener {
             g.drawString("Ambrosia: " + player.getAmbrosia(), 40, 120);
             g.drawString("Ambrosia: " + enemy.getAmbrosia(), 1005, 120);
 
+            // Vulnerable Stacks
+            if (player.getVulnerableStacks() > 0) 
+                g.drawString("Vulnerable: x" + player.getVulnerableStacks(), 20, 150);
+            if (enemy.getVulnerableStacks() > 0)
+                g.drawString("Vulnerable: x" + enemy.getVulnerableStacks(), 1055, 150);
 
             // display player's cards
             for (int i = 0; i < GamePanel.deckSize; i++) {
@@ -139,10 +144,19 @@ public class Battle extends JPanel implements ActionListener {
         playersArray[turn].setAmbrosia(attackerCard.getAmbrosia());
 
         // checks if the character has enough ambrosia to use this card
-        if (attackerCard.getAmbrosiaCost() <= playersArray[turn].getAmbrosia())
-            defender.setHealth(defender.getHealth() - (10*(attackerCard.getAttack())));
+        if (attackerCard.getAmbrosiaCost() <= playersArray[turn].getAmbrosia()) {
             
             playersArray[turn].setAmbrosia(-1*(attackerCard.getAmbrosiaCost()));
+            playersArray[altTurn].setVulnerableStacks(attackerCard.getVulnerableStacks());
+
+            // deal damage
+            if (playersArray[altTurn].getVulnerableStacks() > 0)
+                defender.setHealth(defender.getHealth() - (20*(attackerCard.getAttack())));
+            else
+                defender.setHealth(defender.getHealth() - (10*(attackerCard.getAttack())));
+            
+
+        }
 
     }
 
@@ -163,10 +177,13 @@ public class Battle extends JPanel implements ActionListener {
                 messageLabel.setText("Enemy attacks");
             }
 
+            reduceStacks(playersArray[turn]);
+            
             performAttack(playersArray[turn].hand[(round-1)/2 % 8], playersArray[altTurn]);
-
+            
             repaint();
 
+        d
             if (playersArray[altTurn].getHealth() <= 0) {
                 System.out.println(playersArray[altTurn] + "loses!");
                 isWon = true;
@@ -177,4 +194,11 @@ public class Battle extends JPanel implements ActionListener {
             }
         }
     }
+
+    private void reduceStacks(Battler target) {
+        if (target.getVulnerableStacks() > 0) {
+            target.setVulnerableStacks(-1);
+        }
+    }
+
 }
