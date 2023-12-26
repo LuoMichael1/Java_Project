@@ -9,7 +9,7 @@ public class Cards implements MouseMotionListener {
     private int x, y;
     private ImageIcon cardtest;
     private int health = 0, attack = 0;
-    // private JLabel cardtest2;
+    private int ambrosiaCost = 0;
     private int originalX, originalY;
     private int selectionIndex = -1;
     private Scanner filesc;
@@ -53,13 +53,9 @@ public class Cards implements MouseMotionListener {
         
         // assign the data from the file to variables in the class
         description = cardDataArray[1].split(":");
-        System.out.println("cardDataArray: " + cardDataArray[1]);
-        System.out.println("cardDataArraySplit: " + cardDataArray[1].split(":")[0]);
-        System.out.println("description: " + description[0]);
-
         name = cardDataArray[4].substring(5);
         attack = Integer.parseInt(cardDataArray[5].substring(7));
-        
+        ambrosiaCost = Integer.parseInt(cardDataArray[6].substring(13));
     }
 
     public Cards(int x, int y, int health, int attack, int originalX, int originalY, int selectionIndex) {
@@ -123,6 +119,10 @@ public class Cards implements MouseMotionListener {
         return originalY;
     }
 
+    public int getAmbrosiaCost() {
+        return ambrosiaCost;
+    }
+
     public int getSelectionIndex() {
         return selectionIndex;
     }
@@ -140,12 +140,18 @@ public class Cards implements MouseMotionListener {
         g.setColor(Color.BLACK);
         g.setFont(new Font("Arial", Font.BOLD, 14));
         
+        // write the description of the card
         count = 50;
         for (String line : description) {    
-            System.out.println("count: " + count);
+            //System.out.println("count: " + count);
             g.drawString(line, getX() + 15, getY() + count);
             count = count+20;
         }
+
+        if (ambrosiaCost > 0) {
+            g.drawString(""+ambrosiaCost, getX() + 8, getY() + 17);
+        }
+
         //g.drawString(description[0], getX() + 15, getY() + 50);
         //g.drawString("Attack: " + getAttack(), getX() + 15, getY() + 70);
     }

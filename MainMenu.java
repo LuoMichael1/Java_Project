@@ -136,10 +136,9 @@ public class MainMenu extends JPanel implements MouseListener {
     }
 
     public void mousePressed(MouseEvent e) {
-        System.out.println("hi1");
+        // switches to the next card in the layout
         CardLayout cardLayout = (CardLayout) getParent().getLayout();
         cardLayout.next(getParent());
-        System.out.println("hi2");
     }
 
     public void mouseReleased(MouseEvent e) {

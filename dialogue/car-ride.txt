@@ -91,3 +91,6 @@ P: Exactly. So let's make sure it doesn't happen. Let's go in there and do our j
 MC: Let's do it.
 
 P: Alright. Here we go.
+
+
+startTutorial()

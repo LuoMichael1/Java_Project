@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 import javax.imageio.ImageIO;
 
-public class Game extends JFrame {
+public class Game extends JPanel implements MouseListener{
     private int characterX = 0;
     private BufferedImage farBackground, background1, background2, foreground, blackBar;
     private BufferedImage[] carSprites = new BufferedImage[4];
@@ -37,64 +37,8 @@ public class Game extends JFrame {
         }
 
         dialogue = new Dialogue();
-
-        JPanel panel = new JPanel() {
-
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                int w = getWidth();
-                int h = getHeight();
-
-                int bg1x = -characterX / 8 % w;
-                int bg2x = -characterX / 4 % w;
-                int fgx = -characterX % w;
-
-                final int BAR_HEIGHT = getHeight() / 8;
-
-                g.drawImage(farBackground, 0, 0, w, h, null);
-
-                g.drawImage(background1, bg1x, 0, w, h, null);
-                g.drawImage(background1, bg1x + w, 0, w, h, null);
-
-                g.drawImage(background2, bg2x, 0, w, h, null);
-                g.drawImage(background2, bg2x + w, 0, w, h, null);
-
-                // Calculate the y-coordinate based on a sine function
-                int characterY = (int) ((h - (h / 3)) + Math.sin(characterX / 100.0));
-                g.drawImage(carSprites[spriteIndex], w / 3, characterY, w / 3, h / 4, null);
-
-                g.drawImage(foreground, fgx, -200, w / 2, h + (h / 3), null);
-                g.drawImage(foreground, fgx + w, -200, w / 2, h + (h / 3), null);
-
-                g.drawImage(blackBar, 0, 0, w, BAR_HEIGHT, null);
-                g.drawImage(blackBar, 0, h - BAR_HEIGHT, w, BAR_HEIGHT, null);
-
-                if (dialogue.index < dialogue.dialogues.size())
-                    dialogue.draw(g);
-
-                if (fadingIn) {
-                    fadeAlpha -= 255 / 60; // Decrease alpha over 60 frames for fade-out
-                    if (fadeAlpha < 0) {
-                        fadeAlpha = 0;
-                        fadingIn = false;
-                    }
-                } else if (fadingOut) {
-                    fadeAlpha += 255 / 60; // Decrease alpha over 60 frames for fade-in
-                    if (fadeAlpha > 255) {
-                        fadeAlpha = 255;
-                    }
-                }
-
-                g.setColor(new Color(0, 0, 0, fadeAlpha));
-                g.fillRect(0, 0, w, h);
-            }
-        };
-
-        add(panel);
-        setSize(1280, 720);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setFocusable(true);
+        this.addMouseListener(this);
 
         Timer timer = new Timer(1000 / 60, e -> {
             long currentTime = System.currentTimeMillis();
@@ -106,27 +50,73 @@ public class Game extends JFrame {
                 }
                 if (dialogue.index < dialogue.dialogues.size())
                     dialogue.update();
-                panel.repaint();
+                repaint();
                 lastFrameTime = currentTime;
             }
         });
         timer.start();
+        }
 
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                dialogue.next();
-                if (dialogue.index == dialogue.tutorialStartIndex) {
-                    startTutorial();
-                } else if (dialogue.index == dialogue.dialogues.size()) {
-                    fadingOut = true;
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            int w = getWidth();
+            int h = getHeight();
+
+            int bg1x = -characterX / 8 % w;
+            int bg2x = -characterX / 4 % w;
+            int fgx = -characterX % w;
+
+            final int BAR_HEIGHT = getHeight() / 8;
+
+            g.drawImage(farBackground, 0, 0, w, h, null);
+
+            g.drawImage(background1, bg1x, 0, w, h, null);
+            g.drawImage(background1, bg1x + w, 0, w, h, null);
+
+            g.drawImage(background2, bg2x, 0, w, h, null);
+            g.drawImage(background2, bg2x + w, 0, w, h, null);
+
+            // Calculate the y-coordinate based on a sine function
+            int characterY = (int) ((h - (h / 3)) + Math.sin(characterX / 100.0));
+            g.drawImage(carSprites[spriteIndex], w / 3, characterY, w / 3, h / 4, null);
+
+            g.drawImage(foreground, fgx, -200, w / 2, h + (h / 3), null);
+            g.drawImage(foreground, fgx + w, -200, w / 2, h + (h / 3), null);
+
+            g.drawImage(blackBar, 0, 0, w, BAR_HEIGHT, null);
+            g.drawImage(blackBar, 0, h - BAR_HEIGHT, w, BAR_HEIGHT, null);
+
+            if (dialogue.index < dialogue.dialogues.size())
+                dialogue.draw(g);
+
+            if (fadingIn) {
+                fadeAlpha -= 255 / 60; // Decrease alpha over 60 frames for fade-out
+                if (fadeAlpha < 0) {
+                    fadeAlpha = 0;
+                    fadingIn = false;
+                }
+            } else if (fadingOut) {
+                fadeAlpha += 255 / 60; // Decrease alpha over 60 frames for fade-in
+                if (fadeAlpha > 255) {
+                    fadeAlpha = 255;
                 }
             }
-        });
-    }
+
+            g.setColor(new Color(0, 0, 0, fadeAlpha));
+            g.fillRect(0, 0, w, h);
+        }
+
+        //add(panel, BorderLayout.CENTER);
+        //setSize(1280, 720);
+        //setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
 
     private void startTutorial() {
-        System.out.print("Start tutorial here");
+        // switches to the next card in the layout
+        System.out.println("hellowsire");
+        CardLayout cardLayout = (CardLayout) getParent().getLayout();
+        cardLayout.next(getParent());
+        System.out.println("hellowsirette");
     }
 
     public static void main(String[] args) {
@@ -216,5 +206,30 @@ public class Game extends JFrame {
                 textIndex++;
             }
         }
+    }
+
+    public void mouseClicked(MouseEvent e) {
+        dialogue.next();
+        if (dialogue.index == dialogue.tutorialStartIndex) {
+            startTutorial();
+        } else if (dialogue.index == dialogue.dialogues.size()) {
+            fadingOut = true;
+        }
+    }
+
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    public void mouseExited(MouseEvent e) {
+    
     }
 }
