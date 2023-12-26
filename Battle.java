@@ -51,6 +51,10 @@ public class Battle extends JPanel implements ActionListener {
             g.drawString("" + player.getHealth() +"/"+ player.getMaxHealth(), 40, 80);
             g.drawString("" + enemy.getHealth() +"/"+ enemy.getMaxHealth(), 1005, 80);
             
+            // ambrosia stat
+            g.drawString("Ambrosia: " + player.getAmbrosia(), 40, 120);
+            g.drawString("Ambrosia: " + enemy.getAmbrosia(), 1005, 120);
+
 
             // display player's cards
             for (int i = 0; i < GamePanel.deckSize; i++) {
@@ -131,10 +135,15 @@ public class Battle extends JPanel implements ActionListener {
     }
 
     private void performAttack(Cards attackerCard, Battler defender) {
-        
+        // gets ambrosia from card
+        playersArray[turn].setAmbrosia(attackerCard.getAmbrosia());
+
         // checks if the character has enough ambrosia to use this card
-        if (attackerCard.getAmbrosiaCost() <= playersArray[altTurn].getAmbrosia())
+        if (attackerCard.getAmbrosiaCost() <= playersArray[turn].getAmbrosia())
             defender.setHealth(defender.getHealth() - (10*(attackerCard.getAttack())));
+            
+            playersArray[turn].setAmbrosia(-1*(attackerCard.getAmbrosiaCost()));
+
     }
 
     public void actionPerformed(ActionEvent e) {

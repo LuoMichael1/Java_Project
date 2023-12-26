@@ -11,6 +11,7 @@ public class Cards implements MouseMotionListener {
     private ImageIcon cardtest;
     private int health = 0, attack = 0;
     private int ambrosiaCost = 0;
+    private int ambrosiaGive = 0;
     private int originalX, originalY;
     private int selectionIndex = -1;
     private Scanner filesc;
@@ -58,6 +59,7 @@ public class Cards implements MouseMotionListener {
         name = cardDataArray[4].substring(5);
         attack = Integer.parseInt(cardDataArray[5].substring(7));
         ambrosiaCost = Integer.parseInt(cardDataArray[6].substring(13));
+        ambrosiaGive = Integer.parseInt(cardDataArray[7].substring(13));
     }
 
     public Cards(int x, int y, int health, int attack, int originalX, int originalY, int selectionIndex) {
@@ -125,6 +127,10 @@ public class Cards implements MouseMotionListener {
         return ambrosiaCost;
     }
 
+    public int getAmbrosia() {
+        return ambrosiaGive;
+    }
+
     public int getSelectionIndex() {
         return selectionIndex;
     }
@@ -155,6 +161,7 @@ public class Cards implements MouseMotionListener {
 
         if (ambrosiaCost > 0) {
             g.drawString(""+ambrosiaCost, getX() + 8, getY() + 17);
+
         }
 
         //g.drawString(description[0], getX() + 15, getY() + 50);

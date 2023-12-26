@@ -32,7 +32,7 @@ public abstract class Battler {
     }
 
     public void setAmbrosia(int ambrosia) {
-        this.ambrosia = ambrosia;
+        this.ambrosia = this.ambrosia + ambrosia;
     }
 
     public void setHealth(int health) {
@@ -41,7 +41,7 @@ public abstract class Battler {
     public void setMaxHealth(int maxHealth) {
         this.maxHealth = maxHealth;
     }
-    
+
     // Getters -----------------------------------
     public int getShield() {
         return shield;
