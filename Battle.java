@@ -183,7 +183,6 @@ public class Battle extends JPanel implements ActionListener {
             
             repaint();
 
-        d
             if (playersArray[altTurn].getHealth() <= 0) {
                 System.out.println(playersArray[altTurn] + "loses!");
                 isWon = true;
