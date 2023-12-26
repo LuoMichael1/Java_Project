@@ -17,7 +17,7 @@ public class Cards implements MouseMotionListener {
     private String cardDataArray[] = new String[cardDataPoints];
     private int rand; // index of a randomly chosen card
     private int count = 0;
-    private String description;
+    private String[] description;
     private String name;
     public static final int CARDWIDTH = 120;
     public static final int CARDHIGHT = 220;
@@ -47,11 +47,16 @@ public class Cards implements MouseMotionListener {
         }
 
         System.out.println("card: " + rand);
-        for(int i = 0; i < cardDataArray.length; i++) {
-            System.out.println(cardDataArray[i]);
-        }
+        //for(int i = 0; i < cardDataArray.length; i++) {
+            //System.out.println(cardDataArray[i]);
+        //}
         
-        description = cardDataArray[1];
+        // assign the data from the file to variables in the class
+        description = cardDataArray[1].split(":");
+        System.out.println("cardDataArray: " + cardDataArray[1]);
+        System.out.println("cardDataArraySplit: " + cardDataArray[1].split(":")[0]);
+        System.out.println("description: " + description[0]);
+
         name = cardDataArray[4].substring(5);
         attack = Integer.parseInt(cardDataArray[5].substring(7));
         
@@ -134,7 +139,14 @@ public class Cards implements MouseMotionListener {
         // Draw the health and attack values
         g.setColor(Color.BLACK);
         g.setFont(new Font("Arial", Font.BOLD, 14));
-        g.drawString(description, getX() + 15, getY() + 50);
+        
+        count = 50;
+        for (String line : description) {    
+            System.out.println("count: " + count);
+            g.drawString(line, getX() + 15, getY() + count);
+            count = count+20;
+        }
+        //g.drawString(description[0], getX() + 15, getY() + 50);
         //g.drawString("Attack: " + getAttack(), getX() + 15, getY() + 70);
     }
 
