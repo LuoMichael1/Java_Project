@@ -25,14 +25,13 @@ public class Battle extends JPanel implements ActionListener {
     private ImageIcon enemySprite = new ImageIcon("images/enemy.png");
     // private Cards[] playerSelectedCards;
 
-    
     private JPanel cardPanel = new JPanel() {
 
-        protected void paintComponent(Graphics g) {            
+        protected void paintComponent(Graphics g) {
             super.paintComponent(g);
-            
+
             // enables antialiasing on the font which makes it look way better
-            Graphics2D g2d = (Graphics2D)g;
+            Graphics2D g2d = (Graphics2D) g;
             g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
             // draw the characters
@@ -41,23 +40,23 @@ public class Battle extends JPanel implements ActionListener {
             g.drawImage(enemySprite.getImage(), 900, 120, null);
 
             // healthbars
-            g.drawRect(35,60, 251,25);
-            g.drawRect(1000,60, 251,25);
+            g.drawRect(35, 60, 251, 25);
+            g.drawRect(1000, 60, 251, 25);
             g.setColor(Color.red);
-            g.fillRect(36, 61, player.getHealth()/(player.getMaxHealth()/250), 24);
-            g.fillRect(1001, 61, enemy.getHealth()/(enemy.getMaxHealth()/250), 24);
+            g.fillRect(36, 61, player.getHealth() / (player.getMaxHealth() / 250), 24);
+            g.fillRect(1001, 61, enemy.getHealth() / (enemy.getMaxHealth() / 250), 24);
 
             g.setColor(Color.black);
             g.setFont(Main.Lexend18);
-            g.drawString("" + player.getHealth() +"/"+ player.getMaxHealth(), 40, 80);
-            g.drawString("" + enemy.getHealth() +"/"+ enemy.getMaxHealth(), 1005, 80);
-            
+            g.drawString("" + player.getHealth() + "/" + player.getMaxHealth(), 40, 80);
+            g.drawString("" + enemy.getHealth() + "/" + enemy.getMaxHealth(), 1005, 80);
+
             // ambrosia stat
             g.drawString("Ambrosia: " + player.getAmbrosia(), 40, 120);
             g.drawString("Ambrosia: " + enemy.getAmbrosia(), 1005, 120);
 
             // Vulnerable Stacks
-            if (player.getVulnerableStacks() > 0) 
+            if (player.getVulnerableStacks() > 0)
                 g.drawString("Vulnerable: x" + player.getVulnerableStacks(), 20, 150);
             if (enemy.getVulnerableStacks() > 0)
                 g.drawString("Vulnerable: x" + enemy.getVulnerableStacks(), 1055, 150);
@@ -68,11 +67,11 @@ public class Battle extends JPanel implements ActionListener {
                 player.hand[i].setY(440);
 
                 // moves the currently acting card upwards to make it more visible
-                if (turn == 0 && i == (round-1)/2 %8)
+                if (turn == 0 && i == (round - 1) / 2 % 8)
                     player.hand[i].setY(420);
 
                 player.hand[i].myDraw(g);
-                //drawCardInfo(g, player.hand[i]);
+                // drawCardInfo(g, player.hand[i]);
             }
 
             // display enemy's cards
@@ -83,30 +82,32 @@ public class Battle extends JPanel implements ActionListener {
                 System.out.println("round: " + round);
 
                 // moves the currently acting card upwards to make it more visible
-                if (turn == 1 && i == ((round-1)/2-1) % 8)
+                if (turn == 1 && i == ((round - 1) / 2 - 1) % 8)
                     enemy.hand[i].setY(420);
 
                 enemy.hand[i].myDraw(g);
-                //drawCardInfo(g, enemy.hand[i]);
+                // drawCardInfo(g, enemy.hand[i]);
             }
 
             // if is players turn and the card represented by i is the card currently
             // acting, setY to 800 instead
         }
 
-        // display health and attack 
-        /* 
-        private void drawCardInfo(Graphics g, Cards card) {
-            g.setColor(Color.BLACK);
-            g.setFont(new Font("Arial", Font.BOLD, 14));
-            g.drawString("Health: " + card.getHealth(), card.getX() + 10, card.getY() + 30);
-            g.drawString("Attack: " + card.getAttack(), card.getX() + 10, card.getY() + 50);
-        } 
-        */
+        // display health and attack
+        /*
+         * private void drawCardInfo(Graphics g, Cards card) {
+         * g.setColor(Color.BLACK);
+         * g.setFont(new Font("Arial", Font.BOLD, 14));
+         * g.drawString("Health: " + card.getHealth(), card.getX() + 10, card.getY() +
+         * 30);
+         * g.drawString("Attack: " + card.getAttack(), card.getX() + 10, card.getY() +
+         * 50);
+         * }
+         */
     };
 
     public Battle(Player player, Cards[] playerSelectedCards) {
-        
+
         // put playerSelectedCards into player.hand
         for (int i = 0; i < playerSelectedCards.length; i++) {
             player.hand[i] = playerSelectedCards[i];
@@ -146,23 +147,22 @@ public class Battle extends JPanel implements ActionListener {
 
         // checks if the character has enough ambrosia to use this card
         if (attackerCard.getAmbrosiaCost() <= playersArray[turn].getAmbrosia()) {
-            
-            playersArray[turn].setAmbrosia(-1*(attackerCard.getAmbrosiaCost()));
+
+            playersArray[turn].setAmbrosia(-1 * (attackerCard.getAmbrosiaCost()));
             playersArray[altTurn].setVulnerableStacks(attackerCard.getVulnerableStacks());
 
             // deal damage
             if (playersArray[altTurn].getVulnerableStacks() > 0)
-                defender.setHealth(defender.getHealth() - (20*(attackerCard.getAttack())));
+                defender.setHealth(defender.getHealth() - (20 * (attackerCard.getAttack())));
             else
-                defender.setHealth(defender.getHealth() - (10*(attackerCard.getAttack())));
-            
+                defender.setHealth(defender.getHealth() - (10 * (attackerCard.getAttack())));
 
         }
 
     }
 
     public void actionPerformed(ActionEvent e) {
-        
+
         if (e.getSource() == timer) {
 
             // if round is even, it is the player's turn, if round is odd, its the enemy's
@@ -179,9 +179,9 @@ public class Battle extends JPanel implements ActionListener {
             }
 
             reduceStacks(playersArray[turn]);
-            
-            performAttack(playersArray[turn].hand[(round-1)/2 % 8], playersArray[altTurn]);
-            
+
+            performAttack(playersArray[turn].hand[(round - 1) / 2 % 8], playersArray[altTurn]);
+
             repaint();
 
             if (playersArray[altTurn].getHealth() <= 0) {
