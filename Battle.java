@@ -16,7 +16,13 @@ public class Battle extends JPanel implements ActionListener {
     private int altTurn; // the party that is not currently acting
     private boolean isWon = false;
 
-    private int speed = 1000; // how many milliseconds before a card acts, set lower for a faster game
+    private int FPS = 60;              // frames per second
+    private int framesPerTurn = 60;    // set lower for faster game
+    private int frameCounter = 0;
+    private int framesForCardUp = 5;  // how many frames for the card up animation
+    private final int CARDY = 500;
+    private int cardUpY = CARDY;
+
     // space for messages
     private JLabel messageLabel;
     private JLabel instructionLabel;
@@ -35,7 +41,7 @@ public class Battle extends JPanel implements ActionListener {
             g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
             // draw the characters
-            g.drawImage(playerSprite.getImage(), 100, 120, null);
+            //g.drawImage(playerSprite.getImage(), 100, 120, null);
             player.myDraw(g);
             g.drawImage(enemySprite.getImage(), 900, 120, null);
 
@@ -62,28 +68,28 @@ public class Battle extends JPanel implements ActionListener {
                 g.drawString("Vulnerable: x" + enemy.getVulnerableStacks(), 1055, 150);
 
             // display player's cards
-            for (int i = 0; i < GamePanel.deckSize; i++) {
-                player.hand[i].setX(5 + i * 70);
-                player.hand[i].setY(440);
+            for (int i = GamePanel.deckSize-1; i >= 0; i=i-1) {
+                player.hand[i].setX(5 + i * 60);
+                player.hand[i].setY(CARDY);
 
-                // moves the currently acting card upwards to make it more visible
+                // moves the currently acting card upwards 20px to make it more visible
                 if (turn == 0 && i == (round - 1) / 2 % 8)
-                    player.hand[i].setY(420);
+                    player.hand[i].setY(cardUpY);
 
                 player.hand[i].myDraw(g);
                 // drawCardInfo(g, player.hand[i]);
             }
 
             // display enemy's cards
-            for (int i = 0; i < GamePanel.deckSize; i++) {
-                enemy.hand[i].setX(1140 + i * -70);
-                enemy.hand[i].setY(440);
+            for (int i = GamePanel.deckSize-1; i >= 0; i=i-1) {
+                enemy.hand[i].setX(1140 + i * -60);
+                enemy.hand[i].setY(CARDY);
 
-                System.out.println("round: " + round);
+                //System.out.println("round: " + round);
 
-                // moves the currently acting card upwards to make it more visible
+                // moves the currently acting card upwards 20px to make it more visible
                 if (turn == 1 && i == ((round - 1) / 2 - 1) % 8)
-                    enemy.hand[i].setY(420);
+                    enemy.hand[i].setY(cardUpY);
 
                 enemy.hand[i].myDraw(g);
                 // drawCardInfo(g, enemy.hand[i]);
@@ -136,7 +142,7 @@ public class Battle extends JPanel implements ActionListener {
         playersArray[0] = player;
         playersArray[1] = enemy;
 
-        timer = new Timer(speed, this);
+        timer = new Timer(1000/FPS, this);
         timer.start();
 
     }
@@ -162,35 +168,50 @@ public class Battle extends JPanel implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent e) {
-
+    
         if (e.getSource() == timer) {
+            frameCounter++;
 
+            // frame 0 - 5
+            if (frameCounter <= framesForCardUp) {
+                cardUpY = cardUpY-(75/framesForCardUp);
+                System.out.println("Testing pint 1"+cardUpY);
+            }
+
+            if (frameCounter == 10)
+                player.attackAnim();
+
+            repaint();
+            
+            // frame 60
+            if (frameCounter == framesPerTurn) {
+                frameCounter = 0;
+                cardUpY = CARDY;
             // if round is even, it is the player's turn, if round is odd, its the enemy's
             // turn. turn is 0 or 1 to make using an array easier
 
-            round++;
-            altTurn = (round + 1) % 2;
-            if (round % 2 == 0) {
-                turn = 0;
-                messageLabel.setText("Player attacks");
-            } else {
-                turn = 1;
-                messageLabel.setText("Enemy attacks");
-            }
+                round++;
+                altTurn = (round + 1) % 2;
+                if (round % 2 == 0) {
+                    turn = 0;
+                    messageLabel.setText("Player attacks");
+                } else {
+                    turn = 1;
+                    messageLabel.setText("Enemy attacks");
+                }
 
-            reduceStacks(playersArray[turn]);
+                reduceStacks(playersArray[turn]);
 
-            performAttack(playersArray[turn].hand[(round - 1) / 2 % 8], playersArray[altTurn]);
+                performAttack(playersArray[turn].hand[(round - 1) / 2 % 8], playersArray[altTurn]);
 
-            repaint();
+                if (playersArray[altTurn].getHealth() <= 0) {
+                    System.out.println(playersArray[altTurn] + "loses!");
+                    isWon = true;
+                }
 
-            if (playersArray[altTurn].getHealth() <= 0) {
-                System.out.println(playersArray[altTurn] + "loses!");
-                isWon = true;
-            }
-
-            if (isWon) {
-                System.exit(0);
+                if (isWon) {
+                    System.exit(0);
+                }
             }
         }
     }

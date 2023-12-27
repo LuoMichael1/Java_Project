@@ -15,4 +15,9 @@ public class Enemy extends Battler {
     public void myDraw(Graphics g) {
 
     }
+
+    @Override
+    public void attackAnim() {
+
+    }
 }

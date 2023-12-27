@@ -75,4 +75,6 @@ public abstract class Battler {
     }
 
     abstract public void myDraw(Graphics g);
+    abstract public void attackAnim();
+    
 }
