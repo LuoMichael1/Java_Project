@@ -37,6 +37,7 @@ public class Battle extends JPanel implements ActionListener {
 
             // draw the characters
             g.drawImage(playerSprite.getImage(), 100, 120, null);
+            player.myDraw(g);
             g.drawImage(enemySprite.getImage(), 900, 120, null);
 
             // healthbars

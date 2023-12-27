@@ -62,6 +62,8 @@ public class Cards implements MouseMotionListener {
         ambrosiaCost = Integer.parseInt(cardDataArray[6].substring(13));
         ambrosiaGive = Integer.parseInt(cardDataArray[7].substring(13));
         vulnerableStacks = Integer.parseInt(cardDataArray[12].substring(17));
+
+        filesc.close();
     }
 
     public Cards(int x, int y, int health, int attack, int originalX, int originalY, int selectionIndex) {
