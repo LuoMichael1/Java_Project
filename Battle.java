@@ -156,13 +156,16 @@ public class Battle extends JPanel implements ActionListener {
             playersArray[altTurn].setVulnerableStacks(attackerCard.getVulnerableStacks());
 
             // deal damage
-            if (playersArray[altTurn].getVulnerableStacks() > 0)
-                defender.setHealth(defender.getHealth() - (20 * (attackerCard.getAttack())));
-            else
-                defender.setHealth(defender.getHealth() - (10 * (attackerCard.getAttack())));
-            playersArray[turn].attackAnim(1);
-        }
+            int damage = (attackerCard.getAttack()) * 10;
 
+            if (playersArray[altTurn].getVulnerableStacks() > 0)
+                damage = damage*2;
+
+            if (damage > 0) {
+                defender.setHealth(defender.getHealth() - damage);
+                playersArray[turn].attackAnim(1);
+            }
+        }
     }
 
     public void actionPerformed(ActionEvent e) {

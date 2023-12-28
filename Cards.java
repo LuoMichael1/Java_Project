@@ -18,6 +18,7 @@ public class Cards implements MouseMotionListener {
     private Scanner filesc;
     private int cardDataPoints = 15;  // the number of different pieces of data stored in a card template
     private String cardDataArray[] = new String[cardDataPoints];
+    private int rarity = 0;
     private int rand; // index of a randomly chosen card
     private int count = 0;
     private String[] description;
@@ -26,20 +27,32 @@ public class Cards implements MouseMotionListener {
     public static final int CARDHIGHT = 220;
     
     
-    public Cards(int x, int y) {
-        cardtest = new ImageIcon("card.png");
+    public Cards(int x, int y, int common, int rare) {
+        
 
         this.x = x;
         this.y = y;
         this.originalX = x;
         this.originalY = y;
 
-        // randomly generate a card
-        rand = (int) (Math.random() * 4 + 1);
+        if (common+rare != 100)
+            System.out.println("CHANCE DOES NOT TOTAL 100%");
 
+        // randomly generate a card
+        rarity = (int) (Math.random() * 100 + 1);
+        if (rarity <= common) {
+            rand = (int) (Math.random() * 4 + 1);
+            rarity = 0;
+            cardtest = new ImageIcon("images/card.png");
+        } else if (rarity <= common+rare) {
+            rand = (int) (Math.random() * 2 + 1);
+            rarity = 1;
+            cardtest = new ImageIcon("images/card2.png");
+        }
+        
         try {
             // get card details from file
-            filesc = new Scanner (new File("cards/card00"+ rand +".txt"));
+            filesc = new Scanner (new File("cards/card"+rarity+"0"+ rand +".txt"));
             
             while (filesc.hasNextLine()) {                                    
                 cardDataArray[count] = (filesc.nextLine()); 
