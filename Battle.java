@@ -12,7 +12,7 @@ public class Battle extends JPanel implements ActionListener {
 
     private int round = 0; // player goes first in any battle
                            // the enemy will go first
-    private int turn = 0; // player or enemys turn to act
+    private int turn = 5; // player or enemys turn to act
     private int altTurn; // the party that is not currently acting
     private boolean isWon = false;
 
@@ -62,13 +62,20 @@ public class Battle extends JPanel implements ActionListener {
             g.drawString("Ambrosia: " + enemy.getAmbrosia(), 1005, 120);
 
             // Vulnerable Stacks
+            
             if (player.getVulnerableStacks() > 0) {
-                g.drawImage(vulnerableIcon.getImage(), 15, 200, null);
-                g.drawString("Vulnerable: x" + player.getVulnerableStacks(), 20, 150);
+                g.drawImage(vulnerableIcon.getImage(), 22, 200, null);
+                g.setFont(Main.Lexend12);
+                g.drawString("Vulnerable", 20, 260);
+                g.setFont(Main.Lexend18);
+                g.drawString("" + player.getVulnerableStacks(), 25, 205);
             }
             if (enemy.getVulnerableStacks() > 0) {
-                g.drawImage(vulnerableIcon.getImage(), 1200, 200, null);
-                g.drawString("Vulnerable: x" + enemy.getVulnerableStacks(), 1055, 150);
+                g.drawImage(vulnerableIcon.getImage(), 1190, 200, null);
+                g.setFont(Main.Lexend12);
+                g.drawString("Vulnerable", 1180, 260);
+                g.setFont(Main.Lexend18);
+                g.drawString("" + enemy.getVulnerableStacks(), 1190, 205);
             }
 
             // display player's cards
@@ -98,22 +105,7 @@ public class Battle extends JPanel implements ActionListener {
                 enemy.hand[i].myDraw(g);
                 // drawCardInfo(g, enemy.hand[i]);
             }
-
-            // if is players turn and the card represented by i is the card currently
-            // acting, setY to 800 instead
         }
-
-        // display health and attack
-        /*
-         * private void drawCardInfo(Graphics g, Cards card) {
-         * g.setColor(Color.BLACK);
-         * g.setFont(new Font("Arial", Font.BOLD, 14));
-         * g.drawString("Health: " + card.getHealth(), card.getX() + 10, card.getY() +
-         * 30);
-         * g.drawString("Attack: " + card.getAttack(), card.getX() + 10, card.getY() +
-         * 50);
-         * }
-         */
     };
 
     public Battle(Player player, Cards[] playerSelectedCards) {
@@ -143,9 +135,11 @@ public class Battle extends JPanel implements ActionListener {
         this.player = player;
         // this.playerSelectedCards = playerSelectedCards;
 
+        // create player array 
         playersArray[0] = player;
         playersArray[1] = enemy;
 
+        // setup timer
         timer = new Timer(1000/FPS, this);
         timer.start();
 
@@ -166,7 +160,7 @@ public class Battle extends JPanel implements ActionListener {
                 defender.setHealth(defender.getHealth() - (20 * (attackerCard.getAttack())));
             else
                 defender.setHealth(defender.getHealth() - (10 * (attackerCard.getAttack())));
-
+            playersArray[turn].attackAnim(1);
         }
 
     }
@@ -175,18 +169,35 @@ public class Battle extends JPanel implements ActionListener {
     
         if (e.getSource() == timer) {
             frameCounter++;
-
-            // frame 0 - 5
-            if (frameCounter <= framesForCardUp) {
-                cardUpY = cardUpY-(75/framesForCardUp);
-                System.out.println("Testing pint 1"+cardUpY);
+            
+            // first frame of turn
+            if (frameCounter == 1) {
+                altTurn = (round + 1) % 2;
+                if (round % 2 == 0) {
+                    turn = 0;
+                    messageLabel.setText("Player attacks");
+                } else {
+                    turn = 1;
+                    messageLabel.setText("Enemy attacks");
+                }
+                round++;
             }
 
+            // frame 0 - 5
+            if (frameCounter <= framesForCardUp)
+                cardUpY = cardUpY-(75/framesForCardUp);
+
+            if (frameCounter == 20)
+                performAttack(playersArray[turn].hand[(round - 1) / 2 % 8], playersArray[altTurn]);
+                
             if (frameCounter == 40)
                 player.attackAnimStop(1);
 
             repaint();
-            
+            // frame 55 - 60
+            if (frameCounter >= 55)
+                cardUpY = cardUpY+(75/framesForCardUp);
+
             // frame 60
             if (frameCounter == framesPerTurn) {
                 frameCounter = 0;
@@ -195,20 +206,11 @@ public class Battle extends JPanel implements ActionListener {
             // turn. turn is 0 or 1 to make using an array easier
 
                 
-                altTurn = (round + 1) % 2;
-                if (round % 2 == 0) {
-                    turn = 0;
-                    messageLabel.setText("Player attacks");
-                    player.attackAnim(1);
-                } else {
-                    turn = 1;
-                    messageLabel.setText("Enemy attacks");
-                }
-                round++;
+                
 
                 reduceStacks(playersArray[turn]);
 
-                performAttack(playersArray[turn].hand[(round - 1) / 2 % 8], playersArray[altTurn]);
+                
 
                 if (playersArray[altTurn].getHealth() <= 0) {
                     System.out.println(playersArray[altTurn] + "loses!");
