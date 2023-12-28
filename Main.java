@@ -8,8 +8,12 @@ import java.io.File;
 class Main {
 
     // Fonts
-    public static Font Lexend12 = loadFont("fonts/lexend/static/Lexend-Regular.ttf", 12);
-    public static Font Lexend18 = loadFont("fonts/lexend/static/Lexend-Regular.ttf", 18);
+    public static final Font Lexend12 = loadFont("fonts/lexend/static/Lexend-Regular.ttf", 12);
+    public static final Font Lexend18 = loadFont("fonts/lexend/static/Lexend-Regular.ttf", 18);
+
+    // Size
+    public static final int WIDTH = 1280;
+    public static final int HEIGHT = 720;
 
     public static void main(String[] args) {
 
@@ -26,7 +30,7 @@ class Main {
         p.add(p3, "CardGame");
 
         f.setVisible(true);
-        f.setSize(1280, 720);
+        f.setSize(WIDTH, HEIGHT);
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         CardLayout cardLayout = (CardLayout) p.getLayout();

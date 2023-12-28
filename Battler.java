@@ -8,7 +8,7 @@ public abstract class Battler {
     public int cardsUsed = 0;
 
     public ArrayList<Cards> deck = new ArrayList<>();
-    public Cards[] hand = new Cards[8];
+    public Cards[] hand = new Cards[10];
 
     private String name;
     // players stats
@@ -21,8 +21,8 @@ public abstract class Battler {
     public Battler(String name) {
         this.name = name;
         // create the players deck
-        for (int i = 0; i < GamePanel.deckSize; i++) {
-            deck.add(new Cards(i * 110 + 200, 420));
+        for (int i = 0; i < 10; i++) {
+            deck.add(new Cards(i * 110 + 75, 420));
             System.out.println("hello");
             System.out.println(i);
         }

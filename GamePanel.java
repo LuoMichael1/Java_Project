@@ -22,7 +22,7 @@ public class GamePanel extends JPanel implements MouseMotionListener, MouseListe
     private JButton leftButton; // scroll left
     private JButton rightButton; // scroll right
 
-    private JLabel[] cardBoxes = new JLabel[deckSize + 1];
+    private JLabel[] cardBoxes = new JLabel[9]; // the slots that a card can be dragged to
     private Cards[] selectedCards = new Cards[8];
     private int cardsSelected = 0;
 
@@ -243,10 +243,17 @@ public class GamePanel extends JPanel implements MouseMotionListener, MouseListe
         }
     }
 
+    // remove gaps between cards in the deck as cards are removed. Tries to center the cards
     public void removeGaps() {
 
-        // remove gaps between cards in the deck
-        int deckX = 200;
+        // gets the center of the screen
+        int deckX = (Main.WIDTH)/2;
+
+        // adjusts the start accounting for each of the cards in the deck
+        for (Cards card : player.deck)
+            deckX = deckX - 55;
+
+        // puts each card after one another
         for (Cards card : player.deck) {
             card.setX(deckX + scrollValue);
             deckX += 110;
