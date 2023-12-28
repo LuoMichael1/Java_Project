@@ -1,5 +1,21 @@
-0 0 
-1 1
-2 1
-3 1
-0 0
+// first number is visiblilty x y |visiblilty x y
+frame0 
+frame1    
+frame2
+frame3
+frame4
+frame5
+frame6
+frame7
+frame8
+frame9
+frame10
+frame11
+frame12
+frame13
+frame14
+frame15
+frame16
+frame17
+frame18
+frame19

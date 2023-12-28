@@ -17,7 +17,11 @@ public class Enemy extends Battler {
     }
 
     @Override
-    public void attackAnim() {
+    public void attackAnim(int frame) {
 
+    }
+
+    @Override
+    public void attackAnimStop(int frame) {
     }
 }

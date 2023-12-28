@@ -11,8 +11,9 @@ public class Player extends Battler {
     private String SpriteAnimArray[] = new String[50];  // 50 just to be on the safe side
     private String tmpArray[];
     private String tmpArray2[];
+    private boolean attackAnimtest = false;
 
-    private int x = 130;
+    private int x = 160;
     private int y = 120;
     private int count = 0;
 
@@ -66,7 +67,7 @@ public class Player extends Battler {
 
             int isVisible = Integer.parseInt(tmpArray2[1]);
             //System.out.println("uwu");
-            if (isVisible == 1) {
+            if (isVisible == 1 || attackAnimtest) {
                 g.clipRect(x+posX+offsetX, y+posY+offsetY, iwidth, iheight);
                 g.drawImage(playerSprite.getImage(), x+offsetX, y+offsetY, null);
                 g.setClip(null);
@@ -75,8 +76,11 @@ public class Player extends Battler {
     }
 
 
-    public void attackAnim() {
-        
+    public void attackAnim(int frame) {
+        attackAnimtest = true;
+    }
+    public void attackAnimStop(int frame) {
+        attackAnimtest = false;
     }
 
 }

@@ -10,14 +10,14 @@ public class Battle extends JPanel implements ActionListener {
 
     private Battler playersArray[] = new Battler[2];
 
-    private int round = 1; // round starts at 1 so player goes first in any battle, if round starts as 0,
+    private int round = 0; // player goes first in any battle
                            // the enemy will go first
-    private int turn; // player or enemys turn to act
+    private int turn = 0; // player or enemys turn to act
     private int altTurn; // the party that is not currently acting
     private boolean isWon = false;
 
-    private int FPS = 60;              // frames per second
-    private int framesPerTurn = 60;    // set lower for faster game
+    private int FPS = 60;              // frames per second (use this to change speed cuz some animations are tied to stuff)
+    private int framesPerTurn = 60;    
     private int frameCounter = 0;
     private int framesForCardUp = 5;  // how many frames for the card up animation
     private final int CARDY = 500;
@@ -27,7 +27,7 @@ public class Battle extends JPanel implements ActionListener {
     private JLabel messageLabel;
     private JLabel instructionLabel;
     private Timer timer;
-    private ImageIcon playerSprite = new ImageIcon("images/player.png");
+    private ImageIcon vulnerableIcon = new ImageIcon("images/VulnerableIcon.png");
     private ImageIcon enemySprite = new ImageIcon("images/enemy.png");
     // private Cards[] playerSelectedCards;
 
@@ -43,7 +43,7 @@ public class Battle extends JPanel implements ActionListener {
             // draw the characters
             //g.drawImage(playerSprite.getImage(), 100, 120, null);
             player.myDraw(g);
-            g.drawImage(enemySprite.getImage(), 900, 120, null);
+            g.drawImage(enemySprite.getImage(), 800, 140, null);
 
             // healthbars
             g.drawRect(35, 60, 251, 25);
@@ -62,10 +62,14 @@ public class Battle extends JPanel implements ActionListener {
             g.drawString("Ambrosia: " + enemy.getAmbrosia(), 1005, 120);
 
             // Vulnerable Stacks
-            if (player.getVulnerableStacks() > 0)
+            if (player.getVulnerableStacks() > 0) {
+                g.drawImage(vulnerableIcon.getImage(), 15, 200, null);
                 g.drawString("Vulnerable: x" + player.getVulnerableStacks(), 20, 150);
-            if (enemy.getVulnerableStacks() > 0)
+            }
+            if (enemy.getVulnerableStacks() > 0) {
+                g.drawImage(vulnerableIcon.getImage(), 1200, 200, null);
                 g.drawString("Vulnerable: x" + enemy.getVulnerableStacks(), 1055, 150);
+            }
 
             // display player's cards
             for (int i = GamePanel.deckSize-1; i >= 0; i=i-1) {
@@ -88,7 +92,7 @@ public class Battle extends JPanel implements ActionListener {
                 //System.out.println("round: " + round);
 
                 // moves the currently acting card upwards 20px to make it more visible
-                if (turn == 1 && i == ((round - 1) / 2 - 1) % 8)
+                if (turn == 1 && i == ((round - 1) / 2) % 8)
                     enemy.hand[i].setY(cardUpY);
 
                 enemy.hand[i].myDraw(g);
@@ -129,7 +133,7 @@ public class Battle extends JPanel implements ActionListener {
 
         // space for messages
         messageLabel = new JLabel("");
-        messageLabel.setBounds(550, 200, 300, 20);
+        messageLabel.setBounds(580, 60, 300, 20);
         messageLabel.setFont(new Font("Arial", Font.BOLD, 16));
         add(messageLabel);
 
@@ -178,8 +182,8 @@ public class Battle extends JPanel implements ActionListener {
                 System.out.println("Testing pint 1"+cardUpY);
             }
 
-            if (frameCounter == 10)
-                player.attackAnim();
+            if (frameCounter == 40)
+                player.attackAnimStop(1);
 
             repaint();
             
@@ -190,15 +194,17 @@ public class Battle extends JPanel implements ActionListener {
             // if round is even, it is the player's turn, if round is odd, its the enemy's
             // turn. turn is 0 or 1 to make using an array easier
 
-                round++;
+                
                 altTurn = (round + 1) % 2;
                 if (round % 2 == 0) {
                     turn = 0;
                     messageLabel.setText("Player attacks");
+                    player.attackAnim(1);
                 } else {
                     turn = 1;
                     messageLabel.setText("Enemy attacks");
                 }
+                round++;
 
                 reduceStacks(playersArray[turn]);
 
