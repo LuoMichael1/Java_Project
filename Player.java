@@ -59,7 +59,7 @@ public class Player extends Battler {
         counter++;
         //animXOffSet = counter%10;
         //animYOffSet = (counter/2)%5;
-        tmpArray2 = SpriteAnimArray[(counter%lineCounter)+1].split(" ");
+        tmpArray2 = SpriteAnimArray[counter%(lineCounter-1)].split(" ");
 
         
 
@@ -77,7 +77,7 @@ public class Player extends Battler {
             int offsetY = Integer.parseInt(tmpArray[5]);
 
             // animation file
-            int isVisible = Integer.parseInt(tmpArray2[0 + (i*3)]);
+            int isVisible = Integer.parseInt(tmpArray2[i*3]);
             int animXOffSet = Integer.parseInt(tmpArray2[1 + (i*3)]);
             int animYOffSet = Integer.parseInt(tmpArray2[2 + (i*3)]);
 
