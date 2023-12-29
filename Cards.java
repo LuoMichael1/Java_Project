@@ -13,6 +13,7 @@ public class Cards implements MouseMotionListener {
     private int ambrosiaCost = 0;
     private int ambrosiaGive = 0;
     private int vulnerableStacks = 0;
+    private int shield = 0;
     private int originalX, originalY;
     private int selectionIndex = -1;
     private Scanner filesc;
@@ -74,6 +75,7 @@ public class Cards implements MouseMotionListener {
         ambrosiaCost = Integer.parseInt(cardDataArray[6].substring(13));
         ambrosiaGive = Integer.parseInt(cardDataArray[7].substring(13));
         vulnerableStacks = Integer.parseInt(cardDataArray[12].substring(17));
+        shield = Integer.parseInt(cardDataArray[11].substring(12));
 
         filesc.close();
     }
@@ -146,7 +148,9 @@ public class Cards implements MouseMotionListener {
     public int getAmbrosia() {
         return ambrosiaGive;
     }
-
+    public int getShield() {
+        return shield;
+    }
     public int getVulnerableStacks() {
         return vulnerableStacks;
     }

@@ -153,6 +153,7 @@ public class Battle extends JPanel implements ActionListener {
         if (attackerCard.getAmbrosiaCost() <= playersArray[turn].getAmbrosia()) {
 
             playersArray[turn].setAmbrosia(-1 * (attackerCard.getAmbrosiaCost()));
+            playersArray[turn].setShield(attackerCard.getShield());
             playersArray[altTurn].setVulnerableStacks(attackerCard.getVulnerableStacks());
 
             // deal damage

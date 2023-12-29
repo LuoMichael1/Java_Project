@@ -30,7 +30,7 @@ public abstract class Battler {
 
     // Setters -----------------------------------
     public void setShield(int shield) {
-        this.shield = shield;
+        this.shield = this.shield + shield;
     }
 
     public void setAmbrosia(int ambrosia) {
