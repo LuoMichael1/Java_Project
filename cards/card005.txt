@@ -1,15 +1,15 @@
 Card Description
-Shield +2:Deal 1 DMG 
+Deal 12 DMG 
 
-rarity 1
-name Stance     
-damage 1
-ambrosiaCost 0
+rarity 0
+name Strike     
+damage 12
+ambrosiaCost 2
 ambrosiaGive 0
 heal 0
 healingStacks 0
 addMaxHP 0
-addShieldHp 2
+addShieldHp 0
 vulnerableStacks 0
 strengthenStacks 0
 defenceStacks 0

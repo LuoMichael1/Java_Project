@@ -17,7 +17,7 @@ public class Cards implements MouseMotionListener {
     private int originalX, originalY;
     private int selectionIndex = -1;
     private Scanner filesc;
-    private int cardDataPoints = 15;  // the number of different pieces of data stored in a card template
+    private int cardDataPoints = 30;  // the number of different pieces of data stored in a card template
     private String cardDataArray[] = new String[cardDataPoints];
     private int rarity = 0;
     private int rand; // index of a randomly chosen card
@@ -41,7 +41,7 @@ public class Cards implements MouseMotionListener {
         // randomly generate a card
         rarity = (int) (Math.random() * 100 + 1);
         if (rarity <= common) {
-            rand = (int) (Math.random() * 4 + 1);
+            rand = (int) (Math.random() * 5 + 1);
             rarity = 0;
             cardtest = new ImageIcon("images/card4.png");
         } else if (rarity <= common+rare) {
@@ -60,10 +60,10 @@ public class Cards implements MouseMotionListener {
             }	
         }
         catch(Exception e) {
-            System.out.print(e);
+            System.out.println("here" + e);
         }
 
-        System.out.println("card: " + rand);
+        //System.out.println("card: " + rand);
         //for(int i = 0; i < cardDataArray.length; i++) {
             //System.out.println(cardDataArray[i]);
         //}

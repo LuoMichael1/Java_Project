@@ -113,10 +113,8 @@ public class Game extends JPanel implements MouseListener{
 
     private void startTutorial() {
         // switches to the next card in the layout
-        System.out.println("hellowsire");
         CardLayout cardLayout = (CardLayout) getParent().getLayout();
         cardLayout.next(getParent());
-        System.out.println("hellowsirette");
     }
 
     public static void main(String[] args) {

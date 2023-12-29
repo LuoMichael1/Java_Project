@@ -7,13 +7,13 @@ public abstract class Battler {
 
     public int cardsUsed = 0;
 
-    public ArrayList<Cards> deck = new ArrayList<>();
+    public ArrayList<Cards> deck = new ArrayList<Cards>();
     public Cards[] hand = new Cards[10];
 
     private String name;
     // players stats
-    private int health = 1000;
-    private int maxHealth = 1000;
+    private int health = 500;
+    private int maxHealth = 500;
     private int ambrosia = 0;
     private int shield = 0;
     private int vulnerableStacks = 0;
@@ -23,8 +23,8 @@ public abstract class Battler {
         // create the players deck
         for (int i = 0; i < 10; i++) {
             deck.add(new Cards(i * 120 + 40, 420, 70, 30));
-            System.out.println("hello");
-            System.out.println(i);
+            //System.out.println(deck);
+            //System.out.println(i);
         }
     }
 

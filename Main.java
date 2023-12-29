@@ -17,7 +17,7 @@ class Main {
 
     public static void main(String[] args) {
 
-        JFrame f = new JFrame("hi");
+        JFrame f = new JFrame("BEFALL");
 
         JPanel p = new JPanel(new CardLayout());
         MainMenu p1 = new MainMenu();
