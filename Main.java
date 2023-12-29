@@ -15,9 +15,14 @@ class Main {
     public static final int WIDTH = 1280;
     public static final int HEIGHT = 720;
 
+    
+
     public static void main(String[] args) {
 
+        ImageIcon test = new ImageIcon("images/favicon.png");
+
         JFrame f = new JFrame("BEFALL");
+        f.setIconImage(test.getImage());
 
         JPanel p = new JPanel(new CardLayout());
         MainMenu p1 = new MainMenu();
