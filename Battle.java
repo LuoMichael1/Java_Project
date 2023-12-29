@@ -29,6 +29,7 @@ public class Battle extends JPanel implements ActionListener {
     private Timer timer;
     private ImageIcon vulnerableIcon = new ImageIcon("images/VulnerableIcon.png");
     private ImageIcon enemySprite = new ImageIcon("images/enemy.png");
+    private ImageIcon shieldIcon = new ImageIcon("images/shieldIcon.png");
     // private Cards[] playerSelectedCards;
 
     private JPanel cardPanel = new JPanel() {
@@ -61,6 +62,17 @@ public class Battle extends JPanel implements ActionListener {
             g.drawString("Ambrosia: " + player.getAmbrosia(), 40, 120);
             g.drawString("Ambrosia: " + enemy.getAmbrosia(), 1005, 120);
 
+            // shield stat
+            g.setFont(Main.Lexend12);
+            if (player.getShield() > 0) {
+                g.drawImage(shieldIcon.getImage(), 300, 60, null);
+                g.drawString(""+player.getShield(), 300, 60);
+            }
+            if (enemy.getShield() > 0) {
+                g.drawImage(shieldIcon.getImage(), 930, 60, null);
+                g.drawString(""+enemy.getShield(), 930, 60);
+            }
+            
             // Vulnerable Stacks
             
             if (player.getVulnerableStacks() > 0) {
@@ -153,7 +165,7 @@ public class Battle extends JPanel implements ActionListener {
         if (attackerCard.getAmbrosiaCost() <= playersArray[turn].getAmbrosia()) {
 
             playersArray[turn].setAmbrosia(-1 * (attackerCard.getAmbrosiaCost()));
-            playersArray[turn].setShield(attackerCard.getShield());
+            playersArray[turn].setShield(attackerCard.getShield()*10);
             playersArray[altTurn].setVulnerableStacks(attackerCard.getVulnerableStacks());
 
             // deal damage -----------------------------------
@@ -163,8 +175,24 @@ public class Battle extends JPanel implements ActionListener {
                 damage = damage*2;
 
             if (damage > 0) {
+
+                // first deals damage to any shield
+                if (defender.getShield() >= damage) {
+                    defender.setShield(-damage);
+                    damage = 0;
+                    
+                } else if (defender.getShield() < damage) {
+                    int tempShield = defender.getShield();
+                    damage = damage-tempShield;
+                    defender.setShield(-tempShield);
+                }   
+
                 defender.setHealth(defender.getHealth() - damage);
                 playersArray[turn].attackAnim(1);
+
+                // prevents health from going below 0
+                if (defender.getHealth() < 0)
+                    defender.setHealth(0);
             }
         }
     }
