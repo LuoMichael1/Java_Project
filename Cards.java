@@ -29,7 +29,6 @@ public class Cards implements MouseMotionListener {
     
     public Cards(int x, int y, int common, int rare) {
         
-
         this.x = x;
         this.y = y;
         this.originalX = x;
@@ -98,7 +97,7 @@ public class Cards implements MouseMotionListener {
     }
 
     public boolean isInside(int mx, int my) {
-        return (x - 10 < mx && y - 10 < my && x + 110 > mx && y + 210 > my);
+        return (x - 10 < mx && y - 10 < my && x + CARDWIDTH > mx && y + CARDHIGHT > my);
     }
 
     public void setHealth(int newHealth) {

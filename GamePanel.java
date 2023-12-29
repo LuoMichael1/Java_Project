@@ -41,7 +41,24 @@ public class GamePanel extends JPanel implements MouseMotionListener, MouseListe
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
+        // anti-alising on font
+        Graphics2D g2d = (Graphics2D)g;
+        g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+
+        int counter = 1;
         g.drawOval(x - 20, y - 20, 40, 40);
+
+        // draw card boxes
+        for (int i = 0; i < deckSize; i++) {
+            g.setColor(Color.gray);
+            g.fillRect(120 + i * 130, 170, 120, 220);
+            g.setColor(Color.black);
+            g.drawRect(120 + i * 130, 170, 120, 220);
+            g.setFont(Main.Lexend60);
+            g.drawString(""+ counter,165 + i * 130, 300);
+            counter++;
+        }
+
 
         for (Cards card : player.deck) {
             card.myDraw(g);
@@ -75,8 +92,10 @@ public class GamePanel extends JPanel implements MouseMotionListener, MouseListe
         for (int i = 0; i < deckSize + 1; i++) {
             cardBoxes[i] = new JLabel();
             cardBoxes[i].setBounds(120 + i * 130, 170, 120, 220);
-            cardBoxes[i].setBorder(BorderFactory.createLineBorder(Color.BLACK));
-            this.add(cardBoxes[i]);
+
+            // I commented out these two lines and nothing broke
+            //cardBoxes[i].setBorder(BorderFactory.createLineBorder(Color.BLACK));
+            //this.add(cardBoxes[i]);
         }
     }
 
@@ -104,7 +123,7 @@ public class GamePanel extends JPanel implements MouseMotionListener, MouseListe
                 scroll(50);
             }
         });
-        this.add(leftButton, BorderLayout.WEST);
+        //this.add(leftButton, BorderLayout.WEST);
 
         // Create the right button
         rightButton = new JButton(">");
@@ -115,7 +134,7 @@ public class GamePanel extends JPanel implements MouseMotionListener, MouseListe
                 scroll(-50);
             }
         });
-        this.add(rightButton, BorderLayout.EAST);
+        //this.add(rightButton, BorderLayout.EAST);
     }
 
     public void scroll(int scrollValue) {

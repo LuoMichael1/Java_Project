@@ -80,7 +80,7 @@ public class Battle extends JPanel implements ActionListener {
 
             // display player's cards
             for (int i = GamePanel.deckSize-1; i >= 0; i=i-1) {
-                player.hand[i].setX(5 + i * 60);
+                player.hand[i].setX(5 + i * 62);
                 player.hand[i].setY(CARDY);
 
                 // moves the currently acting card upwards 20px to make it more visible
@@ -93,7 +93,7 @@ public class Battle extends JPanel implements ActionListener {
 
             // display enemy's cards
             for (int i = GamePanel.deckSize-1; i >= 0; i=i-1) {
-                enemy.hand[i].setX(1140 + i * -60);
+                enemy.hand[i].setX(1140 + i * -62);
                 enemy.hand[i].setY(CARDY);
 
                 //System.out.println("round: " + round);
@@ -188,7 +188,7 @@ public class Battle extends JPanel implements ActionListener {
 
             // frame 0 - 5
             if (frameCounter <= framesForCardUp)
-                cardUpY = cardUpY-(75/framesForCardUp);
+                cardUpY = cardUpY-(100/framesForCardUp);
 
             if (frameCounter == 20)
                 performAttack(playersArray[turn].hand[(round - 1) / 2 % 8], playersArray[altTurn]);
@@ -199,7 +199,7 @@ public class Battle extends JPanel implements ActionListener {
             repaint();
             // frame 55 - 60
             if (frameCounter >= 55)
-                cardUpY = cardUpY+(75/framesForCardUp);
+                cardUpY = cardUpY+(100/framesForCardUp);
 
             // frame 60
             if (frameCounter == framesPerTurn) {
