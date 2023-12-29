@@ -173,10 +173,12 @@ public class Cards implements MouseMotionListener {
         g.setFont(Main.Lexend18);
 
         // draw the name of the card
-        g2d.translate(getX() + 6, getY() + 5);
+        g2d.translate(getX() + 97, getY() + 8);
         g2d.rotate(Math.toRadians(90));
-        g2d.drawString(name, getX() + 65, getY() + 5);
+        g2d.drawString(name, 0, 0);
         g2d.rotate(Math.toRadians(-90));
+        g2d.translate(-(getX() + 97), -(getY() + 8));
+
         g.setFont(Main.Lexend12);
         
         // write the description of the card
