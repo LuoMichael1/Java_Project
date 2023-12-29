@@ -28,6 +28,7 @@ public class Battle extends JPanel implements ActionListener {
     private JLabel instructionLabel;
     private Timer timer;
     private ImageIcon vulnerableIcon = new ImageIcon("images/VulnerableIcon.png");
+    private ImageIcon strenghtIcon = new ImageIcon("images/strenghtIcon.png");
     private ImageIcon enemySprite = new ImageIcon("images/enemy.png");
     private ImageIcon shieldIcon = new ImageIcon("images/shieldIcon.png");
     // private Cards[] playerSelectedCards;
@@ -74,7 +75,6 @@ public class Battle extends JPanel implements ActionListener {
             }
             
             // Vulnerable Stacks
-            
             if (player.getVulnerableStacks() > 0) {
                 g.drawImage(vulnerableIcon.getImage(), 22, 200, null);
                 g.setFont(Main.Lexend12);
@@ -88,6 +88,21 @@ public class Battle extends JPanel implements ActionListener {
                 g.drawString("Vulnerable", 1180, 260);
                 g.setFont(Main.Lexend18);
                 g.drawString("" + enemy.getVulnerableStacks(), 1190, 205);
+            }
+            // Strenghten Stacks
+            if (player.getStrengthenStacks() > 0) {
+                g.drawImage(strenghtIcon.getImage(), 22, 240, null);
+                g.setFont(Main.Lexend12);
+                g.drawString("Strenght", 20, 300);
+                g.setFont(Main.Lexend18);
+                g.drawString("" + player.getStrengthenStacks(), 25, 245);
+            }
+            if (enemy.getStrengthenStacks() > 0) {
+                g.drawImage(strenghtIcon.getImage(), 1190, 240, null);
+                g.setFont(Main.Lexend12);
+                g.drawString("Strenght", 1180, 300);
+                g.setFont(Main.Lexend18);
+                g.drawString("" + enemy.getStrengthenStacks(), 1190, 245);
             }
 
             // display player's cards
@@ -167,9 +182,10 @@ public class Battle extends JPanel implements ActionListener {
             playersArray[turn].setAmbrosia(-1 * (attackerCard.getAmbrosiaCost()));
             playersArray[turn].setShield(attackerCard.getShield()*10);
             playersArray[altTurn].setVulnerableStacks(attackerCard.getVulnerableStacks());
+            playersArray[turn].setStrengthenStacks(attackerCard.getStrengthenStacks());
 
             // deal damage -----------------------------------
-            int damage = (attackerCard.getAttack()) * 10;
+            int damage = (attackerCard.getAttack()+playersArray[turn].getStrengthenStacks()) * 10;
 
             if (playersArray[altTurn].getVulnerableStacks() > 0)
                 damage = damage*2;

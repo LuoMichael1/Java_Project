@@ -17,6 +17,7 @@ public abstract class Battler {
     private int ambrosia = 0;
     private int shield = 0;
     private int vulnerableStacks = 0;
+    private int strengthenStacks = 0;
 
     public Battler(String name) {
         this.name = name;
@@ -32,42 +33,40 @@ public abstract class Battler {
     public void setShield(int shield) {
         this.shield = this.shield + shield;
     }
-
     public void setAmbrosia(int ambrosia) {
         this.ambrosia = this.ambrosia + ambrosia;
     }
-
     public void setHealth(int health) {
         this.health = health;
     }
-
     public void setMaxHealth(int maxHealth) {
         this.maxHealth = maxHealth;
     }
-
     public void setVulnerableStacks(int vulnerableStacks) {
         this.vulnerableStacks = this.vulnerableStacks + vulnerableStacks;
+    }
+    public void setStrengthenStacks(int StrengthenStacks) {
+        this.strengthenStacks = this.strengthenStacks + StrengthenStacks;
     }
 
     // Getters -----------------------------------
     public int getShield() {
         return shield;
     }
-
     public int getAmbrosia() {
         return ambrosia;
     }
-
     public int getHealth() {
         return health;
     }
-
     public int getMaxHealth() {
         return maxHealth;
     }
-
     public int getVulnerableStacks() {
         return vulnerableStacks;
+    }
+    public int getStrengthenStacks() {
+        return strengthenStacks;
     }
 
     public String toString() {

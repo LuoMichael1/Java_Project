@@ -1,9 +1,9 @@
 Card Description
-Shield +2:Deal 1 DMG 
+Deal 1 DMG:STR +2 
 
 rarity 1
 name Stance     
-damage 1
+damage 2
 ambrosiaCost 0
 ambrosiaGive 0
 heal 0
@@ -11,7 +11,7 @@ healingStacks 0
 addMaxHP 0
 addShieldHp 2
 vulnerableStacks 0
-strengthenStacks 0
+strengthenStacks 2
 defenceStacks 0
 bleedStacks 0
 isWildCard 0

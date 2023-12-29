@@ -63,7 +63,7 @@ public class GamePanel extends JPanel implements MouseMotionListener, MouseListe
             
             
             g.setFont(Main.Lexend60);
-            g.drawString(""+ counter,155 + i * 130, 300);
+            g.drawString(""+ counter, 165 + i * 130, 295);
             counter++;
         }
 

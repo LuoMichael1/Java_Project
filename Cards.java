@@ -13,6 +13,7 @@ public class Cards implements MouseMotionListener {
     private int ambrosiaCost = 0;
     private int ambrosiaGive = 0;
     private int vulnerableStacks = 0;
+    private int strengthenStacks = 0;
     private int shield = 0;
     private int originalX, originalY;
     private int selectionIndex = -1;
@@ -74,8 +75,9 @@ public class Cards implements MouseMotionListener {
         attack = Integer.parseInt(cardDataArray[5].substring(7));
         ambrosiaCost = Integer.parseInt(cardDataArray[6].substring(13));
         ambrosiaGive = Integer.parseInt(cardDataArray[7].substring(13));
-        vulnerableStacks = Integer.parseInt(cardDataArray[12].substring(17));
         shield = Integer.parseInt(cardDataArray[11].substring(12));
+        vulnerableStacks = Integer.parseInt(cardDataArray[12].substring(17));
+        strengthenStacks = Integer.parseInt(cardDataArray[13].substring(17));
 
         filesc.close();
     }
@@ -102,49 +104,29 @@ public class Cards implements MouseMotionListener {
         return (x - 10 < mx && y - 10 < my && x + CARDWIDTH > mx && y + CARDHIGHT > my);
     }
 
-    public void setHealth(int newHealth) {
-
-        health = newHealth;
-    }
-
-    public int getHealth() {
-
-        return health;
-    }
-
-    public int getAttack() {
-
-        return attack;
-    }
-
+    
+    // getters -------------------------
     public int getX() {
         return x;
     }
-
     public int getY() {
         return y;
     }
-
-    public void setX(int x) {
-        this.x = x;
+    public int getHealth() {
+        return health;
     }
-
-    public void setY(int y) {
-        this.y = y;
+    public int getAttack() {
+        return attack;
     }
-
     public int getOriginalX() {
         return originalX;
     }
-
     public int getOriginalY() {
         return originalY;
     }
-
     public int getAmbrosiaCost() {
         return ambrosiaCost;
     }
-
     public int getAmbrosia() {
         return ambrosiaGive;
     }
@@ -154,13 +136,28 @@ public class Cards implements MouseMotionListener {
     public int getVulnerableStacks() {
         return vulnerableStacks;
     }
+    public int getStrengthenStacks() {
+        return strengthenStacks;
+    }
     public int getSelectionIndex() {
         return selectionIndex;
     }
 
+    // setters
     public void setSelectionIndex(int index) {
         selectionIndex = index;
     }
+    public void setHealth(int newHealth) {
+        health = newHealth;
+    }
+    public void setX(int x) {
+        this.x = x;
+    }
+    public void setY(int y) {
+        this.y = y;
+    }
+
+
 
     public void myDraw(Graphics g) {
         // enables antialiasing on the font which makes it look way better

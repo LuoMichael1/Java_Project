@@ -2,7 +2,7 @@ Card Description
 Shield +2:Deal 1 DMG 
 
 rarity 1
-name Stance     
+name Fortify     
 damage 1
 ambrosiaCost 0
 ambrosiaGive 0
