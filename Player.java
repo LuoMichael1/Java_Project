@@ -15,8 +15,11 @@ public class Player extends Battler {
 
     private int x = 160;
     private int y = 120;
-    private int count = 0;
+    private int lineCounter = 0;
 
+    private int animXOffSet = 0;
+    private int animYOffSet = 0;
+    private int counter = 0;
 
     public Player() {
         
@@ -32,15 +35,15 @@ public class Player extends Battler {
             filesc = new Scanner (new File("images/spriteCut.txt"));
             
             while (filesc.hasNextLine()) {                                    
-                SpriteArray[count] = (filesc.nextLine()); 
-                count++;	
+                SpriteArray[lineCounter] = (filesc.nextLine()); 
+                lineCounter++;	
             }	
             // get how to animate the images
             filesc = new Scanner (new File("images/spirteAnim1.txt"));
-            count=0;
+            lineCounter=0;
             while (filesc.hasNextLine()) {                                    
-                SpriteAnimArray[count] = (filesc.nextLine()); 
-                count++;	
+                SpriteAnimArray[lineCounter] = (filesc.nextLine()); 
+                lineCounter++;	
             }	
         }
         catch(Exception e) {
@@ -53,10 +56,18 @@ public class Player extends Battler {
 
     public void myDraw(Graphics g) {
 
+        counter++;
+        //animXOffSet = counter%10;
+        //animYOffSet = (counter/2)%5;
+        tmpArray2 = SpriteAnimArray[(counter%lineCounter)+1].split(" ");
+
+        
+
+        // iterate through each part of the sprite
         for (int i=0; i < 4; i++) {
             //System.out.println("uwu");
             tmpArray = SpriteArray[i].split(" ");
-            tmpArray2 = SpriteAnimArray[i].split(" ");
+            
 
             int posX = Integer.parseInt(tmpArray[0]);
             int posY = Integer.parseInt(tmpArray[1]);
@@ -65,11 +76,17 @@ public class Player extends Battler {
             int offsetX = Integer.parseInt(tmpArray[4]);
             int offsetY = Integer.parseInt(tmpArray[5]);
 
-            int isVisible = Integer.parseInt(tmpArray2[1]);
+            // animation file
+            int isVisible = Integer.parseInt(tmpArray2[0 + (i*3)]);
+            int animXOffSet = Integer.parseInt(tmpArray2[1 + (i*3)]);
+            int animYOffSet = Integer.parseInt(tmpArray2[2 + (i*3)]);
+
+
+            //int isVisible = Integer.parseInt(tmpArray2[1]);
             //System.out.println("uwu");
             if (isVisible == 1 || attackAnimtest) {
-                g.clipRect(x+posX+offsetX, y+posY+offsetY, iwidth, iheight);
-                g.drawImage(playerSprite.getImage(), x+offsetX, y+offsetY, null);
+                g.clipRect(x+posX+offsetX+animXOffSet, y+posY+offsetY+animYOffSet, iwidth, iheight);
+                g.drawImage(playerSprite.getImage(), x+offsetX+animXOffSet, y+offsetY+animYOffSet, null);
                 g.setClip(null);
             }
         }

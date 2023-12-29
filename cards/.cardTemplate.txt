@@ -1,7 +1,7 @@
 Card Description
 use this area to write what will show up on the card ingame\n this is the base template all the cards will have\n 
 
-rarity 0 <------- this is now the first digit of the file name
+rarity 0
 name ""     
 damage 0
 ambrosiaCost 0

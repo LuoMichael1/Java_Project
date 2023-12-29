@@ -2,6 +2,9 @@
 // main panel
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
@@ -50,12 +53,17 @@ public class GamePanel extends JPanel implements MouseMotionListener, MouseListe
 
         // draw card boxes
         for (int i = 0; i < deckSize; i++) {
-            g.setColor(Color.gray);
-            g.fillRect(120 + i * 130, 170, 120, 220);
-            g.setColor(Color.black);
-            g.drawRect(120 + i * 130, 170, 120, 220);
+            g.setColor(new Color(101, 111, 249));
+            g.fillRect(122 + i * 130, 162, Cards.CARDWIDTH-4, Cards.CARDHIGHT-4);
+
+            g.setColor(new Color(45, 44, 60));
+            g.fillRect(123 + i * 130, 163, Cards.CARDWIDTH-6, Cards.CARDHIGHT-6);
+
+            g.setColor(new Color(58, 57, 74));
+            
+            
             g.setFont(Main.Lexend60);
-            g.drawString(""+ counter,165 + i * 130, 300);
+            g.drawString(""+ counter,155 + i * 130, 300);
             counter++;
         }
 
@@ -74,11 +82,11 @@ public class GamePanel extends JPanel implements MouseMotionListener, MouseListe
         this.addMouseMotionListener(this);
         this.addMouseListener(this);
 
-        instructionLabel = new JLabel(
-                "This is a card-based auto battler. Drag exactly " + deckSize
-                        + " cards into the boxes to take into battle, then press Start Battle");
+        instructionLabel = new JLabel((
+                "Drag exactly " + deckSize
+                        + " cards into the boxes to take into battle, then press Start Battle").toUpperCase());
         instructionLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        instructionLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        instructionLabel.setFont(Main.Lexend18);
         this.add(instructionLabel, BorderLayout.NORTH);
 
         // cardx = 0;
@@ -91,7 +99,7 @@ public class GamePanel extends JPanel implements MouseMotionListener, MouseListe
 
         for (int i = 0; i < deckSize + 1; i++) {
             cardBoxes[i] = new JLabel();
-            cardBoxes[i].setBounds(120 + i * 130, 170, 120, 220);
+            cardBoxes[i].setBounds(120 + i * 130, 160, 120, 220);
 
             // I commented out these two lines and nothing broke
             //cardBoxes[i].setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -103,6 +111,7 @@ public class GamePanel extends JPanel implements MouseMotionListener, MouseListe
 
         // create the battle button
         battleButton = new JButton("Start Battle");
+        
         battleButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -113,9 +122,17 @@ public class GamePanel extends JPanel implements MouseMotionListener, MouseListe
         // add the battle button to the panel
 
         this.add(battleButton, BorderLayout.SOUTH);
+        battleButton.setFont(Main.Lexend18);
+        battleButton.setForeground(Color.black);
+        battleButton.setBackground(Color.white);
+        battleButton.setBorderPainted(false);
+        battleButton.setFocusPainted(false);
+
 
         // Create the left button
         leftButton = new JButton("<");
+        
+
         leftButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
