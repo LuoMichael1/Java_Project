@@ -22,7 +22,7 @@ public abstract class Battler {
         this.name = name;
         // create the players deck
         for (int i = 0; i < 10; i++) {
-            deck.add(new Cards(i * 110 + 75, 420, 50, 50));
+            deck.add(new Cards(i * 120 + 60, 420, 50, 50));
             System.out.println("hello");
             System.out.println(i);
         }

@@ -251,12 +251,12 @@ public class GamePanel extends JPanel implements MouseMotionListener, MouseListe
 
         // adjusts the start accounting for each of the cards in the deck
         for (Cards card : player.deck)
-            deckX = deckX - 55;
+            deckX = deckX - 60;
 
         // puts each card after one another
         for (Cards card : player.deck) {
             card.setX(deckX + scrollValue);
-            deckX += 110;
+            deckX += 120;
         }
     }
 
