@@ -8,7 +8,8 @@ import java.util.Scanner;
 public class Cards implements MouseMotionListener {
 
     private int x, y;
-    private ImageIcon cardtest;
+    private ImageIcon cardImage;
+    private int level = 0;
     private int health = 0, attack = 0;
     private int ambrosiaCost = 0;
     private int ambrosiaGive = 0;
@@ -45,12 +46,12 @@ public class Cards implements MouseMotionListener {
         if (rarity <= common) {
             rand = (int) (Math.random() * 5 + 1);
             rarity = 0;
-            cardtest = new ImageIcon("images/card4.png");
+            cardImage = new ImageIcon("images/card4.png");
         } 
         else if (rarity <= common+rare) {
             rand = (int) (Math.random() * 2 + 1);
             rarity = 1;
-            cardtest = new ImageIcon("images/card5.png");
+            cardImage = new ImageIcon("images/card5.png");
         }
 
         try {
@@ -66,10 +67,6 @@ public class Cards implements MouseMotionListener {
             System.out.println("here" + e);
         }
 
-        //System.out.println("card: " + rand);
-        //for(int i = 0; i < cardDataArray.length; i++) {
-            //System.out.println(cardDataArray[i]);
-        //}
         
         // assign the data from the file to variables in the class
         description = cardDataArray[1].split(":");
@@ -115,7 +112,7 @@ public class Cards implements MouseMotionListener {
 
     public Cards(int x, int y, int health, int attack, int originalX, int originalY, int selectionIndex) {
 
-        cardtest = new ImageIcon("card.png");
+        cardImage = new ImageIcon("card.png");
 
         this.x = x;
         this.y = y;
@@ -127,7 +124,6 @@ public class Cards implements MouseMotionListener {
     }
 
     public Cards makeCopy() {
-
         return new Cards(x, y, health, attack, originalX, originalY, selectionIndex);
     }
 
@@ -135,7 +131,14 @@ public class Cards implements MouseMotionListener {
         return (x - 10 < mx && y - 10 < my && x + CARDWIDTH > mx && y + CARDHIGHT > my);
     }
 
-    
+    public void updateInfo() {
+        // Finds the correct level
+        for (cardDataArray)
+            ("//Level"+(level+1))
+        level
+
+    }
+
     // getters -------------------------
     public int getX() {
         return x;
@@ -173,6 +176,9 @@ public class Cards implements MouseMotionListener {
     public int getSelectionIndex() {
         return selectionIndex;
     }
+    public int getLevel() {
+        return level;
+    }
 
     // setters
     public void setSelectionIndex(int index) {
@@ -188,6 +194,9 @@ public class Cards implements MouseMotionListener {
         this.y = y;
     }
 
+    public void increaseLevel() {
+        level++;
+    }
 
 
     public void myDraw(Graphics g) {
@@ -197,7 +206,7 @@ public class Cards implements MouseMotionListener {
 
         
         // cardtest.paintIcon(null, g, x - 60, y - 100);
-        g.drawImage(cardtest.getImage(), x, y, null);
+        g.drawImage(cardImage.getImage(), x, y, null);
 
         // Draw the health and attack values
         g.setColor(Color.WHITE);
@@ -245,6 +254,6 @@ public class Cards implements MouseMotionListener {
     }
 
     public Image getImage() {
-        return cardtest.getImage();
+        return cardImage.getImage();
     }
 }

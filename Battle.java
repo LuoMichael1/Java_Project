@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class Battle extends JPanel implements ActionListener {
 
-    private Battler player; // = new Player(); <--- player is made in the constructor
+    private Battler player;  // player is made in the constructor
     private Battler enemy = new Enemy();
 
     private Battler playersArray[] = new Battler[2];
@@ -25,6 +25,8 @@ public class Battle extends JPanel implements ActionListener {
     private int cardUpY = CARDY;       // intializing the card up offset
 
     static final int HEALTHBAR_Y = 60; // the Y level the healthbar is drawn at
+    static final int HEALTHBAR_WIDTH = 250;
+    static final int HEALTHBAR_HEIGHT = 24;
 
     private int damage = 0;
 
@@ -37,8 +39,9 @@ public class Battle extends JPanel implements ActionListener {
     // images
     private ImageIcon vulnerableIcon = new ImageIcon("images/VulnerableIcon.png");
     private ImageIcon strenghtIcon = new ImageIcon("images/strenghtIcon.png");
-    private ImageIcon enemySprite = new ImageIcon("images/enemy.png");
     private ImageIcon shieldIcon = new ImageIcon("images/shieldIcon.png");
+
+    // ------------------------------------------------------------------------------------------
 
     public Battle(Player player, Cards[] playerSelectedCards) {
 
@@ -56,10 +59,11 @@ public class Battle extends JPanel implements ActionListener {
         this.add(instructionLabel, BorderLayout.NORTH);
 
         // space for messages
-        messageLabel = new JLabel("");
-        messageLabel.setBounds(580, 60, 300, 20);
-        messageLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        add(messageLabel);
+        //messageLabel = new JLabel("");
+        //this.add(messageLabel);
+        //messageLabel.setBounds(580, 60, 300, 20);
+        //messageLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        
 
         //add(cardPanel, BorderLayout.CENTER);
 
@@ -87,14 +91,14 @@ public class Battle extends JPanel implements ActionListener {
         // draw the characters
         //g.drawImage(playerSprite.getImage(), 100, 120, null);
         player.myDraw(g);
-        g.drawImage(enemySprite.getImage(), 800, 140, null);
+        enemy.myDraw(g);
 
         // healthbars
-        g.drawRect(35, HEALTHBAR_Y, 251, 25);
-        g.drawRect(1000, HEALTHBAR_Y, 251, 25);
+        g.drawRect(35, HEALTHBAR_Y, HEALTHBAR_WIDTH+1, HEALTHBAR_HEIGHT+1);
+        g.drawRect(Main.WIDTH-HEALTHBAR_WIDTH-36, HEALTHBAR_Y, HEALTHBAR_WIDTH+1, HEALTHBAR_HEIGHT+1);
         g.setColor(Color.red);
-        g.fillRect(36, HEALTHBAR_Y+1, player.getHealth() / (player.getMaxHealth() / 250), 24);
-        g.fillRect(1001, HEALTHBAR_Y+1, enemy.getHealth() / (enemy.getMaxHealth() / 250), 24);
+        g.fillRect(36, HEALTHBAR_Y+1, player.getHealth() / (player.getMaxHealth() / HEALTHBAR_WIDTH), HEALTHBAR_HEIGHT);
+        g.fillRect(Main.WIDTH-HEALTHBAR_WIDTH-35, HEALTHBAR_Y+1, enemy.getHealth() / (enemy.getMaxHealth() / HEALTHBAR_WIDTH), HEALTHBAR_HEIGHT);
 
         g.setColor(Color.black);
         g.setFont(Main.Lexend18);
@@ -238,10 +242,10 @@ public class Battle extends JPanel implements ActionListener {
                 altTurn = (round + 1) % 2;
                 if (round % 2 == 0) {
                     turn = 0;
-                    messageLabel.setText("Player attacks");
+                    //messageLabel.setText("Player attacks");
                 } else {
                     turn = 1;
-                    messageLabel.setText("Enemy attacks");
+                    //messageLabel.setText("Enemy attacks");
                 }
                 round++;
             }

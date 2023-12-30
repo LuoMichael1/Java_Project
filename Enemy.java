@@ -1,6 +1,9 @@
-import java.awt.Graphics;
+import java.awt.*;
+import javax.swing.*;
 
 public class Enemy extends Battler {
+
+    private ImageIcon enemySprite = new ImageIcon("images/enemy.png");
 
     public Enemy() {
 
@@ -13,7 +16,7 @@ public class Enemy extends Battler {
 
     @Override
     public void myDraw(Graphics g) {
-
+        g.drawImage(enemySprite.getImage(), 800, 140, null);
     }
 
     @Override

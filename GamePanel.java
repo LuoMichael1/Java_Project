@@ -40,7 +40,6 @@ public class GamePanel extends JPanel implements MouseMotionListener, MouseListe
         initButtons();
     }
 
-    @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 

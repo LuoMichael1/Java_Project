@@ -1,4 +1,14 @@
-Card Description
+//Level1
 Deal 2 DMG 
 name Punch     
 damage 2
+
+//Level2
+Deal 3 DMG 
+name Punch     
+damage 3
+
+//Level3
+Deal 5 DMG 
+name Punch     
+damage 5
