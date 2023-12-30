@@ -23,6 +23,7 @@ public class Battle extends JPanel implements ActionListener {
     private final int CARDY = 500;
     private int cardUpY = CARDY;
 
+    private int damage = 0;
     // space for messages
     private JLabel messageLabel;
     private JLabel instructionLabel;
@@ -105,6 +106,14 @@ public class Battle extends JPanel implements ActionListener {
                 g.drawString("" + enemy.getStrengthenStacks(), 1190, 245);
             }
 
+            if (damage > 0) {
+                g.setColor(Color.red);
+                if (turn == 0)
+                    g.drawString("-" + damage, 880, 70);
+                else 
+                    g.drawString("-" + damage, 350, 70);
+            }
+
             // display player's cards
             for (int i = GamePanel.deckSize-1; i >= 0; i=i-1) {
                 player.hand[i].setX(5 + i * 62);
@@ -185,7 +194,7 @@ public class Battle extends JPanel implements ActionListener {
             playersArray[turn].setStrengthenStacks(attackerCard.getStrengthenStacks());
 
             // deal damage -----------------------------------
-            int damage = (attackerCard.getAttack()+playersArray[turn].getStrengthenStacks()) * 10;
+            damage = (attackerCard.getAttack()+playersArray[turn].getStrengthenStacks()) * 10;
 
             if (playersArray[altTurn].getVulnerableStacks() > 0)
                 damage = damage*2;
@@ -254,7 +263,7 @@ public class Battle extends JPanel implements ActionListener {
             // turn. turn is 0 or 1 to make using an array easier
 
                 
-                
+                damage = 0;
 
                 reduceStacks(playersArray[turn]);
 

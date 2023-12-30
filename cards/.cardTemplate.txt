@@ -1,8 +1,8 @@
 Card Description
-use this area to write what will show up on the card ingame\n this is the base template all the cards will have\n 
-
-rarity 0
+use this area to write what will show up on the card ingame
 name ""     
+
+EVERYTHING BELOW IS OPTIONAL (just make sure the first effect exists here)
 damage 0
 ambrosiaCost 0
 ambrosiaGive 0

@@ -20,6 +20,7 @@ public class Cards implements MouseMotionListener {
     private Scanner filesc;
     private int cardDataPoints = 30;  // the number of different pieces of data stored in a card template
     private String cardDataArray[] = new String[cardDataPoints];
+    private String cardDataSplit[];
     private int rarity = 0;
     private int rand; // index of a randomly chosen card
     private int count = 0;
@@ -45,7 +46,8 @@ public class Cards implements MouseMotionListener {
             rand = (int) (Math.random() * 5 + 1);
             rarity = 0;
             cardtest = new ImageIcon("images/card4.png");
-        } else if (rarity <= common+rare) {
+        } 
+        else if (rarity <= common+rare) {
             rand = (int) (Math.random() * 2 + 1);
             rarity = 1;
             cardtest = new ImageIcon("images/card5.png");
@@ -71,13 +73,42 @@ public class Cards implements MouseMotionListener {
         
         // assign the data from the file to variables in the class
         description = cardDataArray[1].split(":");
-        name = (cardDataArray[4].substring(5)).toUpperCase();
-        attack = Integer.parseInt(cardDataArray[5].substring(7));
-        ambrosiaCost = Integer.parseInt(cardDataArray[6].substring(13));
-        ambrosiaGive = Integer.parseInt(cardDataArray[7].substring(13));
-        shield = Integer.parseInt(cardDataArray[11].substring(12));
-        vulnerableStacks = Integer.parseInt(cardDataArray[12].substring(17));
-        strengthenStacks = Integer.parseInt(cardDataArray[13].substring(17));
+        name = (cardDataArray[2].substring(5)).toUpperCase();
+
+        for (int i = 0; i < count; i++) {
+            cardDataSplit = cardDataArray[i].split(" ");
+
+            if (cardDataSplit[0].equals("damage")) {
+                attack = Integer.parseInt(cardDataSplit[1]);
+            }
+            else if (cardDataSplit[0].equals("ambrosiaCost")) {
+                ambrosiaCost = Integer.parseInt(cardDataSplit[1]);
+            }
+            else if (cardDataSplit[0].equals("ambrosiaGive")) {
+                ambrosiaGive = Integer.parseInt(cardDataSplit[1]);
+            }
+            else if (cardDataSplit[0].equals("heal")) {
+
+            }
+            else if (cardDataSplit[0].equals("healingStacks")) {
+
+            }
+            else if (cardDataSplit[0].equals("addMaxHP")) {
+
+            }
+            else if (cardDataSplit[0].equals("addShieldHp")) {
+                shield = Integer.parseInt(cardDataSplit[1]);
+            }
+            else if (cardDataSplit[0].equals("vulnerableStacks")) {
+                vulnerableStacks = Integer.parseInt(cardDataSplit[1]);
+            }
+            else if (cardDataSplit[0].equals("strengthenStacks")) {
+                strengthenStacks = Integer.parseInt(cardDataSplit[1]);
+            }
+            else if (cardDataSplit[0].equals("bleedStacks")) {
+
+            }
+        }
 
         filesc.close();
     }
