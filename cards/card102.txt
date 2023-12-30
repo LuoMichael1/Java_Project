@@ -2,5 +2,4 @@ Card Description
 Deal 1 DMG:STR +2 
 name Stance     
 damage 2
-addShieldHp 2
 strengthenStacks 2
