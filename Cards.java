@@ -30,7 +30,8 @@ public class Cards implements MouseMotionListener {
     public static final int CARDWIDTH = 120;
     public static final int CARDHIGHT = 220;
     
-    
+    private int line = 0;
+
     public Cards(int x, int y, int common, int rare) {
         
         this.x = x;
@@ -69,13 +70,49 @@ public class Cards implements MouseMotionListener {
 
         
         // assign the data from the file to variables in the class
-        description = cardDataArray[1].split(":");
-        name = (cardDataArray[2].substring(5)).toUpperCase();
+        updateInfo();
+        
 
-        for (int i = 0; i < count; i++) {
+        filesc.close();
+    }
+
+    public Cards(int x, int y, int health, int attack, int originalX, int originalY, int selectionIndex) {
+
+        cardImage = new ImageIcon("card.png");
+
+        this.x = x;
+        this.y = y;
+        this.health = health;
+        this.attack = attack;
+        this.originalX = originalX;
+        this.originalY = originalY;
+        this.selectionIndex = selectionIndex;
+    }
+
+    public Cards makeCopy() {
+        return new Cards(x, y, health, attack, originalX, originalY, selectionIndex);
+    }
+
+    public boolean isInside(int mx, int my) {
+        return (x - 10 < mx && y - 10 < my && x + CARDWIDTH > mx && y + CARDHIGHT > my);
+    }
+
+    public void updateInfo() {
+        // Finds the line where the data for the current level starts
+        for (int i = 0; i < cardDataArray.length; i++) {
+            if (("//Level"+(level+1)).equals(cardDataArray[i]))
+                line = i;
+        }
+
+        description = cardDataArray[line+1].split(":");
+
+        for (int i = line+2; i < count; i++) {
             cardDataSplit = cardDataArray[i].split(" ");
-
-            if (cardDataSplit[0].equals("damage")) {
+            
+            if (cardDataSplit[0].equals("name")) {
+                name = (cardDataSplit[1]).toUpperCase();
+            }
+            else if (cardDataSplit[0].equals("damage")) {
                 attack = Integer.parseInt(cardDataSplit[1]);
             }
             else if (cardDataSplit[0].equals("ambrosiaCost")) {
@@ -105,37 +142,11 @@ public class Cards implements MouseMotionListener {
             else if (cardDataSplit[0].equals("bleedStacks")) {
 
             }
+            else {
+                // Assumes that if the line doesn't contain one of the above then this is the end of what needs to be read
+                i = count;
+            }
         }
-
-        filesc.close();
-    }
-
-    public Cards(int x, int y, int health, int attack, int originalX, int originalY, int selectionIndex) {
-
-        cardImage = new ImageIcon("card.png");
-
-        this.x = x;
-        this.y = y;
-        this.health = health;
-        this.attack = attack;
-        this.originalX = originalX;
-        this.originalY = originalY;
-        this.selectionIndex = selectionIndex;
-    }
-
-    public Cards makeCopy() {
-        return new Cards(x, y, health, attack, originalX, originalY, selectionIndex);
-    }
-
-    public boolean isInside(int mx, int my) {
-        return (x - 10 < mx && y - 10 < my && x + CARDWIDTH > mx && y + CARDHIGHT > my);
-    }
-
-    public void updateInfo() {
-        // Finds the correct level
-        for (cardDataArray)
-            ("//Level"+(level+1))
-        level
 
     }
 

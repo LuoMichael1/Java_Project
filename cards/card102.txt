@@ -1,5 +1,18 @@
-Card Description
-Deal 1 DMG:STR +2 
+//Level1
+Deal 2 DMG:STR +2 
 name Stance     
 damage 2
 strengthenStacks 2
+
+//Level2
+Deal 2 DMG:STR +4 
+name Stance     
+damage 2
+strengthenStacks 4
+
+
+//Level3
+Deal 2 DMG:STR +6 
+name Stance     
+damage 2
+strengthenStacks 6

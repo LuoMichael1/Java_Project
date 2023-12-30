@@ -1,5 +1,17 @@
-Card Description
+//Level1
 Deal 4 DMG 
 name Kick     
 damage 4
+ambrosiaCost 1
+
+//Level2
+Deal 6 DMG 
+name Kick     
+damage 6
+ambrosiaCost 1
+
+//Level3
+Deal 10 DMG 
+name Kick     
+damage 10
 ambrosiaCost 1

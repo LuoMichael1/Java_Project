@@ -1,6 +1,20 @@
-Card Description
+//Level1
 Enemy gains 2:stacks of:vulnerable:Deal 1 DMG
 name Stealth     
 damage 1
 ambrosiaCost 1
 vulnerableStacks 2
+
+//Level2
+Enemy gains 4:stacks of:vulnerable:Deal 1 DMG
+name Stealth     
+damage 1
+ambrosiaCost 1
+vulnerableStacks 4
+
+//Level3
+Enemy gains 6:stacks of:vulnerable:Deal 2 DMG
+name Stealth     
+damage 2
+ambrosiaCost 1
+vulnerableStacks 6

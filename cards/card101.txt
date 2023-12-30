@@ -1,5 +1,17 @@
-Card Description
+//Level1
 Shield +2:Deal 1 DMG 
 name Fortify     
 damage 1
 addShieldHp 2
+
+//Level2
+Shield +4:Deal 1 DMG 
+name Fortify     
+damage 1
+addShieldHp 4
+
+//Level3
+Shield +6:Deal 1 DMG 
+name Fortify     
+damage 1
+addShieldHp 6

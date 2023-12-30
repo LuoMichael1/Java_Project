@@ -1,6 +1,17 @@
-Card Description
-Deal 12 DMG 
+//Level1
+Deal 10 DMG 
 name Strike     
-damage 12
+damage 10
 ambrosiaCost 2
 
+//Level2
+Deal 14 DMG 
+name Strike     
+damage 14
+ambrosiaCost 2
+
+//Level3
+Deal 20 DMG 
+name Strike     
+damage 20
+ambrosiaCost 2
