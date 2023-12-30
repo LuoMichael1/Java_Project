@@ -8,7 +8,9 @@ import java.util.Scanner;
 public class Cards implements MouseMotionListener {
 
     private int x, y;
+    private int id = 1000;    // used to compare if two cards are the same for merging | format is (####); first number is level, last 3 are the numbers from the file name
     private ImageIcon cardImage;
+    private ImageIcon star = new ImageIcon("images/star.png");
     private int level = 0;
     private int health = 0, attack = 0;
     private int ambrosiaCost = 0;
@@ -54,6 +56,8 @@ public class Cards implements MouseMotionListener {
             rarity = 1;
             cardImage = new ImageIcon("images/card5.png");
         }
+
+        id += (rarity*100) + rand;
 
         try {
             // get card details from file
@@ -190,6 +194,9 @@ public class Cards implements MouseMotionListener {
     public int getLevel() {
         return level;
     }
+    public int getID() {
+        return id;
+    }
 
     // setters
     public void setSelectionIndex(int index) {
@@ -207,6 +214,8 @@ public class Cards implements MouseMotionListener {
 
     public void increaseLevel() {
         level++;
+        id += 1000;
+        updateInfo();
     }
 
 
@@ -244,6 +253,10 @@ public class Cards implements MouseMotionListener {
             g.setColor(Color.BLACK);
             g.drawString(""+ambrosiaCost, getX() + 11, getY() + 17);
 
+        }
+        // draw the level stars
+        for (int i = 0; i < level+1; i++) {
+            g.drawImage(star.getImage(), getX()+8, getY()+28 + i*22, null);
         }
 
         //g.drawString(description[0], getX() + 15, getY() + 50);

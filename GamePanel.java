@@ -222,14 +222,19 @@ public class GamePanel extends JPanel implements MouseMotionListener, MouseListe
                 if (e.getX() >= cardBoxes[i].getX() && e.getX() <= cardBoxes[i].getX() + cardBoxes[i].getWidth()
                         && e.getY() >= cardBoxes[i].getY()
                         && e.getY() <= cardBoxes[i].getY() + cardBoxes[i].getHeight()) {
-
-                    // if there is already a card in the box, remove the card
+                    
+                    // if the same card is in the box already, merge the two cards. else just remove the card
                     if (selectedCards[i] != null) {
 
+                        if (selectedCards[i].getID() == selected.getID()) {
+                            selected.increaseLevel();
+                        }
+                        else {
                         selectedCards[i].setX(selectedCards[i].getOriginalX());
                         selectedCards[i].setY(selectedCards[i].getOriginalY());
 
                         removeCard(selectedCards[i]);
+                        }
                     }
 
                     // remove card from current position in selection if applicable to support
