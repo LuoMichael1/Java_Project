@@ -260,6 +260,8 @@ public class Battle extends JPanel implements ActionListener {
             if (frameCounter == 40)
                 player.attackAnimStop(1);
 
+            player.increaseCounter();
+            
             repaint();
             // frame 55 - 60
             if (frameCounter >= 55)

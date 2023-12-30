@@ -18,6 +18,7 @@ public abstract class Battler {
     private int shield = 0;
     private int vulnerableStacks = 0;
     private int strengthenStacks = 0;
+    private int counter = 0;
 
     public Battler(String name) {
         this.name = name;
@@ -48,7 +49,9 @@ public abstract class Battler {
     public void setStrengthenStacks(int StrengthenStacks) {
         this.strengthenStacks = this.strengthenStacks + StrengthenStacks;
     }
-
+    public void increaseCounter() {
+        counter++;
+    }
     // Getters -----------------------------------
     public int getShield() {
         return shield;
@@ -68,7 +71,9 @@ public abstract class Battler {
     public int getStrengthenStacks() {
         return strengthenStacks;
     }
-
+    public int getCounter() {
+        return counter;
+    }
     public String toString() {
         return name;
     }

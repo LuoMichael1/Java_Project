@@ -19,7 +19,7 @@ public class Player extends Battler {
 
     private int animXOffSet = 0;
     private int animYOffSet = 0;
-    private int counter = 0;
+    //private int counter = 0;
 
     public Player() {
         
@@ -49,17 +49,13 @@ public class Player extends Battler {
         catch(Exception e) {
             System.out.print(e);
         }
-
-
-
     }
 
     public void myDraw(Graphics g) {
 
-        counter++;
         //animXOffSet = counter%10;
         //animYOffSet = (counter/2)%5;
-        tmpArray2 = SpriteAnimArray[(counter/2)%(lineCounter-1)].split(" ");
+        tmpArray2 = SpriteAnimArray[(super.getCounter()/2)%(lineCounter-1)].split(" ");
 
         
 
