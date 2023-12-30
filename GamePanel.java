@@ -175,8 +175,23 @@ public class GamePanel extends JPanel implements MouseMotionListener, MouseListe
             add(battle, BorderLayout.CENTER);
             revalidate();
             repaint();
-        } else {
-            System.out.println("Please select exactly " + deckSize + " cards for the battle.");
+        } 
+        // if you didn't fill out your deck, it will generate some random cards to use
+        else {
+            for (int i = 0; i < deckSize; i++) {
+                if (selectedCards[i] == null) {
+                    selectedCards[i] = new Cards(0,0,100,0);
+                    cardsSelected++;
+                }
+            }
+            removeAll();
+            revalidate();
+            repaint();
+
+            Battle battle = new Battle(player, selectedCards);
+            add(battle, BorderLayout.CENTER);
+            revalidate();
+            repaint();
         }
     }
 
