@@ -15,3 +15,5 @@ Ambrosia +5:Deal 2 DMG
 name Wand     
 damage 2
 ambrosiaGive 5
+
+__

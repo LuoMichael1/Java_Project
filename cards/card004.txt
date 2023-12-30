@@ -18,3 +18,5 @@ name Stealth
 damage 2
 ambrosiaCost 1
 vulnerableStacks 6
+
+__

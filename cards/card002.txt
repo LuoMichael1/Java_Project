@@ -15,3 +15,5 @@ Deal 10 DMG
 name Kick     
 damage 10
 ambrosiaCost 1
+
+__

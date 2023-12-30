@@ -15,3 +15,5 @@ Deal 20 DMG
 name Strike     
 damage 20
 ambrosiaCost 2
+
+__

@@ -10,9 +10,10 @@ name Stance
 damage 2
 strengthenStacks 4
 
-
 //Level3
 Deal 2 DMG:STR +6 
 name Stance     
 damage 2
 strengthenStacks 6
+
+__

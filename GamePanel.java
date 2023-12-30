@@ -241,7 +241,7 @@ public class GamePanel extends JPanel implements MouseMotionListener, MouseListe
                     // if the same card is in the box already, merge the two cards. else just remove the card
                     if (selectedCards[i] != null) {
 
-                        if (selectedCards[i].getID() == selected.getID() && !(selectedCards[i] == selected)) {
+                        if (selectedCards[i].getID() == selected.getID() && !(selectedCards[i] == selected) && !(selected.getLevel() > 2)) {
                             selected.increaseLevel();
                         }
                         else {

@@ -15,3 +15,5 @@ Shield +6:Deal 1 DMG
 name Fortify     
 damage 1
 addShieldHp 6
+
+__
