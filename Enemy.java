@@ -15,8 +15,12 @@ public class Enemy extends Battler {
     }
 
     @Override
-    public void myDraw(Graphics g) {
+    public void drawSprite(Graphics g) {
         g.drawImage(enemySprite.getImage(), 800, 200, null);
+    }
+
+    public void drawStatus(Graphics g) {
+       
     }
 
     @Override

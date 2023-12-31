@@ -5,7 +5,8 @@ import java.util.Scanner;
 
 public class Player extends Battler {
 
-    private ImageIcon playerSprite = new ImageIcon("images/player2.png");    // just for fun
+    private ImageIcon playerSprite = new ImageIcon("images/player2.png");   
+
     private Scanner filesc;
     private String SpriteArray[] = new String[50];  // 50 just to be on the safe side
     private String SpriteAnimArray[] = new String[50];  // 50 just to be on the safe side
@@ -16,6 +17,7 @@ public class Player extends Battler {
     private int x = 160;
     private int y = 200;
     private int lineCounter = 0;
+    private int yoffset = 0;
 
     private int animXOffSet = 0;
     private int animYOffSet = 0;
@@ -51,7 +53,7 @@ public class Player extends Battler {
         }
     }
 
-    public void myDraw(Graphics g) {
+    public void drawSprite(Graphics g) {
 
         //animXOffSet = counter%10;
         //animYOffSet = (counter/2)%5;
@@ -87,7 +89,40 @@ public class Player extends Battler {
             }
         }
     }
+    
+    public void drawStatus(Graphics g) {
+        //show health
+        g.setColor(Color.black);
+        g.drawRect(35, 100, 250+1, 24+1);
+        g.setColor(Color.gray);
+        g.fillRect(36, 100+1, 250, 24);
+        g.setColor(Color.red);
+        g.fillRect(36, 100+1, super.getHealth() / (super.getMaxHealth() / 250), 24);
+        
+        g.setColor(Color.black);
+        g.setFont(Main.Lexend18);
+        g.drawString("" + super.getHealth() + "/" + super.getMaxHealth(), 40, 100+20);
+        
+        // shield stat
+        g.setFont(Main.Lexend12);
+        if (super.getShield() > 0) {
+            g.drawImage(super.getStatusImage()[0].getImage(), 300, 100, null);
+            g.drawString("" + super.getShield(), 300, 100);
+        }
 
+        // show other stats
+        for (int i = 1; i < super.getStatusNum().length; i++) {
+            if (super.getStatusNum()[i] > 0) {
+                yoffset = yoffset+80;
+                g.drawImage(super.getStatusImage()[i].getImage(), 22, 100+yoffset, null);
+                g.setFont(Main.Lexend12);
+                g.drawString(super.getStatusName()[i], 20, 160+yoffset);
+                g.setFont(Main.Lexend18);
+                g.drawString("" + super.getStatusNum()[i], 25, 105+yoffset);
+            }
+        }
+        yoffset = 0;
+    }
 
     public void attackAnim(int frame) {
         attackAnimtest = true;
@@ -95,5 +130,7 @@ public class Player extends Battler {
     public void attackAnimStop(int frame) {
         attackAnimtest = false;
     }
+
+    
 
 }

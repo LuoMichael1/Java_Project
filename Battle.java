@@ -36,7 +36,7 @@ public class Battle extends JPanel implements ActionListener {
 
     private JButton doubleSpeed;
     private boolean doubleTime = false;
-    private int culler = 0;
+    private int culler = 0;         // when not in double speed, discards half of the timer events
     private Timer timer;
     
     // images
@@ -103,49 +103,52 @@ public class Battle extends JPanel implements ActionListener {
         //g.drawImage(background.getImage(), 0, 0, null);
         // draw the characters
         //g.drawImage(playerSprite.getImage(), 100, 120, null);
-        player.myDraw(g);
-        enemy.myDraw(g);
+        player.drawSprite(g);
+        enemy.drawSprite(g);
 
+        player.drawStatus(g);
+        
         // healthbars
-        g.drawRect(35, HEALTHBAR_Y, HEALTHBAR_WIDTH+1, HEALTHBAR_HEIGHT+1);
+        //g.drawRect(35, HEALTHBAR_Y, HEALTHBAR_WIDTH+1, HEALTHBAR_HEIGHT+1);
+        g.setColor(Color.black);
         g.drawRect(Main.WIDTH-HEALTHBAR_WIDTH-51, HEALTHBAR_Y, HEALTHBAR_WIDTH+1, HEALTHBAR_HEIGHT+1);
         g.setColor(Color.gray);
-        g.fillRect(36, HEALTHBAR_Y+1, HEALTHBAR_WIDTH, HEALTHBAR_HEIGHT);
+        //g.fillRect(36, HEALTHBAR_Y+1, HEALTHBAR_WIDTH, HEALTHBAR_HEIGHT);
         g.fillRect(Main.WIDTH-HEALTHBAR_WIDTH-50, HEALTHBAR_Y+1, HEALTHBAR_WIDTH, HEALTHBAR_HEIGHT);
 
         g.setColor(Color.red);
-        g.fillRect(36, HEALTHBAR_Y+1, player.getHealth() / (player.getMaxHealth() / HEALTHBAR_WIDTH), HEALTHBAR_HEIGHT);
+        //g.fillRect(36, HEALTHBAR_Y+1, player.getHealth() / (player.getMaxHealth() / HEALTHBAR_WIDTH), HEALTHBAR_HEIGHT);
         g.fillRect(Main.WIDTH-HEALTHBAR_WIDTH-50, HEALTHBAR_Y+1, enemy.getHealth() / (enemy.getMaxHealth() / HEALTHBAR_WIDTH), HEALTHBAR_HEIGHT);
 
 
         g.setColor(Color.black);
         g.setFont(Main.Lexend18);
-        g.drawString("" + player.getHealth() + "/" + player.getMaxHealth(), 40, HEALTHBAR_Y+20);
+        //g.drawString("" + player.getHealth() + "/" + player.getMaxHealth(), 40, HEALTHBAR_Y+20);
         g.drawString("" + enemy.getHealth() + "/" + enemy.getMaxHealth(), 1005, HEALTHBAR_Y+20);
 
         // ambrosia stat
-        g.drawString("Ambrosia: " + player.getAmbrosia(), 40, 160);
-        g.drawString("Ambrosia: " + enemy.getAmbrosia(), 1005, 160);
+        //g.drawString("Ambrosia: " + player.getEnergy(), 40, 160);
+        g.drawString("Ambrosia: " + enemy.getEnergy(), 1005, 160);
 
         // shield stat
         g.setFont(Main.Lexend12);
-        if (player.getShield() > 0) {
-            g.drawImage(shieldIcon.getImage(), 300, HEALTHBAR_Y, null);
-            g.drawString(""+player.getShield(), 300, HEALTHBAR_Y);
-        }
+        //if (player.getShield() > 0) {
+        //    g.drawImage(shieldIcon.getImage(), 300, HEALTHBAR_Y, null);
+        //    g.drawString(""+player.getShield(), 300, HEALTHBAR_Y);
+        //}
         if (enemy.getShield() > 0) {
             g.drawImage(shieldIcon.getImage(), 910, HEALTHBAR_Y, null);
             g.drawString(""+enemy.getShield(), 910, HEALTHBAR_Y);
         }
         
         // Vulnerable Stacks
-        if (player.getVulnerableStacks() > 0) {
-            g.drawImage(vulnerableIcon.getImage(), 22, 200, null);
-            g.setFont(Main.Lexend12);
-            g.drawString("Vulnerable", 20, 260);
-            g.setFont(Main.Lexend18);
-            g.drawString("" + player.getVulnerableStacks(), 25, 205);
-        }
+        //if (player.getVulnerableStacks() > 0) {
+        //    g.drawImage(vulnerableIcon.getImage(), 22, 200, null);
+        //    g.setFont(Main.Lexend12);
+        //    g.drawString("Vulnerable", 20, 260);
+        //    g.setFont(Main.Lexend18);
+        //    g.drawString("" + player.getVulnerableStacks(), 25, 205);
+        //}
         if (enemy.getVulnerableStacks() > 0) {
             g.drawImage(vulnerableIcon.getImage(), 1190, 200, null);
             g.setFont(Main.Lexend12);
@@ -154,13 +157,13 @@ public class Battle extends JPanel implements ActionListener {
             g.drawString("" + enemy.getVulnerableStacks(), 1190, 205);
         }
         // Strenghten Stacks
-        if (player.getStrengthenStacks() > 0) {
-            g.drawImage(strenghtIcon.getImage(), 22, 240, null);
-            g.setFont(Main.Lexend12);
-            g.drawString("Strenght", 20, 300);
-            g.setFont(Main.Lexend18);
-            g.drawString("" + player.getStrengthenStacks(), 25, 245);
-        }
+        //if (player.getStrengthenStacks() > 0) {
+        //    g.drawImage(strenghtIcon.getImage(), 22, 240, null);
+        //    g.setFont(Main.Lexend12);
+        //    g.drawString("Strenght", 20, 300);
+        //    g.setFont(Main.Lexend18);
+        //    g.drawString("" + player.getStrengthenStacks(), 25, 245);
+        //}
         if (enemy.getStrengthenStacks() > 0) {
             g.drawImage(strenghtIcon.getImage(), 1190, 240, null);
             g.setFont(Main.Lexend12);
@@ -211,12 +214,12 @@ public class Battle extends JPanel implements ActionListener {
 
     private void performAttack(Cards attackerCard, Battler defender) {
         // gets ambrosia from card
-        playersArray[turn].setAmbrosia(attackerCard.getAmbrosia());
+        playersArray[turn].setEnergy(attackerCard.getAmbrosia());
 
         // checks if the character has enough ambrosia to use this card
-        if (attackerCard.getAmbrosiaCost() <= playersArray[turn].getAmbrosia()) {
+        if (attackerCard.getAmbrosiaCost() <= playersArray[turn].getEnergy()) {
 
-            playersArray[turn].setAmbrosia(-1 * (attackerCard.getAmbrosiaCost()));
+            playersArray[turn].setEnergy(-1 * (attackerCard.getAmbrosiaCost()));
             playersArray[turn].setShield(attackerCard.getShield()*10);
             playersArray[altTurn].setVulnerableStacks(attackerCard.getVulnerableStacks());
             playersArray[turn].setStrengthenStacks(attackerCard.getStrengthenStacks());
