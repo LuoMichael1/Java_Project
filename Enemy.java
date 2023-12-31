@@ -45,11 +45,11 @@ public class Enemy extends Battler {
         for (int i = 1; i < super.getStatusNum().length; i++) {
             if (super.getStatusNum()[i] > 0) {
                 yoffset = yoffset+80;
-                g.drawImage(super.getStatusImage()[i].getImage(), 1100 + 22, 100+yoffset, null);
+                g.drawImage(super.getStatusImage()[i].getImage(), 1150 + 22, 100+yoffset, null);
                 g.setFont(Main.Lexend12);
-                g.drawString(super.getStatusName()[i], 1100 + 20, 160+yoffset);
+                g.drawString(super.getStatusName()[i], 1150 + 20, 160+yoffset);
                 g.setFont(Main.Lexend18);
-                g.drawString("" + super.getStatusNum()[i], 1100 + 25, 105+yoffset);
+                g.drawString("" + super.getStatusNum()[i], 1150 + 25, 105+yoffset);
             }
         }
         yoffset = 0;

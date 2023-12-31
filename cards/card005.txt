@@ -1,19 +1,19 @@
 //Level1
-Deal 10 DMG 
+Deal 12 DMG 
 name Strike     
-damage 10
-ambrosiaCost 2
+damage 12
+energyCost 2
 
 //Level2
-Deal 14 DMG 
+Deal 16 DMG 
 name Strike     
-damage 14
-ambrosiaCost 2
+damage 16
+energyCost 2
 
 //Level3
-Deal 20 DMG 
+Deal 22 DMG 
 name Strike     
-damage 20
-ambrosiaCost 2
+damage 22
+energyCost 2
 
 __

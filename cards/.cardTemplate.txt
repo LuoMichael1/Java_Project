@@ -4,8 +4,8 @@ name ""
 
 EVERYTHING BELOW IS OPTIONAL (just make sure the first effect exists here)
 damage 0
-ambrosiaCost 0
-ambrosiaGive 0
+energyCost 0
+energyGive 0
 heal 0
 healingStacks 0
 addMaxHP 0

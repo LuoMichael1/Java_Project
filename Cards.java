@@ -13,8 +13,8 @@ public class Cards implements MouseMotionListener {
     private ImageIcon star = new ImageIcon("images/star.png");
     private int level = 0;
     private int health = 0, attack = 0;
-    private int ambrosiaCost = 0;
-    private int ambrosiaGive = 0;
+    private int energyCost = 0;
+    private int energyGive = 0;
     private int vulnerableStacks = 0;
     private int strengthenStacks = 0;
     private int shield = 0;
@@ -120,11 +120,11 @@ public class Cards implements MouseMotionListener {
             else if (cardDataSplit[0].equals("damage")) {
                 attack = Integer.parseInt(cardDataSplit[1]);
             }
-            else if (cardDataSplit[0].equals("ambrosiaCost")) {
-                ambrosiaCost = Integer.parseInt(cardDataSplit[1]);
+            else if (cardDataSplit[0].equals("energyCost")) {
+                energyCost = Integer.parseInt(cardDataSplit[1]);
             }
-            else if (cardDataSplit[0].equals("ambrosiaGive")) {
-                ambrosiaGive = Integer.parseInt(cardDataSplit[1]);
+            else if (cardDataSplit[0].equals("energyGive")) {
+                energyGive = Integer.parseInt(cardDataSplit[1]);
             }
             else if (cardDataSplit[0].equals("heal")) {
 
@@ -177,11 +177,11 @@ public class Cards implements MouseMotionListener {
     public int getOriginalY() {
         return originalY;
     }
-    public int getAmbrosiaCost() {
-        return ambrosiaCost;
+    public int getEnergyCost() {
+        return energyCost;
     }
-    public int getAmbrosia() {
-        return ambrosiaGive;
+    public int getEnergy() {
+        return energyGive;
     }
     public int getShield() {
         return shield;
@@ -256,9 +256,9 @@ public class Cards implements MouseMotionListener {
             count = count+17;
         }
 
-        if (ambrosiaCost > 0) {
+        if (energyCost > 0) {
             g.setColor(Color.BLACK);
-            g.drawString(""+ambrosiaCost, getX() + 11, getY() + 17);
+            g.drawString("" + energyCost, getX() + 11, getY() + 17);
 
         }
         // draw the level stars

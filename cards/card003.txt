@@ -1,19 +1,19 @@
 //Level1
-Ambrosia +2:Deal 1 DMG 
+Energy +2:Deal 1 DMG 
 name Wand     
 damage 1
-ambrosiaGive 2
+energyGive 2
 
 //Level2
-Ambrosia +3:Deal 2 DMG 
+Energy +3:Deal 2 DMG 
 name Wand     
 damage 2
-ambrosiaGive 3
+energyGive 3
 
 //Level3
-Ambrosia +5:Deal 2 DMG 
+Energy +5:Deal 2 DMG 
 name Wand     
 damage 2
-ambrosiaGive 5
+energyGive 5
 
 __

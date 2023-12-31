@@ -133,7 +133,7 @@ public class Battle extends JPanel implements ActionListener {
 
             if (showDamage.get(i+1) == 0) {
                 showDamage.remove(i);
-                showDamage.remove(i+1);
+                showDamage.remove(i);
             }
         }
 
@@ -171,12 +171,12 @@ public class Battle extends JPanel implements ActionListener {
 
     private void performAttack(Cards attackerCard, Battler defender) {
         // gets ambrosia from card
-        playersArray[turn].setEnergy(attackerCard.getAmbrosia());
+        playersArray[turn].setEnergy(attackerCard.getEnergy());
 
         // checks if the character has enough ambrosia to use this card
-        if (attackerCard.getAmbrosiaCost() <= playersArray[turn].getEnergy()) {
+        if (attackerCard.getEnergyCost() <= playersArray[turn].getEnergy()) {
 
-            playersArray[turn].setEnergy(-1 * (attackerCard.getAmbrosiaCost()));
+            playersArray[turn].setEnergy(-1 * (attackerCard.getEnergyCost()));
             playersArray[turn].setShield(attackerCard.getShield()*10);
             playersArray[altTurn].setVulnerableStacks(attackerCard.getVulnerableStacks());
             playersArray[turn].setStrengthenStacks(attackerCard.getStrengthenStacks());
