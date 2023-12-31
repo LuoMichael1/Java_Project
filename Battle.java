@@ -107,17 +107,18 @@ public class Battle extends JPanel implements ActionListener {
         enemy.drawSprite(g);
 
         player.drawStatus(g);
-        
+        enemy.drawStatus(g);
+        /* 
         // healthbars
-        //g.drawRect(35, HEALTHBAR_Y, HEALTHBAR_WIDTH+1, HEALTHBAR_HEIGHT+1);
+        g.drawRect(35, HEALTHBAR_Y, HEALTHBAR_WIDTH+1, HEALTHBAR_HEIGHT+1);
         g.setColor(Color.black);
         g.drawRect(Main.WIDTH-HEALTHBAR_WIDTH-51, HEALTHBAR_Y, HEALTHBAR_WIDTH+1, HEALTHBAR_HEIGHT+1);
         g.setColor(Color.gray);
-        //g.fillRect(36, HEALTHBAR_Y+1, HEALTHBAR_WIDTH, HEALTHBAR_HEIGHT);
+        g.fillRect(36, HEALTHBAR_Y+1, HEALTHBAR_WIDTH, HEALTHBAR_HEIGHT);
         g.fillRect(Main.WIDTH-HEALTHBAR_WIDTH-50, HEALTHBAR_Y+1, HEALTHBAR_WIDTH, HEALTHBAR_HEIGHT);
 
         g.setColor(Color.red);
-        //g.fillRect(36, HEALTHBAR_Y+1, player.getHealth() / (player.getMaxHealth() / HEALTHBAR_WIDTH), HEALTHBAR_HEIGHT);
+        g.fillRect(36, HEALTHBAR_Y+1, player.getHealth() / (player.getMaxHealth() / HEALTHBAR_WIDTH), HEALTHBAR_HEIGHT);
         g.fillRect(Main.WIDTH-HEALTHBAR_WIDTH-50, HEALTHBAR_Y+1, enemy.getHealth() / (enemy.getMaxHealth() / HEALTHBAR_WIDTH), HEALTHBAR_HEIGHT);
 
 
@@ -171,7 +172,7 @@ public class Battle extends JPanel implements ActionListener {
             g.setFont(Main.Lexend18);
             g.drawString("" + enemy.getStrengthenStacks(), 1190, 245);
         }
-
+*/
         if (damage > 0) {
             g.setColor(Color.red);
             g.setFont(Main.Lexend18);
