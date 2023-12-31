@@ -14,7 +14,7 @@ public class Player extends Battler {
     private boolean attackAnimtest = false;
 
     private int x = 160;
-    private int y = 150;
+    private int y = 200;
     private int lineCounter = 0;
 
     private int animXOffSet = 0;
