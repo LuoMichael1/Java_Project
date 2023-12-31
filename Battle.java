@@ -139,7 +139,7 @@ public class Battle extends JPanel implements ActionListener {
 
 
         // display player's cards
-        for (int i = GamePanel.deckSize-1; i >= 0; i=i-1) {
+        for (int i = GamePanel.deckSize-1; i >= 0; i--) {
             player.hand[i].setX(5 + i * 62);
             player.hand[i].setY(CARDY);
 
@@ -152,7 +152,7 @@ public class Battle extends JPanel implements ActionListener {
         }
 
         // display enemy's cards
-        for (int i = GamePanel.deckSize-1; i >= 0; i=i-1) {
+        for (int i = GamePanel.deckSize-1; i >= 0; i--) {
             enemy.hand[i].setX(1140 + i * -62);
             enemy.hand[i].setY(CARDY);
 
