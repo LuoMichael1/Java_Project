@@ -13,22 +13,14 @@ import javax.sound.sampled.*;
 
 public class Music { 
 
-	Clip clip; 	
-	AudioInputStream audioInputStream; 
+	private Clip clip; 	
 
 	public Music() { 
         try {
-		// create AudioInputStream object 
-		audioInputStream = AudioSystem.getAudioInputStream(new File("music/bg.wav")); 
-		
-		// create clip reference 
-		clip = AudioSystem.getClip(); 
-		
-		// open audioInputStream to the clip 
-		clip.open(audioInputStream); 
-		
-		clip.loop(Clip.LOOP_CONTINUOUSLY); 
-        clip.start();
+            clip = AudioSystem.getClip(); 
+            clip.open(AudioSystem.getAudioInputStream(new File("music/bg.wav"))); 
+            clip.loop(Clip.LOOP_CONTINUOUSLY); 
+            clip.start();
         }
         catch (Exception e) {
             System.out.println("Something went wrong with the music");
