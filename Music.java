@@ -1,12 +1,5 @@
-// idk what this is
-// halp, the docs are no use
-//https://docs.oracle.com/javase/8/docs/technotes/guides/sound/programmer_guide/contents.html
-
-
-// used this website
+// used this website for help with the music
 // https://www.geeksforgeeks.org/play-audio-file-using-java/
-
-
 
 import java.io.File; 
 import javax.sound.sampled.*;
@@ -15,10 +8,10 @@ public class Music {
 
 	private Clip clip; 	
 
-	public Music() { 
+	public Music(String filePath) { 
         try {
             clip = AudioSystem.getClip(); 
-            clip.open(AudioSystem.getAudioInputStream(new File("music/bg.wav"))); 
+            clip.open(AudioSystem.getAudioInputStream(new File(filePath))); 
             clip.loop(Clip.LOOP_CONTINUOUSLY); 
             clip.start();
         }
@@ -27,7 +20,7 @@ public class Music {
         } 
 	} 
 	
-	// Method to stop the audio 
+	// stop the music 
 	public void stop() { 
 		clip.stop(); 
 		clip.close(); 

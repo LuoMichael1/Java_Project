@@ -39,7 +39,7 @@ public class GamePanel extends JPanel implements MouseMotionListener, MouseListe
         initUserInterface();
         initButtons();
         try {
-            Music music = new Music();
+            Music music = new Music("music/bg.wav");
             //music.doathing();
         }
         catch (Exception e) {
@@ -55,7 +55,7 @@ public class GamePanel extends JPanel implements MouseMotionListener, MouseListe
         g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
         int counter = 1;
-        g.drawOval(x - 20, y - 20, 40, 40);
+        //g.drawOval(x - 20, y - 20, 40, 40);
 
         // draw card boxes
         for (int i = 0; i < deckSize; i++) {
