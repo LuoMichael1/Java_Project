@@ -29,7 +29,9 @@ public class Battle extends JPanel implements ActionListener {
     static final int HEALTHBAR_HEIGHT = 24;
 
     private int damage = 0;
-
+    private int shieldDamage = 0;
+    private ArrayList<Integer> showDamage = new ArrayList<Integer>();
+    private int xPos = 0;       // for the damage messages
     // space for messages
     private JLabel messageLabel;
     private JLabel instructionLabel;
@@ -40,10 +42,10 @@ public class Battle extends JPanel implements ActionListener {
     private Timer timer;
     
     // images
-    private ImageIcon background = new ImageIcon("images/background.png");
-    private ImageIcon vulnerableIcon = new ImageIcon("images/VulnerableIcon.png");
-    private ImageIcon strenghtIcon = new ImageIcon("images/strenghtIcon.png");
-    private ImageIcon shieldIcon = new ImageIcon("images/shieldIcon.png");
+    //private ImageIcon background = new ImageIcon("images/background.png");
+    //private ImageIcon vulnerableIcon = new ImageIcon("images/VulnerableIcon.png");
+    //private ImageIcon strenghtIcon = new ImageIcon("images/strenghtIcon.png");
+    //private ImageIcon shieldIcon = new ImageIcon("images/shieldIcon.png");
 
     // ------------------------------------------------------------------------------------------
 
@@ -107,14 +109,34 @@ public class Battle extends JPanel implements ActionListener {
             battler.drawStatus(g);
         }
 
-        if (damage > 0) {
-            g.setColor(Color.red);
-            g.setFont(Main.Lexend18);
+        //if (damage > 0) {
+        //    g.setColor(Color.red);
+        //    g.setFont(Main.Lexend18);
+        //    if (turn == 0)
+        //        g.drawString("-" + damage, 880, HEALTHBAR_Y+10);
+        //    else 
+        //        g.drawString("-" + damage, 350, HEALTHBAR_Y+10);
+        //}
+        System.out.println(showDamage);
+        g.setColor(Color.red);
+        g.setFont(Main.Lexend30);
+        for (int i = 0; i < showDamage.size()-1; i=i+2 ) {
             if (turn == 0)
-                g.drawString("-" + damage, 880, HEALTHBAR_Y+10);
+                xPos = 860;
             else 
-                g.drawString("-" + damage, 350, HEALTHBAR_Y+10);
+                xPos = 350;
+
+            if (showDamage.get(i+1) <= 100)
+                g.drawString("-" + showDamage.get(i), xPos, 60+showDamage.get(i+1));
+            
+            showDamage.set(i+1, showDamage.get(i+1)-1);
+
+            if (showDamage.get(i+1) == 0) {
+                showDamage.remove(i);
+                showDamage.remove(i+1);
+            }
         }
+
 
         // display player's cards
         for (int i = GamePanel.deckSize-1; i >= 0; i=i-1) {
@@ -164,26 +186,37 @@ public class Battle extends JPanel implements ActionListener {
 
             if (playersArray[altTurn].getVulnerableStacks() > 0)
                 damage = damage*2;
-
+                int orignalDamage = damage;
             if (damage > 0) {
 
-                // first deals damage to any shield
-                if (defender.getShield() >= damage) {
-                    defender.setShield(-damage);
-                    damage = 0;
+                for (int i = 0; i < attackerCard.getMultiHit(); i++) {
+                    damage = orignalDamage;
+
+                    showDamage.add(damage);
+                    showDamage.add(100+(i*10));  // decides how long the damage message persists for
+                    //showDamage.add(shieldDamage);
+
+                    // first deals damage to any shield
+                    if (defender.getShield() >= damage) {
+                        shieldDamage = damage;
+                        damage = 0;
+                    } 
+                    else if (defender.getShield() < damage) {
+                        shieldDamage = defender.getShield();
+                        damage = damage-shieldDamage;
+                        //defender.setShield(-shieldDamage);
+                    }  
                     
-                } else if (defender.getShield() < damage) {
-                    int tempShield = defender.getShield();
-                    damage = damage-tempShield;
-                    defender.setShield(-tempShield);
-                }   
 
-                defender.setHealth(defender.getHealth() - damage);
-                playersArray[turn].attackAnim(1);
+                    defender.setShield(-shieldDamage);
 
-                // prevents health from going below 0
-                if (defender.getHealth() < 0)
-                    defender.setHealth(0);
+                    defender.setHealth(defender.getHealth() - damage);
+                    playersArray[turn].attackAnim(1);
+
+                    // prevents health from going below 0
+                    if (defender.getHealth() < 0)
+                        defender.setHealth(0);
+                }
             }
         }
     }
@@ -238,7 +271,7 @@ public class Battle extends JPanel implements ActionListener {
                 damage = 0;
 
                 reduceStacks(playersArray[turn]);
-
+                showDamage.clear();
                 
 
                 if (playersArray[altTurn].getHealth() <= 0) {

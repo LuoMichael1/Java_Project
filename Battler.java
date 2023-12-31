@@ -12,8 +12,8 @@ public abstract class Battler {
 
     private ImageIcon energyIcon = new ImageIcon("images/shieldIcon.png");
     private ImageIcon shieldIcon = new ImageIcon("images/shieldIcon.png");
-    private ImageIcon vulnerableIcon = new ImageIcon("images/shieldIcon.png");
-    private ImageIcon strengthenIcon = new ImageIcon("images/shieldIcon.png");
+    private ImageIcon vulnerableIcon = new ImageIcon("images/vulnerableIcon.png");
+    private ImageIcon strengthenIcon = new ImageIcon("images/strenghtIcon.png");
 
     private String name;
     // players stats
@@ -24,10 +24,12 @@ public abstract class Battler {
     private int vulnerableStacks = 0;
     private int strengthenStacks = 0;
     private int counter = 0;
+
     private int statusNum[] = {shield, energy, vulnerableStacks, strengthenStacks};
     private String statusName[] = {"Shield", "Energy", "Vulnerable", "Strength"};
     private ImageIcon statusImage[] = {shieldIcon, energyIcon, vulnerableIcon, strengthenIcon};
-
+    
+    private ArrayList<Integer> showDamage = new ArrayList<Integer>();   // currently unused
 
     public Battler(String name) {
         this.name = name;
@@ -99,6 +101,13 @@ public abstract class Battler {
 
     public String toString() {
         return name;
+    }
+
+    public void addShowDamage(int damage) {
+        showDamage.add(damage);
+    }
+    public ArrayList<Integer> getShowDamage() {
+        return showDamage;
     }
 
     abstract public void drawSprite(Graphics g);

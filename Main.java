@@ -10,6 +10,7 @@ class Main {
     // Fonts
     public static final Font Lexend12 = loadFont("fonts/lexend/static/Lexend-Regular.ttf", 12);
     public static final Font Lexend18 = loadFont("fonts/lexend/static/Lexend-Regular.ttf", 18);
+    public static final Font Lexend30 = loadFont("fonts/lexend/static/Lexend-Regular.ttf", 30);
     public static final Font Lexend60 = loadFont("fonts/lexend/static/Lexend-Regular.ttf", 60);
     // Size
     public static final int WIDTH = 1280;
@@ -30,9 +31,9 @@ class Main {
         GamePanel p3 = new GamePanel();
 
         f.add(p, BorderLayout.CENTER);
-        p.add(p1, "Menu");
+        p.add(p3, "Menu");
         p.add(p2, "Game");
-        p.add(p3, "CardGame");
+        p.add(p1, "CardGame");
 
         f.setVisible(true);
         f.setSize(WIDTH, HEIGHT);

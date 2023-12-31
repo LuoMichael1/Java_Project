@@ -18,6 +18,7 @@ public class Cards implements MouseMotionListener {
     private int vulnerableStacks = 0;
     private int strengthenStacks = 0;
     private int shield = 0;
+    private int multiHit = 1;
     private int originalX, originalY;
     private int selectionIndex = -1;
     private Scanner filesc;
@@ -47,7 +48,7 @@ public class Cards implements MouseMotionListener {
         // randomly generate a card
         rarity = (int) (Math.random() * 100 + 1);
         if (rarity <= common) {
-            rand = (int) (Math.random() * 5 + 1);
+            rand = (int) (Math.random() * 6 + 1);
             rarity = 0;
             cardImage = new ImageIcon("images/card4.png");
         } 
@@ -146,6 +147,9 @@ public class Cards implements MouseMotionListener {
             else if (cardDataSplit[0].equals("bleedStacks")) {
 
             }
+            else if (cardDataSplit[0].equals("multiHit")) {
+                multiHit = Integer.parseInt(cardDataSplit[1]);
+            }
             else {
                 // Assumes that if the line doesn't contain one of the above then this is the end of what needs to be read
                 i = count;
@@ -187,6 +191,9 @@ public class Cards implements MouseMotionListener {
     }
     public int getStrengthenStacks() {
         return strengthenStacks;
+    }
+    public int getMultiHit() {
+        return multiHit;
     }
     public int getSelectionIndex() {
         return selectionIndex;

@@ -1,0 +1,21 @@
+//Level1
+Deal 4 DMG x 2 
+name Combo     
+damage 4 
+ambrosiaCost 1
+multiHit 2
+
+//Level2
+Deal 6 DMG x 2 
+name Combo     
+damage 6
+ambrosiaCost 1
+multiHit 2
+
+//Level3
+Deal 6 DMG x 3
+name Combo     
+damage 6
+ambrosiaCost 1
+multiHit 3
+__
