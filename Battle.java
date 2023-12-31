@@ -101,78 +101,12 @@ public class Battle extends JPanel implements ActionListener {
         g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
         //g.drawImage(background.getImage(), 0, 0, null);
-        // draw the characters
-        //g.drawImage(playerSprite.getImage(), 100, 120, null);
-        player.drawSprite(g);
-        enemy.drawSprite(g);
 
-        player.drawStatus(g);
-        enemy.drawStatus(g);
-        /* 
-        // healthbars
-        g.drawRect(35, HEALTHBAR_Y, HEALTHBAR_WIDTH+1, HEALTHBAR_HEIGHT+1);
-        g.setColor(Color.black);
-        g.drawRect(Main.WIDTH-HEALTHBAR_WIDTH-51, HEALTHBAR_Y, HEALTHBAR_WIDTH+1, HEALTHBAR_HEIGHT+1);
-        g.setColor(Color.gray);
-        g.fillRect(36, HEALTHBAR_Y+1, HEALTHBAR_WIDTH, HEALTHBAR_HEIGHT);
-        g.fillRect(Main.WIDTH-HEALTHBAR_WIDTH-50, HEALTHBAR_Y+1, HEALTHBAR_WIDTH, HEALTHBAR_HEIGHT);
-
-        g.setColor(Color.red);
-        g.fillRect(36, HEALTHBAR_Y+1, player.getHealth() / (player.getMaxHealth() / HEALTHBAR_WIDTH), HEALTHBAR_HEIGHT);
-        g.fillRect(Main.WIDTH-HEALTHBAR_WIDTH-50, HEALTHBAR_Y+1, enemy.getHealth() / (enemy.getMaxHealth() / HEALTHBAR_WIDTH), HEALTHBAR_HEIGHT);
-
-
-        g.setColor(Color.black);
-        g.setFont(Main.Lexend18);
-        //g.drawString("" + player.getHealth() + "/" + player.getMaxHealth(), 40, HEALTHBAR_Y+20);
-        g.drawString("" + enemy.getHealth() + "/" + enemy.getMaxHealth(), 1005, HEALTHBAR_Y+20);
-
-        // ambrosia stat
-        //g.drawString("Ambrosia: " + player.getEnergy(), 40, 160);
-        g.drawString("Ambrosia: " + enemy.getEnergy(), 1005, 160);
-
-        // shield stat
-        g.setFont(Main.Lexend12);
-        //if (player.getShield() > 0) {
-        //    g.drawImage(shieldIcon.getImage(), 300, HEALTHBAR_Y, null);
-        //    g.drawString(""+player.getShield(), 300, HEALTHBAR_Y);
-        //}
-        if (enemy.getShield() > 0) {
-            g.drawImage(shieldIcon.getImage(), 910, HEALTHBAR_Y, null);
-            g.drawString(""+enemy.getShield(), 910, HEALTHBAR_Y);
+        for (Battler battler : playersArray) {
+            battler.drawSprite(g);
+            battler.drawStatus(g);
         }
-        
-        // Vulnerable Stacks
-        //if (player.getVulnerableStacks() > 0) {
-        //    g.drawImage(vulnerableIcon.getImage(), 22, 200, null);
-        //    g.setFont(Main.Lexend12);
-        //    g.drawString("Vulnerable", 20, 260);
-        //    g.setFont(Main.Lexend18);
-        //    g.drawString("" + player.getVulnerableStacks(), 25, 205);
-        //}
-        if (enemy.getVulnerableStacks() > 0) {
-            g.drawImage(vulnerableIcon.getImage(), 1190, 200, null);
-            g.setFont(Main.Lexend12);
-            g.drawString("Vulnerable", 1180, 260);
-            g.setFont(Main.Lexend18);
-            g.drawString("" + enemy.getVulnerableStacks(), 1190, 205);
-        }
-        // Strenghten Stacks
-        //if (player.getStrengthenStacks() > 0) {
-        //    g.drawImage(strenghtIcon.getImage(), 22, 240, null);
-        //    g.setFont(Main.Lexend12);
-        //    g.drawString("Strenght", 20, 300);
-        //    g.setFont(Main.Lexend18);
-        //    g.drawString("" + player.getStrengthenStacks(), 25, 245);
-        //}
-        if (enemy.getStrengthenStacks() > 0) {
-            g.drawImage(strenghtIcon.getImage(), 1190, 240, null);
-            g.setFont(Main.Lexend12);
-            g.drawString("Strenght", 1180, 300);
-            g.setFont(Main.Lexend18);
-            g.drawString("" + enemy.getStrengthenStacks(), 1190, 245);
-        }
-*/
+
         if (damage > 0) {
             g.setColor(Color.red);
             g.setFont(Main.Lexend18);
