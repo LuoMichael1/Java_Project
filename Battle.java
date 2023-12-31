@@ -117,7 +117,7 @@ public class Battle extends JPanel implements ActionListener {
         //    else 
         //        g.drawString("-" + damage, 350, HEALTHBAR_Y+10);
         //}
-        System.out.println(showDamage);
+        //System.out.println(showDamage);
         g.setColor(Color.red);
         g.setFont(Main.Lexend30);
         for (int i = 0; i < showDamage.size()-1; i=i+2 ) {

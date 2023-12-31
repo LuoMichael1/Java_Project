@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Music",
+            "request": "launch",
+            "mainClass": "Music",
+            "projectName": "Java_Project_40d67900"
+        },
+        {
+            "type": "java",
             "name": "InteractivePanel",
             "request": "launch",
             "mainClass": "InteractivePanel",

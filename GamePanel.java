@@ -38,6 +38,13 @@ public class GamePanel extends JPanel implements MouseMotionListener, MouseListe
 
         initUserInterface();
         initButtons();
+        try {
+            Music music = new Music();
+            //music.doathing();
+        }
+        catch (Exception e) {
+            System.out.println("Hmm");
+        }
     }
 
     public void paintComponent(Graphics g) {
