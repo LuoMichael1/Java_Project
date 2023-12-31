@@ -19,6 +19,17 @@ public class Music {
             System.out.println("Something went wrong with the music");
         } 
 	} 
+    public Music(String filePath, int loop) { 
+        try {
+            clip = AudioSystem.getClip(); 
+            clip.open(AudioSystem.getAudioInputStream(new File(filePath))); 
+            clip.loop(loop); 
+            clip.start();
+        }
+        catch (Exception e) {
+            System.out.println("Something went wrong with the music");
+        } 
+	} 
 	
 	// stop the music 
 	public void stop() { 
