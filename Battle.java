@@ -37,6 +37,7 @@ public class Battle extends JPanel implements ActionListener {
     private Timer timer;
     
     // images
+    private ImageIcon background = new ImageIcon("images/background.png");
     private ImageIcon vulnerableIcon = new ImageIcon("images/VulnerableIcon.png");
     private ImageIcon strenghtIcon = new ImageIcon("images/strenghtIcon.png");
     private ImageIcon shieldIcon = new ImageIcon("images/shieldIcon.png");
@@ -88,6 +89,7 @@ public class Battle extends JPanel implements ActionListener {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
+        g.drawImage(background.getImage(), 0, 0, null);
         // draw the characters
         //g.drawImage(playerSprite.getImage(), 100, 120, null);
         player.myDraw(g);
@@ -261,7 +263,7 @@ public class Battle extends JPanel implements ActionListener {
                 player.attackAnimStop(1);
 
             player.increaseCounter();
-            
+
             repaint();
             // frame 55 - 60
             if (frameCounter >= 55)
