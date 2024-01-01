@@ -38,8 +38,9 @@ public class Cutscene1 extends JPanel implements KeyListener, MouseListener {
 
         dialogue = new Dialogue();
         setFocusable(true);
-        //this.addKeyListener(this);
+        this.addKeyListener(this);
         this.addMouseListener(this);
+        addKeyListener(this);
 
         Timer timer = new Timer(1000 / 60, e -> {
             long currentTime = System.currentTimeMillis();
@@ -114,8 +115,7 @@ public class Cutscene1 extends JPanel implements KeyListener, MouseListener {
 
     private void startTutorial() {
         // switches to the next card in the layout
-        CardLayout cardLayout = (CardLayout) getParent().getLayout();
-        cardLayout.next(getParent());
+        Main.nextCard();
     }
 
     //public static void main(String[] args) {
@@ -208,7 +208,6 @@ public class Cutscene1 extends JPanel implements KeyListener, MouseListener {
     }
 
     public void mouseClicked(MouseEvent e) {
-        System.out.println(e);
         dialogue.next();
         if (dialogue.index == dialogue.tutorialStartIndex) {
             startTutorial();

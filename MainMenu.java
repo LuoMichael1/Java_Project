@@ -22,6 +22,8 @@ public class MainMenu extends JPanel implements MouseListener {
 
     private int layer1X2_stars = 0;
     private int layer2X2_stars = IMAGE_WIDTH;
+    
+    private boolean seenScene1 = false;
 
     public MainMenu() {
         // setTitle("Main Menu");
@@ -105,7 +107,7 @@ public class MainMenu extends JPanel implements MouseListener {
 
         timer.start();
         this.add(layeredPane, BorderLayout.CENTER);
-        this.setVisible(true);
+        //this.setVisible(true);
         // setContentPane(layeredPane);
     }
 
@@ -136,9 +138,14 @@ public class MainMenu extends JPanel implements MouseListener {
     }
 
     public void mousePressed(MouseEvent e) {
-        // switches to the next card in the layout
         CardLayout cardLayout = (CardLayout) getParent().getLayout();
-        cardLayout.next(getParent());
+        // switches to the next card in the layout
+        if (!seenScene1) {
+            cardLayout.next(getParent());
+            seenScene1 = true;
+        }
+        else
+            cardLayout.show(getParent(), "CardGame");
     }
 
     public void mouseReleased(MouseEvent e) {

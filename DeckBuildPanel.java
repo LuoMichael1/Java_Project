@@ -173,7 +173,10 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
     private void startBattle() {
 
         if (cardsSelected == deckSize) {
-
+            Battle battle = new Battle(player, selectedCards);
+            Main.addCard(battle, "battle");
+            //Main.nextCard();
+            /* 
             removeAll();
             revalidate();
             repaint();
@@ -182,6 +185,7 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
             add(battle, BorderLayout.CENTER);
             revalidate();
             repaint();
+            */
         } 
         // if you didn't fill out your deck, it will generate some random cards to use
         else {
@@ -191,6 +195,9 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
                     cardsSelected++;
                 }
             }
+            Battle battle = new Battle(player, selectedCards);
+            Main.addCard(battle, "battle");
+            /* 
             removeAll();
             revalidate();
             repaint();
@@ -199,7 +206,9 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
             add(battle, BorderLayout.CENTER);
             revalidate();
             repaint();
+        */
         }
+        Main.showCard("battle");
     }
 
     public void mousePressed(MouseEvent e) {
