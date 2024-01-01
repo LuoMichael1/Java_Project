@@ -28,7 +28,7 @@ class Main {
         JPanel p = new JPanel(new CardLayout());
         MainMenu p1 = new MainMenu();
         Game p2 = new Game();
-        GamePanel p3 = new GamePanel();
+        DeckBuildPanel p3 = new DeckBuildPanel();
 
         f.add(p, BorderLayout.CENTER);
         p.add(p1, "Menu");

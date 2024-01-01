@@ -11,7 +11,7 @@ public class Enemy extends Battler {
 
         super("Enemy");
 
-        for (int i = 0; i < GamePanel.deckSize; i++) {
+        for (int i = 0; i < DeckBuildPanel.deckSize; i++) {
             hand[i] = new Cards(i * 150 + 20, 600, 70, 30);
         }
     }

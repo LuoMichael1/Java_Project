@@ -139,7 +139,7 @@ public class Battle extends JPanel implements ActionListener {
 
 
         // display player's cards
-        for (int i = GamePanel.deckSize-1; i >= 0; i--) {
+        for (int i = DeckBuildPanel.deckSize-1; i >= 0; i--) {
             player.hand[i].setX(5 + i * 62);
             player.hand[i].setY(CARDY);
 
@@ -152,7 +152,7 @@ public class Battle extends JPanel implements ActionListener {
         }
 
         // display enemy's cards
-        for (int i = GamePanel.deckSize-1; i >= 0; i--) {
+        for (int i = DeckBuildPanel.deckSize-1; i >= 0; i--) {
             enemy.hand[i].setX(1140 + i * -62);
             enemy.hand[i].setY(CARDY);
 
@@ -223,7 +223,7 @@ public class Battle extends JPanel implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
     
-        if (e.getSource() == timer) {
+        if (e.getSource() == timer && !isWon) {
             if (!doubleTime) {
                 culler++;
             }
@@ -280,7 +280,9 @@ public class Battle extends JPanel implements ActionListener {
                 }
 
                 if (isWon) {
-                    System.exit(0);
+                    // switches to the next card in the layout
+                    CardLayout cardLayout = (CardLayout) getParent().getParent().getLayout();
+                    cardLayout.show(getParent().getParent(), "Menu");
                 }
             }
             }
