@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Cutscene1",
+            "request": "launch",
+            "mainClass": "Cutscene1",
+            "projectName": "Java_Project_40d67900"
+        },
+        {
+            "type": "java",
             "name": "Music",
             "request": "launch",
             "mainClass": "Music",
