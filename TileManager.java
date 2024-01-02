@@ -1,5 +1,12 @@
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.io.*;
 import javax.imageio.ImageIO;
 
@@ -8,6 +15,12 @@ public class TileManager {
     InteractivePanel gamePanel;
     Tile[] tile;
     String[][] map;
+    int[][] alpha;
+    Set<Integer> lightSources = new HashSet<>();
+    Set<Integer> nonIlluminable = new HashSet<>();
+
+    private static final int MAX_ALPHA = 255;
+    private BufferedImage[] darkImages = new BufferedImage[MAX_ALPHA];
 
     int C = 63;
     int R = 43;
@@ -22,9 +35,130 @@ public class TileManager {
 
         tile = new Tile[NUM_TILES + 1];
         map = new String[R][C];
+        alpha = new int[R][C];
 
         getTileImage();
         loadMap("maps/base-map2.csv");
+        getLighting(map);
+    }
+
+    public void getLighting(String[][] map) {
+
+        lightSources.addAll(Arrays.asList(new Integer[] { 114 }));
+        nonIlluminable.addAll(Arrays.asList(new Integer[] { 105, 84, 85, 95, 98, 132 }));
+
+        ArrayList<Point> lightSourcePositions = new ArrayList<>();
+
+        for (int i = 0; i < R; i++) {
+            for (int j = 0; j < C; j++) {
+
+                if (lightSources.contains(Integer.parseInt(map[i][j]))) {
+
+                    lightSourcePositions.add(new Point(i, j));
+                }
+
+                alpha[i][j] = 200;
+            }
+        }
+
+        for (Point position : lightSourcePositions) {
+
+            alpha[position.x][position.y] = 0;
+            getSurroundingAlpha(position);
+        }
+
+        for (int alpha = 0; alpha < MAX_ALPHA; alpha++) {
+            darkImages[alpha] = createDarkImage(alpha);
+        }
+    }
+
+    public void getSurroundingAlpha(Point start) {
+
+        final int MAX_ILLUMINATION_DISTANCE = 6;
+
+        Set<Point> visited = new HashSet<>();
+        ArrayList<Point> queue = new ArrayList<>();
+        Map<Point, Integer> distance = new HashMap<>();
+
+        queue.add(start);
+        visited.add(start);
+        distance.put(start, 0);
+
+        int i = 0;
+
+        while (i < queue.size()) {
+
+            Point current = queue.get(i);
+            i++;
+
+            System.out.println(distance.get(current));
+
+            if (distance.get(current) > MAX_ILLUMINATION_DISTANCE)
+                break;
+
+            for (Point neighbor : getNeighbors(current)) {
+
+                if (!visited.contains(neighbor)
+                        && !nonIlluminable.contains(Integer.parseInt(map[neighbor.x][neighbor.y]))) {
+
+                    int temp = distance.get(current) + 1;
+
+                    System.out.println(temp);
+
+                    if (temp < distance.getOrDefault(neighbor, Integer.MAX_VALUE)) {
+
+                        distance.put(neighbor, temp);
+                        alpha[neighbor.x][neighbor.y] = alpha[neighbor.x][neighbor.y]
+                                - alpha[neighbor.x][neighbor.y] / temp;
+
+                        visited.add(neighbor);
+                        queue.add(neighbor);
+                    } else {
+                        System.out.println(false);
+                    }
+                }
+            }
+        }
+    }
+
+    public ArrayList<Point> getNeighbors(Point current) {
+
+        ArrayList<Point> neighbors = new ArrayList<>();
+
+        if (current.x != 0)
+            neighbors.add(new Point(current.x - 1, current.y));
+        if (current.y != 0)
+            neighbors.add(new Point(current.x, current.y - 1));
+        if (current.x < R - 1)
+            neighbors.add(new Point(current.x + 1, current.y));
+        if (current.y < C - 1)
+            neighbors.add(new Point(current.x, current.y + 1));
+
+        return neighbors;
+    }
+
+    class Point {
+        int x, y;
+
+        Point(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o)
+                return true;
+            if (!(o instanceof Point))
+                return false;
+            Point point = (Point) o;
+            return x == point.x && y == point.y;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(x, y);
+        }
     }
 
     public void getTileImage() {
@@ -61,19 +195,23 @@ public class TileManager {
         }
     }
 
-    public void draw(Graphics2D graphic) {
+    private BufferedImage createDarkImage(int alpha) {
 
-        /*
-         * for (int i = 0; i < gamePanel.MAX_SCREEN_ROW; i++) {
-         * for (int j = 0; j < gamePanel.MAX_SCREEN_COL; j++) {
-         * graphic.drawImage(tile[Integer.parseInt(map[i][j])].image, j *
-         * gamePanel.TILE_SIZE,
-         * i * gamePanel.TILE_SIZE,
-         * gamePanel.TILE_SIZE,
-         * gamePanel.TILE_SIZE, null);
-         * }
-         * }
-         */
+        // Create a new image
+        BufferedImage darkImage = new BufferedImage(gamePanel.TILE_SIZE, gamePanel.TILE_SIZE,
+                BufferedImage.TYPE_INT_ARGB);
+
+        // Add a black graphic to the image
+        Graphics2D g2 = darkImage.createGraphics();
+
+        g2.setColor(new Color(0, 0, 0, alpha));
+        g2.fillRect(0, 0, gamePanel.TILE_SIZE, gamePanel.TILE_SIZE);
+        g2.dispose();
+
+        return darkImage;
+    }
+
+    public void draw(Graphics2D graphic) {
 
         // Convert the player's coordinates into the range of visible tiles
         int start_i = Math.max(0, player.y / gamePanel.TILE_SIZE);
@@ -90,6 +228,10 @@ public class TileManager {
                         i * gamePanel.TILE_SIZE - player.y,
                         gamePanel.TILE_SIZE,
                         gamePanel.TILE_SIZE, null);
+
+                // Overlay transparent black tiles to represent darkness
+                graphic.drawImage(darkImages[alpha[i][j]], j * gamePanel.TILE_SIZE - player.x,
+                        i * gamePanel.TILE_SIZE - player.y, null);
             }
         }
     }
