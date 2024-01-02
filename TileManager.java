@@ -18,6 +18,7 @@ public class TileManager {
     int[][] alpha;
     Set<Integer> lightSources = new HashSet<>();
     Set<Integer> nonIlluminable = new HashSet<>();
+    Set<Integer> collisionTiles = new HashSet<>();
 
     private static final int MAX_ALPHA = 255;
     private BufferedImage[] darkImages = new BufferedImage[MAX_ALPHA];
@@ -37,15 +38,17 @@ public class TileManager {
         map = new String[R][C];
         alpha = new int[R][C];
 
+        lightSources.addAll(Arrays.asList(new Integer[] { 114 }));
+        nonIlluminable.addAll(Arrays.asList(new Integer[] { 105, 84, 85, 95, 98, 132 }));
+        collisionTiles
+                .addAll(Arrays.asList(new Integer[] { 105, 84, 85, 95, 98, 132, 0, 96, 103, 108, 111, 112, 113, 114 }));
+
         getTileImage();
         loadMap("maps/base-map2.csv");
         getLighting(map);
     }
 
     public void getLighting(String[][] map) {
-
-        lightSources.addAll(Arrays.asList(new Integer[] { 114 }));
-        nonIlluminable.addAll(Arrays.asList(new Integer[] { 105, 84, 85, 95, 98, 132 }));
 
         ArrayList<Point> lightSourcePositions = new ArrayList<>();
 
@@ -91,8 +94,6 @@ public class TileManager {
             Point current = queue.get(i);
             i++;
 
-            System.out.println(distance.get(current));
-
             if (distance.get(current) > MAX_ILLUMINATION_DISTANCE)
                 break;
 
@@ -103,8 +104,6 @@ public class TileManager {
 
                     int temp = distance.get(current) + 1;
 
-                    System.out.println(temp);
-
                     if (temp < distance.getOrDefault(neighbor, Integer.MAX_VALUE)) {
 
                         distance.put(neighbor, temp);
@@ -113,8 +112,6 @@ public class TileManager {
 
                         visited.add(neighbor);
                         queue.add(neighbor);
-                    } else {
-                        System.out.println(false);
                     }
                 }
             }
@@ -214,24 +211,40 @@ public class TileManager {
     public void draw(Graphics2D graphic) {
 
         // Convert the player's coordinates into the range of visible tiles
-        int start_i = Math.max(0, player.y / gamePanel.TILE_SIZE);
+        int start_i = Math.max(0, (player.y - player.drawY) / gamePanel.TILE_SIZE);
         int end_i = Math.min(R, start_i + gamePanel.WINDOW_HEIGHT / gamePanel.TILE_SIZE + 2);
 
-        int start_j = Math.max(0, player.x / gamePanel.TILE_SIZE);
+        int start_j = Math.max(0, (player.x - player.drawX) / gamePanel.TILE_SIZE);
         int end_j = Math.min(C, start_j + gamePanel.WINDOW_WIDTH / gamePanel.TILE_SIZE + 2);
 
         // Draw only the visible tiles
         for (int i = start_i; i < end_i; i++) {
             for (int j = start_j; j < end_j; j++) {
                 graphic.drawImage(tile[Math.max(0, Integer.parseInt(map[i][j]))].image,
-                        j * gamePanel.TILE_SIZE - player.x,
-                        i * gamePanel.TILE_SIZE - player.y,
+                        j * gamePanel.TILE_SIZE - player.x + player.drawX,
+                        i * gamePanel.TILE_SIZE - player.y + player.drawY,
                         gamePanel.TILE_SIZE,
                         gamePanel.TILE_SIZE, null);
+            }
+        }
+    }
+
+    public void drawLighting(Graphics2D graphic) {
+
+        // Convert the player's coordinates into the range of visible tiles
+        int start_i = Math.max(0, (player.y - player.drawY) / gamePanel.TILE_SIZE);
+        int end_i = Math.min(R, start_i + gamePanel.WINDOW_HEIGHT / gamePanel.TILE_SIZE + 2);
+
+        int start_j = Math.max(0, (player.x - player.drawX) / gamePanel.TILE_SIZE);
+        int end_j = Math.min(C, start_j + gamePanel.WINDOW_WIDTH / gamePanel.TILE_SIZE + 2);
+
+        // Draw only the visible tiles
+        for (int i = start_i; i < end_i; i++) {
+            for (int j = start_j; j < end_j; j++) {
 
                 // Overlay transparent black tiles to represent darkness
-                graphic.drawImage(darkImages[alpha[i][j]], j * gamePanel.TILE_SIZE - player.x,
-                        i * gamePanel.TILE_SIZE - player.y, null);
+                graphic.drawImage(darkImages[alpha[i][j]], j * gamePanel.TILE_SIZE - player.x + player.drawX,
+                        i * gamePanel.TILE_SIZE - player.y + player.drawY, null);
             }
         }
     }

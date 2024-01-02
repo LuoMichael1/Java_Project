@@ -44,8 +44,6 @@ public class InteractivePanel extends JPanel implements Runnable {
 
         while (gameThread != null) {
 
-            System.out.println(player.spriteCounter);
-
             update();
 
             repaint();
@@ -81,6 +79,7 @@ public class InteractivePanel extends JPanel implements Runnable {
 
         tile.draw(altGraphic);
         player.draw(altGraphic);
+        tile.drawLighting(altGraphic);
 
         altGraphic.dispose();
     }

@@ -10,4 +10,7 @@ public class Entity {
 
     public int spriteCounter = 0;
     public int spriteNum = 1;
+
+    public Hitbox hitbox;
+    public boolean collisionOn = false;
 }

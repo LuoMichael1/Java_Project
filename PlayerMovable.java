@@ -1,6 +1,12 @@
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.imageio.ImageIO;
 
 public class PlayerMovable extends Entity {
@@ -8,27 +14,39 @@ public class PlayerMovable extends Entity {
     InteractivePanel gamePanel;
     KeyHandler keyHandler;
 
+    Set<Integer> collisionTiles = new HashSet<>();
+
     static int drawX;
     static int drawY;
+
+    int C = 63;
+    int R = 43;
+    String[][] map;
 
     public PlayerMovable(InteractivePanel gamePanel, KeyHandler keyHandler) {
 
         this.gamePanel = gamePanel;
         this.keyHandler = keyHandler;
 
+        map = new String[R][C];
+
         setDefaultValues();
         getPlayerImage();
+        loadMap("maps/base-map2.csv");
     }
 
     public void setDefaultValues() {
 
-        x = 100;
-        y = 100;
+        x = 6 * gamePanel.TILE_SIZE;
+        y = 6 * gamePanel.TILE_SIZE;
         speed = 6;
         direction = "right";
 
         drawX = gamePanel.WINDOW_WIDTH / 2;
         drawY = gamePanel.WINDOW_HEIGHT / 2;
+
+        collisionTiles
+                .addAll(Arrays.asList(new Integer[] { 105, 84, 85, 95, 98, 132, 0, 96, 103, 108, 111, 112, 113, 114 }));
     }
 
     public void getPlayerImage() {
@@ -49,22 +67,64 @@ public class PlayerMovable extends Entity {
         }
     }
 
+    public void loadMap(String file) {
+
+        try {
+
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(getClass().getResourceAsStream(file)));
+
+            for (int i = 0; i < R; i++) {
+                map[i] = reader.readLine().split(",");
+                System.out.println(Arrays.toString(map[i]));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            ;
+        }
+    }
+
     public void update() {
 
+        // Generate new coordinates of player hitbox
+        hitbox = new Hitbox(y + gamePanel.TILE_SIZE / 4, x + gamePanel.TILE_SIZE / 4, gamePanel.TILE_SIZE / 2,
+                gamePanel.TILE_SIZE / 2);
+
+        // Get current tile
+        int currentTileY = Math.max(0, hitbox.centerY / gamePanel.TILE_SIZE);
+        int currentTileX = Math.max(0, hitbox.centerX / gamePanel.TILE_SIZE);
+
         if (keyHandler.up == true) {
-            y -= speed;
+            if (!collisionTiles.contains(Integer.parseInt(map[currentTileY - 1][currentTileX]))
+                    || !hitbox.intersects(
+                            new Hitbox((currentTileY - 1) * gamePanel.TILE_SIZE, currentTileX * gamePanel.TILE_SIZE,
+                                    gamePanel.TILE_SIZE, gamePanel.TILE_SIZE)))
+                y -= speed;
             direction = "up";
             spriteCounter++;
         } else if (keyHandler.down == true) {
-            y += speed;
+            if (!collisionTiles.contains(Integer.parseInt(map[currentTileY + 1][currentTileX]))
+                    || !hitbox.intersects(
+                            new Hitbox((currentTileY + 1) * gamePanel.TILE_SIZE, currentTileX * gamePanel.TILE_SIZE,
+                                    gamePanel.TILE_SIZE, gamePanel.TILE_SIZE)))
+                y += speed;
             direction = "down";
             spriteCounter++;
         } else if (keyHandler.left == true) {
-            x -= speed;
+            if (!collisionTiles.contains(Integer.parseInt(map[currentTileY][currentTileX - 1]))
+                    || !hitbox.intersects(
+                            new Hitbox(currentTileY * gamePanel.TILE_SIZE, (currentTileX - 1) * gamePanel.TILE_SIZE,
+                                    gamePanel.TILE_SIZE, gamePanel.TILE_SIZE)))
+                x -= speed;
             direction = "left";
             spriteCounter++;
         } else if (keyHandler.right == true) {
-            x += speed;
+            if (!collisionTiles.contains(Integer.parseInt(map[currentTileY][currentTileX + 1]))
+                    || !hitbox.intersects(
+                            new Hitbox(currentTileY * gamePanel.TILE_SIZE, (currentTileX + 1) * gamePanel.TILE_SIZE,
+                                    gamePanel.TILE_SIZE, gamePanel.TILE_SIZE)))
+                x += speed;
             direction = "right";
             spriteCounter++;
         }
