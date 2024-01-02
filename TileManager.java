@@ -9,29 +9,33 @@ public class TileManager {
     Tile[] tile;
     String[][] map;
 
-    int C = 34;
-    int R = 49;
+    int C = 63;
+    int R = 43;
+    int NUM_TILES = 134;
 
-    public TileManager(InteractivePanel gamePanel) {
+    PlayerMovable player;
+
+    public TileManager(InteractivePanel gamePanel, PlayerMovable player) {
 
         this.gamePanel = gamePanel;
+        this.player = player;
 
-        tile = new Tile[120];
+        tile = new Tile[NUM_TILES + 1];
         map = new String[R][C];
 
         getTileImage();
-        loadMap("maps/map1.txt");
+        loadMap("maps/base-map2.csv");
     }
 
     public void getTileImage() {
 
         try {
 
-            for (int i = 0; i < 120; i++) {
+            for (int i = 0; i <= NUM_TILES; i++) {
 
                 tile[i] = new Tile();
                 tile[i].image = ImageIO
-                        .read(getClass().getResourceAsStream("tile/tile" + String.format("%03d", i) + ".png"));
+                        .read(getClass().getResourceAsStream("base-map/tile" + String.format("%03d", i) + ".png"));
             }
 
         } catch (Exception e) {
@@ -70,17 +74,22 @@ public class TileManager {
          * }
          * }
          */
-        int h = gamePanel.WINDOW_HEIGHT;
-        int w = gamePanel.WINDOW_WIDTH;
-        int t = Math.min(h / R, w / C);
 
-        for (int i = 0; i < R; i++) {
-            for (int j = 0; j < C; j++) {
-                graphic.drawImage(tile[Integer.parseInt(map[i][j])].image,
-                        j * t,
-                        i * t,
-                        t,
-                        t, null);
+        // Convert the player's coordinates into the range of visible tiles
+        int start_i = Math.max(0, player.y / gamePanel.TILE_SIZE);
+        int end_i = Math.min(R, start_i + gamePanel.WINDOW_HEIGHT / gamePanel.TILE_SIZE + 2);
+
+        int start_j = Math.max(0, player.x / gamePanel.TILE_SIZE);
+        int end_j = Math.min(C, start_j + gamePanel.WINDOW_WIDTH / gamePanel.TILE_SIZE + 2);
+
+        // Draw only the visible tiles
+        for (int i = start_i; i < end_i; i++) {
+            for (int j = start_j; j < end_j; j++) {
+                graphic.drawImage(tile[Math.max(0, Integer.parseInt(map[i][j]))].image,
+                        j * gamePanel.TILE_SIZE - player.x,
+                        i * gamePanel.TILE_SIZE - player.y,
+                        gamePanel.TILE_SIZE,
+                        gamePanel.TILE_SIZE, null);
             }
         }
     }

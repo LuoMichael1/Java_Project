@@ -3,15 +3,15 @@ import java.awt.*;
 
 public class InteractivePanel extends JPanel implements Runnable {
 
-    final int ORIGINAL_TILE_SIZE = 16;
-    final int SCALE = 3;
+    final int ORIGINAL_TILE_SIZE = 8;
+    final int SCALE = 8;
     final int TILE_SIZE = ORIGINAL_TILE_SIZE * SCALE;
 
     // Define screen as 4:3 ratio
     final int MAX_SCREEN_COL = 16;
     final int MAX_SCREEN_ROW = 12;
-    final int WINDOW_WIDTH = TILE_SIZE * MAX_SCREEN_COL;
-    final int WINDOW_HEIGHT = TILE_SIZE * MAX_SCREEN_ROW;
+    final int WINDOW_WIDTH = 1280;
+    final int WINDOW_HEIGHT = 720;
 
     Thread gameThread;
     KeyHandler keyHandler = new KeyHandler();
@@ -19,7 +19,7 @@ public class InteractivePanel extends JPanel implements Runnable {
     int FPS = 60;
 
     PlayerMovable player = new PlayerMovable(this, keyHandler);
-    TileManager tile = new TileManager(this);
+    TileManager tile = new TileManager(this, player);
 
     public InteractivePanel() {
 

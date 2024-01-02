@@ -8,6 +8,9 @@ public class PlayerMovable extends Entity {
     InteractivePanel gamePanel;
     KeyHandler keyHandler;
 
+    static int drawX;
+    static int drawY;
+
     public PlayerMovable(InteractivePanel gamePanel, KeyHandler keyHandler) {
 
         this.gamePanel = gamePanel;
@@ -23,6 +26,9 @@ public class PlayerMovable extends Entity {
         y = 100;
         speed = 6;
         direction = "right";
+
+        drawX = gamePanel.WINDOW_WIDTH / 2;
+        drawY = gamePanel.WINDOW_HEIGHT / 2;
     }
 
     public void getPlayerImage() {
@@ -96,7 +102,10 @@ public class PlayerMovable extends Entity {
                 break;
         }
 
-        altGraphic.drawImage(image, x, y, gamePanel.TILE_SIZE, gamePanel.TILE_SIZE, null);
+        // altGraphic.drawImage(image, x, y, gamePanel.TILE_SIZE, gamePanel.TILE_SIZE,
+        // null);
+        // Draw player sprite at center of screen
+        altGraphic.drawImage(image, drawX, drawY, gamePanel.TILE_SIZE, gamePanel.TILE_SIZE, null);
 
         if (spriteCounter >= 10) {
             if (spriteNum == 1)

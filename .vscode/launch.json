@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "InteractivePanel",
+            "request": "launch",
+            "mainClass": "InteractivePanel",
+            "projectName": "Java_Project_b303fe86"
+        },
+        {
+            "type": "java",
             "name": "Cutscene1",
             "request": "launch",
             "mainClass": "Cutscene1",
