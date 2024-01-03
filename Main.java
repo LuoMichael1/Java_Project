@@ -7,7 +7,7 @@ import java.io.File;
 
 class Main {
 
-    // Size
+    // Window size
     public static final int WIDTH = 1280;
     public static final int HEIGHT = 720;   
     
