@@ -35,7 +35,7 @@ public class Battle extends JPanel implements ActionListener {
     private ArrayList<Integer> showDamage = new ArrayList<Integer>();
     private int xPos = 0;       // for the damage messages
     // space for messages
-    private JLabel messageLabel;
+    //private JLabel messageLabel;
     private JLabel instructionLabel;
 
     private JButton doubleSpeed;

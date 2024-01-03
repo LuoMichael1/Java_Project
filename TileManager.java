@@ -211,18 +211,18 @@ public class TileManager {
     public void draw(Graphics2D graphic) {
 
         // Convert the player's coordinates into the range of visible tiles
-        int start_i = Math.max(0, (player.y - player.drawY) / gamePanel.TILE_SIZE);
+        int start_i = Math.max(0, (player.y - player.getDrawY()) / gamePanel.TILE_SIZE);
         int end_i = Math.min(R, start_i + Main.HEIGHT / gamePanel.TILE_SIZE + 2);
 
-        int start_j = Math.max(0, (player.x - player.drawX) / gamePanel.TILE_SIZE);
+        int start_j = Math.max(0, (player.x - player.getDrawX()) / gamePanel.TILE_SIZE);
         int end_j = Math.min(C, start_j + Main.WIDTH / gamePanel.TILE_SIZE + 2);
 
         // Draw only the visible tiles
         for (int i = start_i; i < end_i; i++) {
             for (int j = start_j; j < end_j; j++) {
                 graphic.drawImage(tile[Math.max(0, Integer.parseInt(map[i][j]))].image,
-                        j * gamePanel.TILE_SIZE - player.x + player.drawX,
-                        i * gamePanel.TILE_SIZE - player.y + player.drawY,
+                        j * gamePanel.TILE_SIZE - player.x + player.getDrawX(),
+                        i * gamePanel.TILE_SIZE - player.y + player.getDrawY(),
                         gamePanel.TILE_SIZE,
                         gamePanel.TILE_SIZE, null);
             }
@@ -232,10 +232,10 @@ public class TileManager {
     public void drawLighting(Graphics2D graphic) {
 
         // Convert the player's coordinates into the range of visible tiles
-        int start_i = Math.max(0, (player.y - player.drawY) / gamePanel.TILE_SIZE);
+        int start_i = Math.max(0, (player.y - player.getDrawY()) / gamePanel.TILE_SIZE);
         int end_i = Math.min(R, start_i + Main.HEIGHT / gamePanel.TILE_SIZE + 2);
 
-        int start_j = Math.max(0, (player.x - player.drawX) / gamePanel.TILE_SIZE);
+        int start_j = Math.max(0, (player.x - player.getDrawX()) / gamePanel.TILE_SIZE);
         int end_j = Math.min(C, start_j + Main.WIDTH / gamePanel.TILE_SIZE + 2);
 
         // Draw only the visible tiles
@@ -243,8 +243,8 @@ public class TileManager {
             for (int j = start_j; j < end_j; j++) {
 
                 // Overlay transparent black tiles to represent darkness
-                graphic.drawImage(darkImages[alpha[i][j]], j * gamePanel.TILE_SIZE - player.x + player.drawX,
-                        i * gamePanel.TILE_SIZE - player.y + player.drawY, null);
+                graphic.drawImage(darkImages[alpha[i][j]], j * gamePanel.TILE_SIZE - player.x + player.getDrawX(),
+                        i * gamePanel.TILE_SIZE - player.y + player.getDrawY(), null);
             }
         }
     }

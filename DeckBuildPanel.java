@@ -1,8 +1,8 @@
 // The screen where you can select the cards you will bring into the auto-battle as well as fuse and upgrade cards
 
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
+//import javax.swing.border.Border;
+//import javax.swing.border.EmptyBorder;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -11,7 +11,7 @@ import java.util.*;
 public class DeckBuildPanel extends JPanel implements MouseMotionListener, MouseListener, ActionListener {
 
     private int x, y;
-    private int cardsInDeck = 8;
+    //private int cardsInDeck = 8;
     public static int deckSize = 8;
     private Cards selected = null;
     private int offsetX, offsetY;
