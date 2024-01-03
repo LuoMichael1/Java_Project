@@ -1,2 +1,2 @@
-Java game made with Swing
-Card based auto-battler
+Java game made with Swing. 
+This is a card based auto-battler
