@@ -1,5 +1,4 @@
-// java game Michael 
-// main panel
+// The screen where you can select the cards you will bring into the auto-battle as well as fuse and upgrade cards
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -40,10 +39,9 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
         initButtons();
         try {
             Music music = new Music("music/bg.wav");
-            //music.doathing();
         }
         catch (Exception e) {
-            System.out.println("Hmm");
+            System.out.println(e);
         }
     }
 
@@ -321,7 +319,7 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
         int deckX = (Main.WIDTH)/2;
 
         // adjusts the start accounting for each of the cards in the deck
-        for (Cards card : player.deck)
+        for (int i=0; i < player.deck.size(); i++)
             deckX = deckX - 60;
 
         // puts each card after one another

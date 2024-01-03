@@ -9,14 +9,14 @@
             "name": "Main",
             "request": "launch",
             "mainClass": "Main",
-            "projectName": "Java_Project_b303fe86"
+            "projectName": "Java_Project_40d67900"
         },
         {
             "type": "java",
             "name": "InteractivePanel",
             "request": "launch",
             "mainClass": "InteractivePanel",
-            "projectName": "Java_Project_b303fe86"
+            "projectName": "Java_Project_40d67900"
         },
         {
             "type": "java",

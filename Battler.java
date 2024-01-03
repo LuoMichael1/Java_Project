@@ -1,8 +1,9 @@
+// This is the abstract class that encompasses both player and enemy
+
 import java.util.*;
 import javax.swing.*;
 import java.awt.*;
 
-// This is the abstract class that encompasses both player and enemy
 public abstract class Battler {
 
     public int cardsUsed = 0;

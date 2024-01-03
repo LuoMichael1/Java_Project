@@ -212,10 +212,10 @@ public class TileManager {
 
         // Convert the player's coordinates into the range of visible tiles
         int start_i = Math.max(0, (player.y - player.drawY) / gamePanel.TILE_SIZE);
-        int end_i = Math.min(R, start_i + gamePanel.WINDOW_HEIGHT / gamePanel.TILE_SIZE + 2);
+        int end_i = Math.min(R, start_i + Main.HEIGHT / gamePanel.TILE_SIZE + 2);
 
         int start_j = Math.max(0, (player.x - player.drawX) / gamePanel.TILE_SIZE);
-        int end_j = Math.min(C, start_j + gamePanel.WINDOW_WIDTH / gamePanel.TILE_SIZE + 2);
+        int end_j = Math.min(C, start_j + Main.WIDTH / gamePanel.TILE_SIZE + 2);
 
         // Draw only the visible tiles
         for (int i = start_i; i < end_i; i++) {
@@ -233,10 +233,10 @@ public class TileManager {
 
         // Convert the player's coordinates into the range of visible tiles
         int start_i = Math.max(0, (player.y - player.drawY) / gamePanel.TILE_SIZE);
-        int end_i = Math.min(R, start_i + gamePanel.WINDOW_HEIGHT / gamePanel.TILE_SIZE + 2);
+        int end_i = Math.min(R, start_i + Main.HEIGHT / gamePanel.TILE_SIZE + 2);
 
         int start_j = Math.max(0, (player.x - player.drawX) / gamePanel.TILE_SIZE);
-        int end_j = Math.min(C, start_j + gamePanel.WINDOW_WIDTH / gamePanel.TILE_SIZE + 2);
+        int end_j = Math.min(C, start_j + Main.WIDTH / gamePanel.TILE_SIZE + 2);
 
         // Draw only the visible tiles
         for (int i = start_i; i < end_i; i++) {

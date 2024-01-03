@@ -1,3 +1,5 @@
+// this is the first cutscene in the game. This scene has a car and some dialoge
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;

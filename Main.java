@@ -1,5 +1,5 @@
 // java game 
-// frame
+// Frame, cardlayout, and some fonts
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,15 +24,18 @@ class Main {
         
         MainMenu p1 = new MainMenu();
         Cutscene1 p2 = new Cutscene1();
-        DeckBuildPanel p3 = new DeckBuildPanel();
+        InteractivePanel p3 = new InteractivePanel();
+        DeckBuildPanel p4 = new DeckBuildPanel();
 
         f.add(p, BorderLayout.CENTER);
         addCard(p1, "Menu");
         addCard(p2, "Cutscene1");
-        addCard(p3, "CardGame");
+        addCard(p3, "Map");
+        addCard(p4, "CardGame");
         
-        // idk why but keylistener in the cutscene does not work unless I do this
+        // idk why but keylistener does not work unless I do this
         f.addKeyListener(p2);
+        f.addKeyListener(p3.keyHandler);
 
         f.setVisible(true);
         f.setSize(WIDTH, HEIGHT);

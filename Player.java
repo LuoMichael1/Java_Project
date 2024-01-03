@@ -6,25 +6,24 @@ import java.util.Scanner;
 public class Player extends Battler {
 
     private ImageIcon playerSprite = new ImageIcon("images/player2.png");   
-
     private Scanner filesc;
-    private String SpriteArray[] = new String[50];  // 50 just to be on the safe side
+    private String SpriteArray[] = new String[50];      // 50 just to be on the safe side
     private String SpriteAnimArray[] = new String[50];  // 50 just to be on the safe side
-    private String tmpArray[];
-    private String tmpArray2[];
+    private String tmpArray[];   // holds the array created by spliting one line of the cut array
+    private String tmpArray2[];  // holds the array created by spliting one line of the animation array
     private boolean attackAnimtest = false;
 
+    // where the characters image is drawn
     private int x = 160;
     private int y = 200;
+
     private int lineCounter = 0;
-    private int yoffset = 0;
-
-    private int animXOffSet = 0;
+    private int yoffset = 0;      // used to draw the status effect icons at different Y values 
+    private int animXOffSet = 0;   
     private int animYOffSet = 0;
-    //private int counter = 0;
 
-    public Player() {
-        
+
+    public Player() {    
         super("Player");
         createSprite();
     }
@@ -53,20 +52,16 @@ public class Player extends Battler {
         }
     }
 
+    // this gets called every frame during the auto-battling segment (Battle.java)
     public void drawSprite(Graphics g) {
 
-        //animXOffSet = counter%10;
-        //animYOffSet = (counter/2)%5;
         tmpArray2 = SpriteAnimArray[(super.getCounter()/2)%(lineCounter-1)].split(" ");
-
-        
 
         // iterate through each part of the sprite
         for (int i=0; i < 4; i++) {
-            //System.out.println("uwu");
             tmpArray = SpriteArray[i].split(" ");
             
-
+            // sprite 
             int posX = Integer.parseInt(tmpArray[0]);
             int posY = Integer.parseInt(tmpArray[1]);
             int iwidth = Integer.parseInt(tmpArray[2]);
@@ -74,14 +69,11 @@ public class Player extends Battler {
             int offsetX = Integer.parseInt(tmpArray[4]);
             int offsetY = Integer.parseInt(tmpArray[5]);
 
-            // animation file
+            // animation
             int isVisible = Integer.parseInt(tmpArray2[i*3]);
             animXOffSet = Integer.parseInt(tmpArray2[1 + (i*3)]);
             animYOffSet = Integer.parseInt(tmpArray2[2 + (i*3)]);
 
-
-            //int isVisible = Integer.parseInt(tmpArray2[1]);
-            //System.out.println("uwu");
             if (isVisible == 1 || attackAnimtest) {
                 g.clipRect(x+posX+offsetX+animXOffSet, y+posY+offsetY+animYOffSet, iwidth, iheight);
                 g.drawImage(playerSprite.getImage(), x+offsetX+animXOffSet, y+offsetY+animYOffSet, null);

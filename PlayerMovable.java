@@ -42,8 +42,8 @@ public class PlayerMovable extends Entity {
         speed = 6;
         direction = "right";
 
-        drawX = gamePanel.WINDOW_WIDTH / 2;
-        drawY = gamePanel.WINDOW_HEIGHT / 2;
+        drawX = Main.WIDTH / 2;
+        drawY = Main.HEIGHT / 2;
 
         collisionTiles
                 .addAll(Arrays.asList(new Integer[] { 105, 84, 85, 95, 98, 132, 0, 96, 103, 108, 111, 112, 113, 114 }));
@@ -71,8 +71,7 @@ public class PlayerMovable extends Entity {
 
         try {
 
-            BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(getClass().getResourceAsStream(file)));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(file)));
 
             for (int i = 0; i < R; i++) {
                 map[i] = reader.readLine().split(",");
@@ -80,6 +79,7 @@ public class PlayerMovable extends Entity {
             }
 
         } catch (Exception e) {
+            System.out.println(":P");
             e.printStackTrace();
             ;
         }

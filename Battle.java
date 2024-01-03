@@ -1,3 +1,5 @@
+// The actual card based auto-battle
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;

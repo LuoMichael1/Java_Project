@@ -1,33 +1,33 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class InteractivePanel extends JPanel implements Runnable {
+public class InteractivePanel extends JPanel implements Runnable{
 
     final int ORIGINAL_TILE_SIZE = 8;
     final int SCALE = 8;
     final int TILE_SIZE = ORIGINAL_TILE_SIZE * SCALE;
 
     // Define screen as 4:3 ratio
-    final int MAX_SCREEN_COL = 16;
-    final int MAX_SCREEN_ROW = 12;
-    final int WINDOW_WIDTH = 1280;
-    final int WINDOW_HEIGHT = 720;
+    //final int MAX_SCREEN_COL = 16;
+    //final int MAX_SCREEN_ROW = 12;
 
     Thread gameThread;
     KeyHandler keyHandler = new KeyHandler();
 
     int FPS = 60;
+    int counter = 0;
 
     PlayerMovable player = new PlayerMovable(this, keyHandler);
     TileManager tile = new TileManager(this, player);
 
     public InteractivePanel() {
 
-        this.setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
+        this.setPreferredSize(new Dimension(Main.WIDTH, Main.HEIGHT));
         this.setBackground(Color.black);
         this.setDoubleBuffered(true); // Improve render performance
         this.addKeyListener(keyHandler);
         this.setFocusable(true);
+        startGameThread();
     }
 
     public void startGameThread() {
@@ -35,7 +35,7 @@ public class InteractivePanel extends JPanel implements Runnable {
         gameThread = new Thread(this);
         gameThread.start();
     }
-
+ 
     @Override
     public void run() {
 
@@ -82,8 +82,14 @@ public class InteractivePanel extends JPanel implements Runnable {
         tile.drawLighting(altGraphic);
 
         altGraphic.dispose();
-    }
 
+        // after 20 seconds you enter battle
+        counter++;
+        if (counter == 60*20) {
+            Main.nextCard();
+        }
+    }
+/*
     public static void main(String args[]) {
 
         JFrame window = new JFrame();
@@ -91,7 +97,7 @@ public class InteractivePanel extends JPanel implements Runnable {
         window.setResizable(false);
         window.setTitle("Game Name");
 
-        InteractivePanel panel = new InteractivePanel();
+        
         window.add(panel);
 
         window.pack();
@@ -101,4 +107,5 @@ public class InteractivePanel extends JPanel implements Runnable {
 
         panel.startGameThread();
     }
+    */
 }

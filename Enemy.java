@@ -4,19 +4,16 @@ import javax.swing.*;
 public class Enemy extends Battler {
 
     private int yoffset = 0;
-
     private ImageIcon enemySprite = new ImageIcon("images/enemy.png");
 
     public Enemy() {
-
         super("Enemy");
-
         for (int i = 0; i < DeckBuildPanel.deckSize; i++) {
             hand[i] = new Cards(i * 150 + 20, 600, 70, 30);
         }
     }
 
-    @Override
+    
     public void drawSprite(Graphics g) {
         g.drawImage(enemySprite.getImage(), 800, 200, null);
     }
