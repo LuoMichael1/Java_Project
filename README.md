@@ -1,2 +1,2 @@
 Java game made with Swing. 
-This is a card based auto-battler
+The game is a card based auto-battler based in space!
