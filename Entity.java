@@ -12,5 +12,4 @@ public class Entity {
     public int spriteNum = 1;
 
     public Hitbox hitbox;
-    public boolean collisionOn = false;
 }

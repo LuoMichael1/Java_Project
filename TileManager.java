@@ -45,7 +45,40 @@ public class TileManager {
 
         getTileImage();
         loadMap("maps/base-map2.csv");
+        loadObjects();
         getLighting(map);
+    }
+
+    public void loadObjects() {
+
+        loadChests("maps/chest-coordinates.csv");
+    }
+
+    public void loadChests(String file) {
+
+        ArrayList<Point> chestCoordinates = new ArrayList<Point>();
+
+        try {
+
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(getClass().getResourceAsStream(file)));
+
+            for (int i = 0; i < R; i++) {
+                String[] line = reader.readLine().split(",");
+                chestCoordinates.add(new Point(Integer.parseInt(line[0]), Integer.parseInt(line[1])));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        for (Point point : chestCoordinates) {
+
+            Chest chest = new Chest(point.x, point.y);
+            chest.loadImages();
+            Chest.chests.add(chest);
+        }
+
     }
 
     public void getLighting(String[][] map) {
@@ -183,7 +216,7 @@ public class TileManager {
 
             for (int i = 0; i < R; i++) {
                 map[i] = reader.readLine().split(",");
-                //System.out.println(Arrays.toString(map[i]));
+                // System.out.println(Arrays.toString(map[i]));
             }
 
         } catch (Exception e) {
@@ -226,6 +259,14 @@ public class TileManager {
                         gamePanel.TILE_SIZE,
                         gamePanel.TILE_SIZE, null);
             }
+        }
+    }
+
+    public void drawChests(Graphics2D g) {
+
+        for (Chest chest : Chest.chests) {
+
+            chest.draw(g, player, gamePanel);
         }
     }
 

@@ -1,15 +1,15 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class InteractivePanel extends JPanel implements Runnable{
+public class InteractivePanel extends JPanel implements Runnable {
 
     final int ORIGINAL_TILE_SIZE = 8;
     final int SCALE = 8;
     final int TILE_SIZE = ORIGINAL_TILE_SIZE * SCALE;
 
     // Define screen as 4:3 ratio
-    //final int MAX_SCREEN_COL = 16;
-    //final int MAX_SCREEN_ROW = 12;
+    // final int MAX_SCREEN_COL = 16;
+    // final int MAX_SCREEN_ROW = 12;
 
     Thread gameThread;
     KeyHandler keyHandler = new KeyHandler();
@@ -35,7 +35,7 @@ public class InteractivePanel extends JPanel implements Runnable{
         gameThread = new Thread(this);
         gameThread.start();
     }
- 
+
     @Override
     public void run() {
 
@@ -68,7 +68,7 @@ public class InteractivePanel extends JPanel implements Runnable{
     public void update() {
 
         player.update();
-
+        Chest.checkCollision(player, this);
     }
 
     public void paintComponent(Graphics graphic) {
@@ -78,6 +78,7 @@ public class InteractivePanel extends JPanel implements Runnable{
         Graphics2D altGraphic = (Graphics2D) graphic;
 
         tile.draw(altGraphic);
+        tile.drawChests(altGraphic);
         player.draw(altGraphic);
         tile.drawLighting(altGraphic);
 
@@ -85,27 +86,27 @@ public class InteractivePanel extends JPanel implements Runnable{
 
         // after 20 seconds you enter battle
         counter++;
-        if (counter == 60*20) {
-            Main.nextCard();
+        if (counter == 60 * 20) {
+            // Main.nextCard();
         }
     }
-/*
-    public static void main(String args[]) {
-
-        JFrame window = new JFrame();
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setResizable(false);
-        window.setTitle("Game Name");
-
-        
-        window.add(panel);
-
-        window.pack();
-
-        window.setLocationRelativeTo(null); // Set window location to center
-        window.setVisible(true);
-
-        panel.startGameThread();
-    }
-    */
+    /*
+     * public static void main(String args[]) {
+     * 
+     * JFrame window = new JFrame();
+     * window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+     * window.setResizable(false);
+     * window.setTitle("Game Name");
+     * 
+     * 
+     * window.add(panel);
+     * 
+     * window.pack();
+     * 
+     * window.setLocationRelativeTo(null); // Set window location to center
+     * window.setVisible(true);
+     * 
+     * panel.startGameThread();
+     * }
+     */
 }

@@ -72,11 +72,11 @@ public class PlayerMovable extends Entity {
 
             for (int i = 0; i < R; i++) {
                 map[i] = reader.readLine().split(",");
-                //System.out.println(Arrays.toString(map[i]));
+                // System.out.println(Arrays.toString(map[i]));
             }
 
         } catch (Exception e) {
-            //System.out.println(":P");
+            // System.out.println(":P");
             e.printStackTrace();
             ;
         }
@@ -86,7 +86,7 @@ public class PlayerMovable extends Entity {
 
         // Generate new coordinates of player hitbox
         hitbox = new Hitbox(y + gamePanel.TILE_SIZE / 4, x + gamePanel.TILE_SIZE / 4, gamePanel.TILE_SIZE / 2,
-                gamePanel.TILE_SIZE / 2);
+                gamePanel.TILE_SIZE / 4 * 3);
 
         // Get current tile
         int currentTileY = Math.max(0, hitbox.centerY / gamePanel.TILE_SIZE);
@@ -177,6 +177,7 @@ public class PlayerMovable extends Entity {
     public int getDrawX() {
         return drawX;
     }
+
     public int getDrawY() {
         return drawY;
     }
