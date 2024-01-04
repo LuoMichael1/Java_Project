@@ -72,11 +72,11 @@ public class PlayerMovable extends Entity {
 
             for (int i = 0; i < R; i++) {
                 map[i] = reader.readLine().split(",");
-                System.out.println(Arrays.toString(map[i]));
+                //System.out.println(Arrays.toString(map[i]));
             }
 
         } catch (Exception e) {
-            System.out.println(":P");
+            //System.out.println(":P");
             e.printStackTrace();
             ;
         }

@@ -13,11 +13,11 @@ public class MainMenu extends JPanel implements MouseListener {
     //private static final int IMAGE_WIDTH = 1280;
     //private static final int IMAGE_HEIGHT = 720;
 
-    private int layer1X1_planets = 0;
-    private int layer2X1_planets = Main.WIDTH;
+    //private int layer1X1_planets = 0;
+    //private int layer2X1_planets = Main.WIDTH;
 
-    private int layer1X2_planets = 0;
-    private int layer2X2_planets = Main.WIDTH;
+    //private int layer1X2_planets = 0;
+    //private int layer2X2_planets = Main.WIDTH;
 
     private int layer1X1_stars = 0;
     private int layer2X1_stars = Main.WIDTH;
@@ -122,7 +122,6 @@ public class MainMenu extends JPanel implements MouseListener {
                 // Update parallax layers for stars
                 layer1X1_stars -= LAYER_SPEED_STARS;
                 layer2X1_stars -= LAYER_SPEED_STARS;
-
                 layer1X2_stars -= LAYER_SPEED_STARS;
                 layer2X2_stars -= LAYER_SPEED_STARS;
                 // Check if the images are off-screen, and reset their positions for stars
