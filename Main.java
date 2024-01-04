@@ -74,6 +74,6 @@ class Main {
     public static final Font Lexend18 = loadFont("fonts/lexend/static/Lexend-Regular.ttf", 18);
     public static final Font Lexend30 = loadFont("fonts/lexend/static/Lexend-Regular.ttf", 30);
     public static final Font Lexend60 = loadFont("fonts/lexend/static/Lexend-Regular.ttf", 60);
-
+    public static final Font Lexend160 = loadFont("fonts/lexend/static/Lexend-Regular.ttf", 160);
 
 }
