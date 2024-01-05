@@ -15,8 +15,8 @@ public class InteractiveEnemy extends Entity {
 
     BufferedImage image;
 
-    static final int InteractiveEnemy_WIDTH = 2;
-    static final int InteractiveEnemy_HEIGHT = 2;
+    static final int InteractiveEnemy_WIDTH = 4;
+    static final int InteractiveEnemy_HEIGHT = 4;
 
     static ArrayList<InteractiveEnemy> InteractiveEnemies = new ArrayList<>();
 
@@ -35,7 +35,7 @@ public class InteractiveEnemy extends Entity {
 
         try {
 
-            image = ImageIO.read(getClass().getResourceAsStream("objects/enemy.png"));
+            image = ImageIO.read(getClass().getResourceAsStream("objects/tile002.png"));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -76,9 +76,10 @@ public class InteractiveEnemy extends Entity {
 
     public void update(PlayerMovable player, InteractivePanel gamePanel) {
 
-        hitbox = new Hitbox(y + gamePanel.TILE_SIZE * 2 / 4, x + gamePanel.TILE_SIZE * 2 / 4,
-                gamePanel.TILE_SIZE * 2 / 2,
-                gamePanel.TILE_SIZE * 2 / 4 * 3);
+        hitbox = new Hitbox(y + gamePanel.TILE_SIZE * InteractiveEnemy_HEIGHT / 4,
+                x + gamePanel.TILE_SIZE * InteractiveEnemy_WIDTH / 4,
+                gamePanel.TILE_SIZE * InteractiveEnemy_WIDTH / 2,
+                gamePanel.TILE_SIZE * InteractiveEnemy_HEIGHT / 4 * 3);
 
         if (frameCounter % 60 == 0) {
 
@@ -100,8 +101,8 @@ public class InteractiveEnemy extends Entity {
             }
 
             // Move the enemy towards the next step
-            this.x += dx * 4;
-            this.y += dy * 4;
+            this.x += dx * 2;
+            this.y += dy * 2;
 
             // If the enemy has reached the next step, remove it from the path
             if (hitbox.centerX / gamePanel.TILE_SIZE == nextStep.x

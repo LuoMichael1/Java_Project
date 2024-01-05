@@ -23,6 +23,8 @@ public class PlayerMovable extends Entity {
     int R = 43;
     String[][] map;
 
+    boolean inVent;
+
     public PlayerMovable(InteractivePanel gamePanel, KeyHandler keyHandler) {
 
         this.gamePanel = gamePanel;
@@ -92,86 +94,98 @@ public class PlayerMovable extends Entity {
         int currentTileY = Math.max(0, hitbox.centerY / gamePanel.TILE_SIZE);
         int currentTileX = Math.max(0, hitbox.centerX / gamePanel.TILE_SIZE);
 
-        if (keyHandler.up == true) {
-            if (!collisionTiles.contains(Integer.parseInt(map[currentTileY - 1][currentTileX]))
-                    || !hitbox.intersects(
-                            new Hitbox((currentTileY - 1) * gamePanel.TILE_SIZE, currentTileX * gamePanel.TILE_SIZE,
-                                    gamePanel.TILE_SIZE, gamePanel.TILE_SIZE)))
-                y -= speed;
-            direction = "up";
-            spriteCounter++;
-        } else if (keyHandler.down == true) {
-            if (!collisionTiles.contains(Integer.parseInt(map[currentTileY + 1][currentTileX]))
-                    || !hitbox.intersects(
-                            new Hitbox((currentTileY + 1) * gamePanel.TILE_SIZE, currentTileX * gamePanel.TILE_SIZE,
-                                    gamePanel.TILE_SIZE, gamePanel.TILE_SIZE)))
-                y += speed;
-            direction = "down";
-            spriteCounter++;
-        } else if (keyHandler.left == true) {
-            if (!collisionTiles.contains(Integer.parseInt(map[currentTileY][currentTileX - 1]))
-                    || !hitbox.intersects(
-                            new Hitbox(currentTileY * gamePanel.TILE_SIZE, (currentTileX - 1) * gamePanel.TILE_SIZE,
-                                    gamePanel.TILE_SIZE, gamePanel.TILE_SIZE)))
-                x -= speed;
-            direction = "left";
-            spriteCounter++;
-        } else if (keyHandler.right == true) {
-            if (!collisionTiles.contains(Integer.parseInt(map[currentTileY][currentTileX + 1]))
-                    || !hitbox.intersects(
-                            new Hitbox(currentTileY * gamePanel.TILE_SIZE, (currentTileX + 1) * gamePanel.TILE_SIZE,
-                                    gamePanel.TILE_SIZE, gamePanel.TILE_SIZE)))
-                x += speed;
-            direction = "right";
-            spriteCounter++;
+        if (!inVent) {
+
+            if (keyHandler.up == true) {
+                if (!collisionTiles.contains(Integer.parseInt(map[currentTileY - 1][currentTileX]))
+                        || !hitbox.intersects(
+                                new Hitbox((currentTileY - 1) * gamePanel.TILE_SIZE, currentTileX * gamePanel.TILE_SIZE,
+                                        gamePanel.TILE_SIZE, gamePanel.TILE_SIZE)))
+                    y -= speed;
+                direction = "up";
+                spriteCounter++;
+            } else if (keyHandler.down == true) {
+                if (!collisionTiles.contains(Integer.parseInt(map[currentTileY + 1][currentTileX]))
+                        || !hitbox.intersects(
+                                new Hitbox((currentTileY + 1) * gamePanel.TILE_SIZE, currentTileX * gamePanel.TILE_SIZE,
+                                        gamePanel.TILE_SIZE, gamePanel.TILE_SIZE)))
+                    y += speed;
+                direction = "down";
+                spriteCounter++;
+            } else if (keyHandler.left == true) {
+                if (!collisionTiles.contains(Integer.parseInt(map[currentTileY][currentTileX - 1]))
+                        || !hitbox.intersects(
+                                new Hitbox(currentTileY * gamePanel.TILE_SIZE, (currentTileX - 1) * gamePanel.TILE_SIZE,
+                                        gamePanel.TILE_SIZE, gamePanel.TILE_SIZE)))
+                    x -= speed;
+                direction = "left";
+                spriteCounter++;
+            } else if (keyHandler.right == true) {
+                if (!collisionTiles.contains(Integer.parseInt(map[currentTileY][currentTileX + 1]))
+                        || !hitbox.intersects(
+                                new Hitbox(currentTileY * gamePanel.TILE_SIZE, (currentTileX + 1) * gamePanel.TILE_SIZE,
+                                        gamePanel.TILE_SIZE, gamePanel.TILE_SIZE)))
+                    x += speed;
+                direction = "right";
+                spriteCounter++;
+            }
         }
     }
 
     public void draw(Graphics2D altGraphic) {
 
-        BufferedImage image = null;
+        if (!inVent) {
 
-        switch (direction) {
-            case "up":
-                if (spriteNum == 1) {
-                    image = up1;
-                } else
-                    image = up2;
-                break;
-            case "down":
-                if (spriteNum == 1) {
-                    image = down1;
-                } else
-                    image = down2;
-                break;
-            case "left":
-                if (spriteNum == 1) {
-                    image = left1;
-                } else
-                    image = left2;
-                break;
+            BufferedImage image = null;
 
-            case "right":
-                if (spriteNum == 1) {
-                    image = right1;
-                } else
-                    image = right2;
-                break;
+            switch (direction) {
+                case "up":
+                    if (spriteNum == 1) {
+                        image = up1;
+                    } else
+                        image = up2;
+                    break;
+                case "down":
+                    if (spriteNum == 1) {
+                        image = down1;
+                    } else
+                        image = down2;
+                    break;
+                case "left":
+                    if (spriteNum == 1) {
+                        image = left1;
+                    } else
+                        image = left2;
+                    break;
+
+                case "right":
+                    if (spriteNum == 1) {
+                        image = right1;
+                    } else
+                        image = right2;
+                    break;
+            }
+
+            // altGraphic.drawImage(image, x, y, gamePanel.TILE_SIZE, gamePanel.TILE_SIZE,
+            // null);
+            // Draw player sprite at center of screen
+            altGraphic.drawImage(image, drawX, drawY, gamePanel.TILE_SIZE, gamePanel.TILE_SIZE, null);
+
+            if (spriteCounter >= 10) {
+                if (spriteNum == 1)
+                    spriteNum = 2;
+                else
+                    spriteNum = 1;
+
+                spriteCounter = 0;
+            }
         }
+    }
 
-        // altGraphic.drawImage(image, x, y, gamePanel.TILE_SIZE, gamePanel.TILE_SIZE,
-        // null);
-        // Draw player sprite at center of screen
-        altGraphic.drawImage(image, drawX, drawY, gamePanel.TILE_SIZE, gamePanel.TILE_SIZE, null);
+    public void setLocation(int x, int y) {
 
-        if (spriteCounter >= 10) {
-            if (spriteNum == 1)
-                spriteNum = 2;
-            else
-                spriteNum = 1;
-
-            spriteCounter = 0;
-        }
+        this.x = x;
+        this.y = y;
     }
 
     public int getDrawX() {
@@ -180,5 +194,15 @@ public class PlayerMovable extends Entity {
 
     public int getDrawY() {
         return drawY;
+    }
+
+    public int getCurrentTileX() {
+
+        return Math.max(0, hitbox.centerX / gamePanel.TILE_SIZE);
+    }
+
+    public int getCurrentTileY() {
+
+        return Math.max(0, hitbox.centerY / gamePanel.TILE_SIZE);
     }
 }

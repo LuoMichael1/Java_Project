@@ -1,9 +1,13 @@
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.HashSet;
 
 public class KeyHandler implements KeyListener {
 
     boolean up, down, left, right;
+
+    private HashSet<Integer> pressedKeys = new HashSet<>();
+    private HashSet<Integer> handledKeys = new HashSet<>();
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -29,6 +33,8 @@ public class KeyHandler implements KeyListener {
                 right = true;
                 break;
         }
+
+        pressedKeys.add(code);
     }
 
     @Override
@@ -51,5 +57,16 @@ public class KeyHandler implements KeyListener {
                 right = false;
                 break;
         }
+
+        pressedKeys.remove(code);
+        handledKeys.remove(code);
+    }
+
+    public boolean isKeyPressed(int keyCode) {
+        if (pressedKeys.contains(keyCode) && !handledKeys.contains(keyCode)) {
+            handledKeys.add(keyCode);
+            return true;
+        }
+        return false;
     }
 }

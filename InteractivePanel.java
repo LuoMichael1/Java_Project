@@ -82,6 +82,7 @@ public class InteractivePanel extends JPanel implements Runnable {
         }
 
         Chest.checkCollision(player, this);
+        Vent.checkCollision(player, this);
         InteractiveEnemy.checkCollision(player, this);
     }
 
@@ -93,6 +94,7 @@ public class InteractivePanel extends JPanel implements Runnable {
 
         tile.draw(altGraphic);
         tile.drawChests(altGraphic);
+        tile.drawVents(altGraphic);
         tile.drawEnemies(altGraphic);
         player.draw(altGraphic);
         tile.drawLighting(altGraphic);

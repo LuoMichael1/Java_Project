@@ -53,6 +53,7 @@ public class TileManager {
 
         loadChests("maps/chest-coordinates.csv");
         loadEnemies("maps/enemy-coordinates.csv");
+        loadVents("maps/vent-coordinates.csv");
     }
 
     public void loadChests(String file) {
@@ -79,6 +80,69 @@ public class TileManager {
             chest.loadImages();
             Chest.chests.add(chest);
         }
+    }
+
+    public void loadVents(String file) {
+
+        try {
+
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(getClass().getResourceAsStream(file)));
+
+            for (int i = 0; i < R; i++) {
+                String[] line = reader.readLine().split(",");
+
+                int ventX = Integer.parseInt(line[0]);
+                int ventY = Integer.parseInt(line[1]);
+                String ventName = line[2];
+
+                Vent vent = new Vent(ventX, ventY, ventName);
+                vent.loadImages();
+                Vent.vents.add(vent);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        loadVentConnections("maps/vent-connections.csv");
+    }
+
+    public void loadVentConnections(String file) {
+
+        try {
+            String line;
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length >= 3) {
+                    String vent1Name = parts[0];
+                    String direction = parts[1];
+                    String vent2Name = parts[2];
+
+                    Vent vent1 = findVentByName(vent1Name);
+                    Vent vent2 = findVentByName(vent2Name);
+
+                    if (vent1 != null && vent2 != null) {
+                        vent1.connect(direction, vent2);
+                    }
+                }
+            }
+
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static Vent findVentByName(String name) {
+        for (Vent vent : Vent.vents) {
+            if (vent.getName().equals(name)) {
+                return vent;
+            }
+        }
+        return null;
     }
 
     public void loadEnemies(String file) {
@@ -269,6 +333,15 @@ public class TileManager {
         for (Chest chest : Chest.chests) {
 
             chest.draw(g, player, gamePanel);
+        }
+    }
+
+    public void drawVents(Graphics2D g) {
+
+        for (Vent vent : Vent.vents) {
+
+            vent.draw(g, player, gamePanel);
+            System.out.println("drawing " + vent.getName());
         }
     }
 
