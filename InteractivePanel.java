@@ -68,7 +68,21 @@ public class InteractivePanel extends JPanel implements Runnable {
     public void update() {
 
         player.update();
+
+        for (InteractiveEnemy enemy : InteractiveEnemy.InteractiveEnemies) {
+
+            enemy.update(player, this);
+        }
+
+        // after 20 seconds you enter battle
+        counter++;
+        if (counter == 60 * 20) {
+            // Main.nextCard();
+            counter = 0;
+        }
+
         Chest.checkCollision(player, this);
+        InteractiveEnemy.checkCollision(player, this);
     }
 
     public void paintComponent(Graphics graphic) {
@@ -79,16 +93,11 @@ public class InteractivePanel extends JPanel implements Runnable {
 
         tile.draw(altGraphic);
         tile.drawChests(altGraphic);
+        tile.drawEnemies(altGraphic);
         player.draw(altGraphic);
         tile.drawLighting(altGraphic);
 
         altGraphic.dispose();
-
-        // after 20 seconds you enter battle
-        counter++;
-        if (counter == 60 * 20) {
-            // Main.nextCard();
-        }
     }
     /*
      * public static void main(String args[]) {

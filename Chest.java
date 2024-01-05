@@ -16,7 +16,7 @@ public class Chest extends Interactible {
         try {
 
             image = ImageIO.read(getClass().getResourceAsStream("objects/chest.png"));
-
+            System.out.println("sdafsdfds");
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -52,6 +52,7 @@ public class TileManager {
     public void loadObjects() {
 
         loadChests("maps/chest-coordinates.csv");
+        loadEnemies("maps/enemy-coordinates.csv");
     }
 
     public void loadChests(String file) {
@@ -78,7 +79,32 @@ public class TileManager {
             chest.loadImages();
             Chest.chests.add(chest);
         }
+    }
 
+    public void loadEnemies(String file) {
+
+        ArrayList<Point> enemyCoordinates = new ArrayList<Point>();
+
+        try {
+
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(getClass().getResourceAsStream(file)));
+
+            for (int i = 0; i < R; i++) {
+                String[] line = reader.readLine().split(",");
+                enemyCoordinates.add(new Point(Integer.parseInt(line[0]), Integer.parseInt(line[1])));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        for (Point point : enemyCoordinates) {
+
+            InteractiveEnemy enemy = new InteractiveEnemy(point.x, point.y, gamePanel);
+            enemy.loadImages();
+            InteractiveEnemy.InteractiveEnemies.add(enemy);
+        }
     }
 
     public void getLighting(String[][] map) {
@@ -167,30 +193,6 @@ public class TileManager {
         return neighbors;
     }
 
-    class Point {
-        int x, y;
-
-        Point(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o)
-                return true;
-            if (!(o instanceof Point))
-                return false;
-            Point point = (Point) o;
-            return x == point.x && y == point.y;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(x, y);
-        }
-    }
-
     public void getTileImage() {
 
         try {
@@ -267,6 +269,14 @@ public class TileManager {
         for (Chest chest : Chest.chests) {
 
             chest.draw(g, player, gamePanel);
+        }
+    }
+
+    public void drawEnemies(Graphics2D g) {
+
+        for (InteractiveEnemy enemy : InteractiveEnemy.InteractiveEnemies) {
+
+            enemy.draw(g, player, gamePanel);
         }
     }
 
