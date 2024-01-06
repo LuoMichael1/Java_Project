@@ -53,6 +53,7 @@ public class TileManager {
 
         loadChests("maps/chest-coordinates.csv");
         loadEnemies("maps/enemy-coordinates.csv");
+        loadChasingEnemies("maps/chasing-enemy-coordinates.csv");
         loadVents("maps/vent-coordinates.csv");
     }
 
@@ -147,7 +148,29 @@ public class TileManager {
 
     public void loadEnemies(String file) {
 
-        ArrayList<Point> enemyCoordinates = new ArrayList<Point>();
+        try {
+
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(getClass().getResourceAsStream(file)));
+
+            for (int i = 0; i < R; i++) {
+                String[] line = reader.readLine().split(",");
+                int x = Integer.parseInt(line[0]);
+                int y = Integer.parseInt(line[1]);
+                String type = line[2];
+                int triggerX = Integer.parseInt(line[3]);
+                int triggerY = Integer.parseInt(line[4]);
+
+                InteractiveEnemy enemy = new InteractiveEnemy(x, y, gamePanel, type, new Point(triggerX, triggerY));
+                InteractiveEnemy.InteractiveEnemies.add(enemy);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadChasingEnemies(String file) {
 
         try {
 
@@ -156,18 +179,17 @@ public class TileManager {
 
             for (int i = 0; i < R; i++) {
                 String[] line = reader.readLine().split(",");
-                enemyCoordinates.add(new Point(Integer.parseInt(line[0]), Integer.parseInt(line[1])));
+                int x = Integer.parseInt(line[0]);
+                int y = Integer.parseInt(line[1]);
+                String type = line[2];
+
+                ChasingEnemy enemy = new ChasingEnemy(x, y, gamePanel, type);
+                ChasingEnemy.chasingEnemies.add(enemy);
+                InteractiveEnemy.InteractiveEnemies.add(enemy);
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-        }
-
-        for (Point point : enemyCoordinates) {
-
-            InteractiveEnemy enemy = new InteractiveEnemy(point.x, point.y, gamePanel);
-            enemy.loadImages();
-            InteractiveEnemy.InteractiveEnemies.add(enemy);
         }
     }
 
@@ -341,7 +363,6 @@ public class TileManager {
         for (Vent vent : Vent.vents) {
 
             vent.draw(g, player, gamePanel);
-            System.out.println("drawing " + vent.getName());
         }
     }
 
