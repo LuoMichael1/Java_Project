@@ -30,7 +30,7 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener {
     private double size = 0;  // the size of the planets (the formula is their normal size multiplied by this)
 
     public MainMenu() {
-        setBackground(Color.black);
+        setBackground(new Color(10,10,10));
         // setTitle("Main Menu");
         // setSize(1280, 720);
         // setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
