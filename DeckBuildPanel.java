@@ -37,12 +37,6 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
 
         initUserInterface();
         initButtons();
-        try {
-            Music music = new Music("music/bg.wav");
-        }
-        catch (Exception e) {
-            System.out.println(e);
-        }
     }
 
     public void paintComponent(Graphics g) {

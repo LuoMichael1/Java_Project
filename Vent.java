@@ -17,7 +17,7 @@ public class Vent extends Interactible {
 
     public void loadImages() {
 
-        System.out.println("vent img loaded");
+        //System.out.println("vent img loaded");
         super.loadImages(IMAGE_PATH);
     }
 

@@ -9,13 +9,17 @@ public class KeyHandler implements KeyListener {
     private HashSet<Integer> pressedKeys = new HashSet<>();
     private HashSet<Integer> handledKeys = new HashSet<>();
 
+    public KeyHandler() {
+        System.out.println("Keyhandler made");
+    }
+
     @Override
     public void keyTyped(KeyEvent e) {
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-
+        System.out.println("Keyhandler doing things");
         int code = e.getKeyCode();
 
         switch (code) {

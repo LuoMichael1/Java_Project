@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 //import java.awt.event.ActionListener;
 
-public class MainMenu extends JPanel implements MouseListener {
+public class MainMenu extends JPanel implements MouseListener, KeyListener {
 
     private static final int LAYER_SPEED_PLANETS = 2;
     private static final int LAYER_SPEED_STARS = 1;
@@ -25,26 +25,28 @@ public class MainMenu extends JPanel implements MouseListener {
     private int layer1X2_stars = 0;
     private int layer2X2_stars = Main.WIDTH;
     
-    private boolean seenScene1 = false;
+    private boolean seenScene1 = false;  // prevents the cutscene from being played more than once
 
-    private int planetY = 0;
     private double size = 0;  // the size of the planets (the formula is their normal size multiplied by this)
 
     public MainMenu() {
-        setBackground(Color.BLACK);
+        setBackground(new Color(10,10,10));
         // setTitle("Main Menu");
         // setSize(1280, 720);
         // setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // setLocationRelativeTo(null);
         this.setLayout(new BorderLayout());
         this.addMouseListener(this);
-
+        
         JLayeredPane layeredPane = new JLayeredPane();
 
-
-        
         layeredPane.setPreferredSize(new Dimension(1280, 720));
-
+        layeredPane.add(new MenuButtons(), new Integer(1));
+        
+        this.setFocusable(true);
+        //this.grabFocus();
+        //this.requestFocusInWindow();
+        this.addKeyListener(this);
         // Add a background image to the background layer
         //JLabel backgroundImage = createBackgroundLabel("menu/parallax-space-backgound.png", IMAGE_WIDTH, IMAGE_HEIGHT);
         //layeredPane.add(backgroundImage, Integer.valueOf(-1)); // Set to -1 for the background layer
@@ -79,20 +81,46 @@ public class MainMenu extends JPanel implements MouseListener {
             
             planetsX[i] = (int)(Math.random()*Main.WIDTH)+1;
             planetsY[i] = (int)(Math.random()*Main.HEIGHT)+1;
-            layeredPane.add(planets[i], Integer.valueOf(0));
+            layeredPane.add(planets[i], JLayeredPane.DEFAULT_LAYER);
             setLayerBounds(layeredPane, planets[i], planetsX[i], planetsY[i], JLayeredPane.DEFAULT_LAYER);
 
         }
 
+        
+        /* 
+        //settingsIcon.setBorderPainted()
+        JButton btt1 = new JButton(settingsIcon);
+        //btt1.setContentAreaFilled(false);
+        btt1.setBorderPainted(false);
+        //btt1.setBounds(0, 0, 110, 110);
+        
+        
+        JPanel container1 = new JPanel(new BorderLayout());
+        JPanel container2 = new JPanel(new GridBagLayout());
 
+        for (int i =0; i < 3; i++) {
+            JPanel empty = new JPanel();
+            empty.setOpaque(false);
+            container2.add(empty);
+        }
+        container1.setOpaque(false);
+        container2.setOpaque(false);
+        
+        container1.setBounds(0, 0, Main.WIDTH, Main.HEIGHT);
+        container1.add(container2, BorderLayout.EAST);
+        container2.add(btt1);
+        layeredPane.add(container1, new Integer(1));
+        */
+        
+        
         JLabel background1_1_stars = createBackgroundLabel("menu/parallax-space-stars.png", Main.WIDTH, Main.HEIGHT);
         JLabel background2_1_stars = createBackgroundLabel("menu/parallax-space-stars.png", Main.WIDTH, Main.HEIGHT);
 
         // Add parallax layers to the background layer
         //layeredPane.add(background1_1_planets, Integer.valueOf(0));
         //layeredPane.add(background2_1_planets, Integer.valueOf(0));
-        layeredPane.add(background1_1_stars, Integer.valueOf(0));
-        layeredPane.add(background2_1_stars, Integer.valueOf(0));
+        layeredPane.add(background1_1_stars, JLayeredPane.DEFAULT_LAYER);
+        layeredPane.add(background2_1_stars, JLayeredPane.DEFAULT_LAYER);
 
         //setLayerBounds(layeredPane, background1_1_planets, 0, 0, JLayeredPane.DEFAULT_LAYER);
         //setLayerBounds(layeredPane, background2_1_planets, Main.WIDTH, 0, JLayeredPane.DEFAULT_LAYER);
@@ -192,14 +220,14 @@ public class MainMenu extends JPanel implements MouseListener {
     }
 
     public void mousePressed(MouseEvent e) {
-        CardLayout cardLayout = (CardLayout) getParent().getLayout();
         // switches to the next card in the layout
         if (!seenScene1) {
-            cardLayout.next(getParent());
+            this.setFocusable(false);
+            Main.nextCard();
             seenScene1 = true;
         }
         else
-            cardLayout.show(getParent(), "CardGame");
+            Main.showCard("CardGame");
     }
 
     public void mouseReleased(MouseEvent e) {
@@ -219,11 +247,29 @@ public class MainMenu extends JPanel implements MouseListener {
         
         
         g.setColor(Color.white);
-        g.setFont(Main.Lexend160);
+        g.setFont(Main.Lexend180);
         g.drawString("BEFALL", 70, 600);
     }
 
     public int random(int start, int end) {
         return (int)(Math.random()*(end-start))+start;
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {}
+
+    @Override
+    public void keyPressed(KeyEvent e) {}
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        // switches to the next card in the layout
+        this.setFocusable(false);
+        if (!seenScene1) {
+            Main.nextCard();
+            seenScene1 = true;
+        }
+        else
+            Main.showCard("CardGame");
     }
 }

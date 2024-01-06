@@ -26,11 +26,13 @@ class Main {
         Cutscene1 p2 = new Cutscene1();
         InteractivePanel p3 = new InteractivePanel();
         DeckBuildPanel p4 = new DeckBuildPanel();
-
+        Settings setting = new Settings();
+        
         f.add(p, BorderLayout.CENTER);
         addCard(p1, "Menu");
         addCard(p2, "Cutscene1");
         addCard(p3, "Map");
+        addCard(setting, "Settings");
         addCard(p4, "CardGame");
         
         // idk why but keylistener does not work unless I do this
@@ -41,6 +43,7 @@ class Main {
         f.setSize(WIDTH, HEIGHT);
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setResizable(false);
+        //f.setFocusable(false);
 
         cardLayout = (CardLayout) p.getLayout();
         showCard("Menu");
@@ -74,6 +77,6 @@ class Main {
     public static final Font Lexend18 = loadFont("fonts/lexend/static/Lexend-Regular.ttf", 18);
     public static final Font Lexend30 = loadFont("fonts/lexend/static/Lexend-Regular.ttf", 30);
     public static final Font Lexend60 = loadFont("fonts/lexend/static/Lexend-Regular.ttf", 60);
-    public static final Font Lexend160 = loadFont("fonts/lexend/static/Lexend-Regular.ttf", 160);
+    public static final Font Lexend180 = loadFont("fonts/lexend/static/Lexend-Regular.ttf", 180);
 
 }
