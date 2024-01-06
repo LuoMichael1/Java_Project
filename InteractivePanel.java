@@ -25,8 +25,9 @@ public class InteractivePanel extends JPanel implements Runnable {
         this.setPreferredSize(new Dimension(Main.WIDTH, Main.HEIGHT));
         this.setBackground(Color.black);
         this.setDoubleBuffered(true); // Improve render performance
-        this.addKeyListener(keyHandler);
+        
         this.setFocusable(true);
+        this.addKeyListener(keyHandler);
         startGameThread();
     }
 
@@ -74,11 +75,15 @@ public class InteractivePanel extends JPanel implements Runnable {
             enemy.update(player, this);
         }
 
-        // after 20 seconds you enter battle
+        // after 10 seconds you enter battle
         counter++;
-        if (counter == 60 * 20) {
+        System.out.println(counter);
+        if (counter == 60 * 1) {
             // Main.nextCard();
             counter = 0;
+
+            // needs to grab focus (from what? idk) so I just put it here
+            grabFocus();
         }
 
         Chest.checkCollision(player, this);

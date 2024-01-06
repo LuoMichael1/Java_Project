@@ -25,6 +25,8 @@ public class Cutscene1 extends JPanel implements KeyListener, MouseListener {
     private boolean fadingOut = false;
 
     public Cutscene1() {
+        this.setFocusable(true);
+        //this.requestFocusInWindow();
         try {
             farBackground = ImageIO.read(new File("environment/far-buildings.png"));
             background1 = ImageIO.read(new File("environment/back-buildings.png"));
@@ -39,10 +41,8 @@ public class Cutscene1 extends JPanel implements KeyListener, MouseListener {
         }
 
         dialogue = new Dialogue();
-        setFocusable(true);
         this.addKeyListener(this);
         this.addMouseListener(this);
-        addKeyListener(this);
 
         Timer timer = new Timer(1000 / 60, e -> {
             long currentTime = System.currentTimeMillis();
@@ -117,7 +117,8 @@ public class Cutscene1 extends JPanel implements KeyListener, MouseListener {
 
     private void startTutorial() {
         // switches to the next card in the layout
-        Main.nextCard();
+        this.setFocusable(false);
+        Main.showCard("Map");
     }
 
     //public static void main(String[] args) {

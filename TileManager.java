@@ -341,7 +341,7 @@ public class TileManager {
         for (Vent vent : Vent.vents) {
 
             vent.draw(g, player, gamePanel);
-            System.out.println("drawing " + vent.getName());
+            //System.out.println("drawing " + vent.getName());
         }
     }
 
