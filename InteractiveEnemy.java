@@ -325,7 +325,7 @@ public class InteractiveEnemy extends Entity {
             int tileY = Math.max(0, InteractiveEnemy.y / gamePanel.TILE_SIZE);
             int tileX = Math.max(0, InteractiveEnemy.x / gamePanel.TILE_SIZE);
 
-            if (tileY + 1 == currentTileY) {
+            if (tileY == currentTileY || tileY + 1 == currentTileY) {
                 if (tileX == currentTileX || tileX + 1 == currentTileX) {
 
                     System.out.println("You opened a InteractiveEnemy");
