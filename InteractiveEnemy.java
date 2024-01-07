@@ -31,8 +31,13 @@ public class InteractiveEnemy extends Entity {
     int R = 43;
     String[][] map;
 
-    Point triggerTile;
+    ArrayList<Point> triggerTiles;
     boolean chasing = false;
+    boolean awayFromHome = false;
+    boolean goingHome = false;
+
+    int initalX;
+    int initalY;
 
     public void loadImages(String type) {
 
@@ -62,64 +67,241 @@ public class InteractiveEnemy extends Entity {
         }
     }
 
-    public InteractiveEnemy(int x, int y, InteractivePanel gamePanel, String enemyType, Point triggerTile) {
+    public InteractiveEnemy(int x, int y, InteractivePanel gamePanel, String enemyType, ArrayList<Point> triggerTiles) {
 
         this.x = x * gamePanel.TILE_SIZE;
         this.y = y * gamePanel.TILE_SIZE;
 
-        this.triggerTile = triggerTile;
+        initalX = this.x;
+        initalY = this.y;
+
+        this.triggerTiles = triggerTiles;
 
         collisionTiles
                 .addAll(Arrays.asList(new Integer[] { 105, 84, 85, 95, 98, 132, 0, 96, 103, 108, 111, 112, 113, 114, 7,
                         91, 94, 106, 107, 133, 134, 130 }));
 
         loadImages(enemyType);
+        loadMap("maps/base-map2.csv");
+    }
+
+    public void loadMap(String file) {
+
+        map = new String[R][C];
+
+        try {
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(file)));
+
+            for (int i = 0; i < R; i++) {
+                map[i] = reader.readLine().split(",");
+                System.out.println(Arrays.toString(map[i]));
+            }
+
+        } catch (Exception e) {
+            System.out.println(":P");
+            e.printStackTrace();
+            ;
+        }
+    }
+
+    public void chasingUpdate(PlayerMovable player, InteractivePanel gamePanel) {
+
+        hitbox = new Hitbox(y + gamePanel.TILE_SIZE * InteractiveEnemy_HEIGHT / 4,
+                x + gamePanel.TILE_SIZE * InteractiveEnemy_WIDTH / 4,
+                gamePanel.TILE_SIZE * InteractiveEnemy_WIDTH / 2,
+                gamePanel.TILE_SIZE * InteractiveEnemy_HEIGHT / 4 * 3);
+
+        if (frameCounter % 30 == 0) {
+
+            if (goingHome) {
+
+                path = calculatePath(gamePanel, initalX, initalY);
+            } else {
+
+                path = calculatePath(gamePanel, player.hitbox.centerX, player.hitbox.centerY);
+            }
+            // Reset counter
+            frameCounter = 0;
+        }
+
+        if (!path.isEmpty()) {
+
+            if ((path.size() > 8 || player.inVent) && !goingHome) {
+                chasing = false;
+                goingHome = true;
+                return;
+            } else {
+                chasing = true;
+                goingHome = false;
+            }
+
+            Point nextStep = path.get(0);
+            int dx = nextStep.x - hitbox.centerX / gamePanel.TILE_SIZE;
+            int dy = nextStep.y - hitbox.centerY / gamePanel.TILE_SIZE;
+
+            // Normalize the distances so that the enemy moves at a constant speed
+            double distance = Math.sqrt(dx * dx + dy * dy);
+            if (distance != 0) { // Avoid division by zero
+                dx /= distance;
+                dy /= distance;
+            }
+
+            // Move the enemy towards the next step
+            this.x += dx * 4;
+            this.y += dy * 4;
+
+            // If the enemy has reached the next step, remove it from the path
+            if (hitbox.centerX / gamePanel.TILE_SIZE == nextStep.x
+                    && hitbox.centerY / gamePanel.TILE_SIZE == nextStep.y) {
+                path.remove(0);
+
+                if (nextStep.x == initalX / gamePanel.TILE_SIZE && nextStep.y == initalY / gamePanel.TILE_SIZE) {
+
+                    System.out.println(
+                            "arrived home at " + initalX / gamePanel.TILE_SIZE + ", " + initalY / gamePanel.TILE_SIZE);
+                    chasing = false;
+                    goingHome = false;
+                    awayFromHome = false;
+                }
+            }
+        }
+        // Increment counter
+        frameCounter++;
+    }
+
+    ArrayList<Point> calculatePath(InteractivePanel gamePanel, int targetX, int targetY) {
+
+        // Create a list of nodes to be evaluated (openList) and a list of nodes already
+        // evaluated (closedList)
+        PriorityQueue<Point> openList = new PriorityQueue<>(Comparator.comparingInt(n -> n.f));
+        Set<Point> closedList = new HashSet<>();
+
+        current = new Point(hitbox.centerX / gamePanel.TILE_SIZE, hitbox.centerY / gamePanel.TILE_SIZE);
+
+        // Add the current enemy's position to the open list
+        openList.add(current);
+
+        // Keep looping until there are no more nodes to be evaluated
+        while (!openList.isEmpty()) {
+            // Find the node with the lowest f value (the estimated cost of the cheapest
+            // solution through it)
+            current = openList.poll();
+
+            // If the current node is the player's position, we've found the shortest path
+            if (current.equals(new Point(targetX / gamePanel.TILE_SIZE,
+                    targetY / gamePanel.TILE_SIZE))) {
+                break;
+            }
+
+            // Generate all the neighboring nodes
+            ArrayList<Point> neighbors = generateNeighbors(current);
+
+            // Evaluate each neighboring node
+            for (Point neighbor : neighbors) {
+                // If the neighboring node is already evaluated and has a lower f value, or if
+                // the node is not traversable, skip it
+                if (closedList.contains(neighbor) && neighbor.f <= current.f
+                        || collisionTiles.contains(Integer.parseInt(map[neighbor.y][neighbor.x]))) {
+                    continue;
+                }
+
+                // If the neighboring node is not yet evaluated or has a higher f value, update
+                // it and add it to the open list
+                if (!openList.contains(neighbor) || neighbor.f > current.f) {
+                    neighbor.g = current.g + distanceBetween(current, neighbor); // The cost to reach the
+                                                                                 // neighboring
+                                                                                 // node from the start
+                    neighbor.h = distanceBetween(neighbor,
+                            new Point(targetX / gamePanel.TILE_SIZE,
+                                    targetY / gamePanel.TILE_SIZE)); // The
+                    // estimated
+                    // cost from
+                    // the
+                    // neighboring node to the goal
+                    neighbor.f = neighbor.g + neighbor.h; // The estimated cost of the cheapest solution through the
+                                                          // neighboring node
+                    neighbor.parent = current; // The node that can be reached with the lowest cost from the
+                                               // neighboring
+                                               // node
+                    // System.out.println(
+                    // neighbor.x + ", " + neighbor.y + "'s parent is " + current.x + ", " +
+                    // current.y);
+                    // System.out.println(neighbor.x + ", " + neighbor.y + "'s parent is " +
+                    // neighbor.parent.x + ", "
+                    // + neighbor.parent.y);
+                    openList.add(neighbor);
+                }
+            }
+
+            // Add the current node to the closed list
+            closedList.add(current);
+        }
+
+        // Trace back from the player's position to the enemy's position to get the
+        // shortest path
+        ArrayList<Point> path = new ArrayList<>();
+        while (current != null
+                && !current.equals(
+                        new Point(hitbox.centerX / gamePanel.TILE_SIZE, hitbox.centerY / gamePanel.TILE_SIZE))) {
+            path.add(0, current);
+            current = current.parent;
+        }
+
+        return path;
+    }
+
+    // This method generates all valid neighbors of the current node
+    ArrayList<Point> generateNeighbors(Point current) {
+        ArrayList<Point> neighbors = new ArrayList<>();
+
+        // Add the points to the north, south, east, and west of the current point
+        // Make sure to check if these points are within the bounds of your game map
+        // if (!collisionTiles.contains(Integer.parseInt(map[current.y][current.x -
+        // 1])))
+        neighbors.add(new Point(current.x, current.y - 1)); // North
+        // if (!collisionTiles.contains(Integer.parseInt(map[current.y][current.x +
+        // 1])))
+        neighbors.add(new Point(current.x, current.y + 1)); // South
+        // if (!collisionTiles.contains(Integer.parseInt(map[current.y -
+        // 1][current.x])))
+        neighbors.add(new Point(current.x - 1, current.y)); // West
+        // if (!collisionTiles.contains(Integer.parseInt(map[current.y +
+        // 1][current.x])))
+        neighbors.add(new Point(current.x + 1, current.y)); // East
+
+        // Diagonals
+        /*
+         * neighbors.add(new Point(current.x - 1, current.y - 1)); // North
+         * neighbors.add(new Point(current.x + 1, current.y + 1)); // South
+         * neighbors.add(new Point(current.x - 1, current.y + 1)); // West
+         * neighbors.add(new Point(current.x + 1, current.y - 1));
+         */
+        return neighbors;
+    }
+
+    // This method returns the actual distance between two points
+    int distanceBetween(Point a, Point b) {
+        return (int) (Math.sqrt(Math.abs(a.x - b.x) * Math.abs(a.x - b.x) + Math.abs(a.y - b.y) * Math.abs(a.y - b.y))
+                * 10);
     }
 
     public void update(PlayerMovable player, InteractivePanel gamePanel) {
 
-        if (triggerTile == null)
-            return;
+        for (Point triggerTile : triggerTiles) {
 
-        if (player.getCurrentTileX() == triggerTile.x && player.getCurrentTileY() == triggerTile.y) {
-            System.out.println("trigger entered");
-            chasing = true;
+            if (player.getCurrentTileX() == triggerTile.x && player.getCurrentTileY() == triggerTile.y
+                    && !player.inVent && !awayFromHome) {
+                System.out.println("trigger entered");
+                chasing = true;
+                awayFromHome = true;
+                goingHome = false;
+            }
         }
 
-        if (chasing) {
-            System.out.println("chasing");
-            hitbox = new Hitbox(y + gamePanel.TILE_SIZE * InteractiveEnemy_HEIGHT / 4,
-                    x + gamePanel.TILE_SIZE * InteractiveEnemy_WIDTH / 4,
-                    gamePanel.TILE_SIZE * InteractiveEnemy_WIDTH / 2,
-                    gamePanel.TILE_SIZE * InteractiveEnemy_HEIGHT / 4 * 3);
+        if (chasing || awayFromHome) {
 
-            int dx = triggerTile.x - hitbox.centerX / gamePanel.TILE_SIZE;
-            int dy = triggerTile.y - hitbox.centerY / gamePanel.TILE_SIZE;
-
-            System.out.println("x + " + dx * 5);
-            System.out.println("y + " + dy * 5);
-
-            /*
-             * // Normalize the distances so that the enemy moves at a constant speed
-             * double distance = Math.sqrt(dx * dx + dy * dy);
-             * if (distance != 0) { // Avoid division by zero
-             * dx /= distance;
-             * dy /= distance;
-             * }
-             */
-
-            System.out.println("x + " + dx * 5);
-            System.out.println("y + " + dy * 5);
-
-            // Move the enemy towards the next step
-            this.x += dx * 2;
-            this.y += dy * 2;
-
-            // If the enemy has reached the player's location, stop moving
-            if (hitbox.centerX / gamePanel.TILE_SIZE == triggerTile.x
-                    && hitbox.centerY / gamePanel.TILE_SIZE == triggerTile.y) {
-                chasing = false;
-            }
+            chasingUpdate(player, gamePanel);
         }
     }
 
