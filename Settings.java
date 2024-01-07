@@ -9,16 +9,25 @@ import javax.swing.*;
 public class Settings extends JPanel implements ActionListener{
     int num_of_rows = 10;
     JPanel[] panelArray = new JPanel[num_of_rows];
-    JButton bt1;
+    JButton bt1 = new JButton("image placeholder");
     Music music;
+    boolean isMusicPlaying = false;
+
+    JButton[] buttonArray = {
+        bt1 , new JButton(), new JButton(), new JButton(), new JButton(), new JButton(), new JButton(), new JButton(), new JButton()};
+    String[] descriptons = { "Background Music", "", "", "", "", "", "", "", "", ""};
+
+    ImageIcon CloseIcon = new ImageIcon("images/CloseButton.png");
+    JButton CloseButton = new JButton(CloseIcon);
+    
 
     public Settings() {
         
-
         // start back ground music 
         // placed music here because the music setting are also here
         try {
-            music = new Music("music/bg.wav");
+            music = new Music("music/bg.wav", 0);
+            isMusicPlaying = true;
         }
         catch (Exception e) {
             System.out.println(e);
@@ -27,36 +36,46 @@ public class Settings extends JPanel implements ActionListener{
 
         this.setLayout(new BorderLayout());
         this.setBackground(new Color(10,10,10) );
-        this.add(new JLabel("Settings go here"), BorderLayout.NORTH);
 
+        // Placing some empty panels so that the center panel has some space and doesn't touch the window edges
         JPanel paddingW = new JPanel();
-        paddingW.setOpaque(false);
-        paddingW.setPreferredSize(new Dimension(30,700));
         JPanel paddingE = new JPanel();
-        paddingE.setOpaque(false);
-        paddingE.setPreferredSize(new Dimension(30,700));
         JPanel paddingN = new JPanel();
-        paddingN.setOpaque(false);
-        paddingN.setPreferredSize(new Dimension(1200,30));
         JPanel paddingS = new JPanel();
+        paddingW.setOpaque(false);
+        paddingE.setOpaque(false);
+        paddingN.setOpaque(false);
         paddingS.setOpaque(false);
+        paddingW.setPreferredSize(new Dimension(30,700));
+        paddingE.setPreferredSize(new Dimension(30,700));
+        paddingN.setPreferredSize(new Dimension(1200,60));
         paddingS.setPreferredSize(new Dimension(1200,30));
         this.add(paddingN, BorderLayout.NORTH);
         this.add(paddingW, BorderLayout.WEST);
         this.add(paddingS, BorderLayout.SOUTH);
         this.add(paddingE, BorderLayout.EAST);
 
+        // creating the main panel that all the setting are added to
         JPanel container = new JPanel(new GridLayout(num_of_rows, 1, 10,10));
         container.setOpaque(false);
         this.add(container, BorderLayout.CENTER);
 
-        for (int i = 0; i < num_of_rows; i++) {
-            panelArray[i] = new JPanel(new BorderLayout());
-            panelArray[i].setOpaque(false);
+        // adds the SETTING text at the top of the menu
+        JLabel title = new JLabel("SETTINGS");
+        title.setFont(Main.Lexend30);
+        title.setForeground(Color.WHITE);
+        paddingN.add(title);
+
+
+        for (int i = 0; i < num_of_rows-1; i++) {
+            //panelArray[i] = new JPanel(new BorderLayout());
+            //panelArray[i].setOpaque(false);
+            buttonArray[i].addActionListener(this);
+            panelArray[i] = createToggle(descriptons[i], buttonArray[i]);
             container.add(panelArray[i]);
         }
-
-        bt1 = new JButton("image placeholder");
+        /* 
+        bt1 = 
         bt1.addActionListener(this);
         panelArray[1].add(bt1, BorderLayout.WEST);
         panelArray[1].add(new JLabel("Turn off and on background music"));
@@ -77,22 +96,52 @@ public class Settings extends JPanel implements ActionListener{
         panelArray[7].add(new JLabel("placeholder text"));
         panelArray[8].add(new JButton("image placeholder"),BorderLayout.WEST);
         panelArray[8].add(new JLabel("placeholder text"));
-        panelArray[9].add(new JButton("image placeholder"),BorderLayout.WEST);
-        panelArray[9].add(new JLabel("placeholder text"));
 
-
+*/      
+        // sends you back to the main menu
+        CloseButton.setContentAreaFilled(false);
+        CloseButton.setBorderPainted(false);
+        CloseButton.setFocusPainted(false);
+        CloseButton.addActionListener(this);
+        // puts the close button at the bottom
+        panelArray[num_of_rows-1] = new JPanel(new BorderLayout());
+        panelArray[num_of_rows-1].setOpaque(false);
+        panelArray[num_of_rows-1].add(CloseButton,BorderLayout.CENTER);
+        container.add(panelArray[num_of_rows-1]);
 
     }
 
  
   
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == bt1) {
-            music.stop();
+        if (e.getSource() == buttonArray[0]) {
+            if (isMusicPlaying) {
+                music.stop();
+                isMusicPlaying = false;
+            }
+            else {
+                music.start();
+                isMusicPlaying = true;
+            }
+        }
+        if (e.getSource() == CloseButton) {
+            Main.showCard("Menu");
         }
     }
 
+    private JPanel createToggle(String text, JButton button) {
+        JPanel TogglePanel = new JPanel(new BorderLayout(20,0));
+        JLabel description = new JLabel(text);
 
+        TogglePanel.setOpaque(false);
+        description.setFont(Main.Lexend18);
+        description.setForeground(Color.WHITE);
+
+        TogglePanel.add(button,BorderLayout.WEST);
+        TogglePanel.add(description);
+
+        return TogglePanel;
+    }
 
 
 

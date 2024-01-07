@@ -11,35 +11,32 @@ public class Music {
 
 	private Clip clip; 	
 
-    // play a song on repeat until the method stop is called
-	public Music(String filePath) { 
-        try {
-            clip = AudioSystem.getClip(); 
-            clip.open(AudioSystem.getAudioInputStream(new File(filePath))); 
-            clip.loop(Clip.LOOP_CONTINUOUSLY); 
-            clip.start();
-        }
-        catch (Exception e) {
-            System.out.println("Something went wrong with the music");
-        } 
-	} 
-    // play a sound but you can specifiy how many times it repeats
+
+    // play a sound and you can specifiy how many times it repeats. Setting how many times it loops to 0 will make it loop forever
     public Music(String filePath, int loop) { 
         try {
             clip = AudioSystem.getClip(); 
             clip.open(AudioSystem.getAudioInputStream(new File(filePath))); 
-            clip.loop(loop); 
-            clip.start();
+
+            if (loop == 0) 
+                clip.loop(Clip.LOOP_CONTINUOUSLY); 
+            else
+                clip.loop(loop); 
+
+            start();
         }
         catch (Exception e) {
             System.out.println("Something went wrong with the music");
         } 
 	} 
 	
-	// stop the music 
 	public void stop() { 
 		clip.stop(); 
-		clip.close(); 
+		//clip.close(); 
 	} 
+    public void start() {
+        clip.start();
+    }
+
 
 } 
