@@ -112,6 +112,17 @@ public class InteractiveEnemy extends Entity {
                 gamePanel.TILE_SIZE * InteractiveEnemy_WIDTH / 2,
                 gamePanel.TILE_SIZE * InteractiveEnemy_HEIGHT / 4 * 3);
 
+        if (hitbox.centerX / gamePanel.TILE_SIZE == initalX / gamePanel.TILE_SIZE
+                && hitbox.centerY / gamePanel.TILE_SIZE == initalY / gamePanel.TILE_SIZE
+                && !chasing) {
+
+            System.out.println(
+                    "arrived home at " + initalX / gamePanel.TILE_SIZE + ", " + initalY / gamePanel.TILE_SIZE);
+            chasing = false;
+            goingHome = false;
+            awayFromHome = false;
+        }
+
         if (frameCounter % 30 == 0) {
 
             if (goingHome) {
@@ -155,15 +166,6 @@ public class InteractiveEnemy extends Entity {
             if (hitbox.centerX / gamePanel.TILE_SIZE == nextStep.x
                     && hitbox.centerY / gamePanel.TILE_SIZE == nextStep.y) {
                 path.remove(0);
-
-                if (nextStep.x == initalX / gamePanel.TILE_SIZE && nextStep.y == initalY / gamePanel.TILE_SIZE) {
-
-                    System.out.println(
-                            "arrived home at " + initalX / gamePanel.TILE_SIZE + ", " + initalY / gamePanel.TILE_SIZE);
-                    chasing = false;
-                    goingHome = false;
-                    awayFromHome = false;
-                }
             }
         }
         // Increment counter
@@ -315,20 +317,23 @@ public class InteractiveEnemy extends Entity {
 
     static void checkCollision(PlayerMovable player, InteractivePanel gamePanel) {
 
-        // Get player's current tile
-        int currentTileY = Math.max(0, player.hitbox.centerY / gamePanel.TILE_SIZE);
-        int currentTileX = Math.max(0, player.hitbox.centerX / gamePanel.TILE_SIZE);
+        if (!player.inVent) {
 
-        for (InteractiveEnemy InteractiveEnemy : InteractiveEnemies) {
+            // Get player's current tile
+            int currentTileY = Math.max(0, player.hitbox.centerY / gamePanel.TILE_SIZE);
+            int currentTileX = Math.max(0, player.hitbox.centerX / gamePanel.TILE_SIZE);
 
-            // Get enemy's current tile
-            int tileY = Math.max(0, InteractiveEnemy.y / gamePanel.TILE_SIZE);
-            int tileX = Math.max(0, InteractiveEnemy.x / gamePanel.TILE_SIZE);
+            for (InteractiveEnemy InteractiveEnemy : InteractiveEnemies) {
 
-            if (tileY == currentTileY || tileY + 1 == currentTileY) {
-                if (tileX == currentTileX || tileX + 1 == currentTileX) {
+                // Get enemy's current tile
+                int tileY = Math.max(0, InteractiveEnemy.y / gamePanel.TILE_SIZE);
+                int tileX = Math.max(0, InteractiveEnemy.x / gamePanel.TILE_SIZE);
 
-                    System.out.println("You opened a InteractiveEnemy");
+                if (tileY == currentTileY || tileY + 1 == currentTileY) {
+                    if (tileX == currentTileX || tileX + 1 == currentTileX) {
+
+                        System.out.println("You opened a InteractiveEnemy");
+                    }
                 }
             }
         }
