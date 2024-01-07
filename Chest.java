@@ -10,12 +10,29 @@ public class Chest extends Interactible {
     static final int HEIGHT = 2;
 
     static final String IMAGE_PATH = "objects/chest.png";
+    static final String IMAGE_PATH_CHEST_STAND = "objects/chest-stand.png";
+
+    static final int chestStandX = 30;
+    static final int chestStandY = 2;
+
+    static BufferedImage chestStandImage;
 
     static ArrayList<Chest> chests = new ArrayList<>();
 
     public void loadImages() {
 
         super.loadImages(IMAGE_PATH);
+    }
+
+    public static void loadChestStandImage() {
+
+        try {
+
+            chestStandImage = ImageIO.read(Chest.class.getResourceAsStream(IMAGE_PATH_CHEST_STAND));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public Chest(int x, int y) {
@@ -38,5 +55,13 @@ public class Chest extends Interactible {
                 }
             }
         }
+    }
+
+    public static void drawChestStand(Graphics2D graphic, PlayerMovable player, InteractivePanel gamePanel) {
+
+        graphic.drawImage(chestStandImage, chestStandX * gamePanel.TILE_SIZE - player.x + player.getDrawX(),
+                chestStandY * gamePanel.TILE_SIZE - player.y + player.getDrawY(),
+                gamePanel.TILE_SIZE * WIDTH,
+                gamePanel.TILE_SIZE * HEIGHT + gamePanel.TILE_SIZE, null);
     }
 }

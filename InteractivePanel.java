@@ -25,7 +25,7 @@ public class InteractivePanel extends JPanel implements Runnable {
         this.setPreferredSize(new Dimension(Main.WIDTH, Main.HEIGHT));
         this.setBackground(Color.black);
         this.setDoubleBuffered(true); // Improve render performance
-        
+
         this.setFocusable(true);
         this.addKeyListener(keyHandler);
         startGameThread();
@@ -77,7 +77,7 @@ public class InteractivePanel extends JPanel implements Runnable {
 
         // after 1 seconds you enter battle
         counter++;
-        //System.out.println(counter);
+        // System.out.println(counter);
         if (counter == 60 * 1) {
             // Main.nextCard();
             counter = 0;
@@ -89,6 +89,7 @@ public class InteractivePanel extends JPanel implements Runnable {
         Chest.checkCollision(player, this);
         Vent.checkCollision(player, this);
         InteractiveEnemy.checkCollision(player, this);
+        OrbStand.checkCollision(player, this);
     }
 
     public void paintComponent(Graphics graphic) {
@@ -98,14 +99,25 @@ public class InteractivePanel extends JPanel implements Runnable {
         Graphics2D altGraphic = (Graphics2D) graphic;
 
         tile.draw(altGraphic);
+        Chest.drawChestStand(altGraphic, player, this);
         tile.drawChests(altGraphic);
         tile.drawVents(altGraphic);
+        drawStands(altGraphic);
         tile.drawEnemies(altGraphic);
         player.draw(altGraphic);
         tile.drawLighting(altGraphic);
 
         altGraphic.dispose();
     }
+
+    public void drawStands(Graphics2D g) {
+
+        for (OrbStand stand : OrbStand.stands) {
+
+            stand.draw(g, player, this);
+        }
+    }
+
     /*
      * public static void main(String args[]) {
      * 

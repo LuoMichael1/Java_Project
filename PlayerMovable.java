@@ -24,6 +24,7 @@ public class PlayerMovable extends Entity {
     String[][] map;
 
     boolean inVent;
+    boolean hasOrb;
 
     public PlayerMovable(InteractivePanel gamePanel, KeyHandler keyHandler) {
 

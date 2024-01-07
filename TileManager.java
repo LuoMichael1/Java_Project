@@ -55,6 +55,8 @@ public class TileManager {
         loadEnemies("maps/enemy-coordinates.csv");
         loadChasingEnemies("maps/chasing-enemy-coordinates.csv");
         loadVents("maps/vent-coordinates.csv");
+        OrbStand.loadOrbStands("maps/orb-stands.csv");
+        Chest.loadChestStandImage();
     }
 
     public void loadChests(String file) {
