@@ -9,16 +9,19 @@ import javax.swing.*;
 public class Settings extends JPanel implements ActionListener{
     int num_of_rows = 10;
     JPanel[] panelArray = new JPanel[num_of_rows];
-    JButton bt1 = new JButton("image placeholder");
+    ImageIcon buttonOnIcon = new ImageIcon("images/buttonOff.png");
+    ImageIcon buttonOffIcon = new ImageIcon("images/buttonOn.png");
+    JButton bt1 = new JButton(buttonOnIcon);
+    
     Music music;
     boolean isMusicPlaying = false;
 
-    JButton[] buttonArray = {
-        bt1 , new JButton(), new JButton(), new JButton(), new JButton(), new JButton(), new JButton(), new JButton(), new JButton()};
+    JButton[] buttonArray = {bt1 , new JButton(buttonOffIcon), new JButton(buttonOffIcon), new JButton(buttonOffIcon), new JButton(buttonOffIcon), new JButton(buttonOffIcon), new JButton(buttonOffIcon), new JButton(buttonOffIcon), new JButton(buttonOffIcon)};
     String[] descriptons = { "Background Music", "", "", "", "", "", "", "", "", ""};
 
     ImageIcon CloseIcon = new ImageIcon("images/CloseButton.png");
     JButton CloseButton = new JButton(CloseIcon);
+    
     
 
     public Settings() {
@@ -40,7 +43,7 @@ public class Settings extends JPanel implements ActionListener{
         // Placing some empty panels so that the center panel has some space and doesn't touch the window edges
         JPanel paddingW = new JPanel();
         JPanel paddingE = new JPanel();
-        JPanel paddingN = new JPanel();
+        JPanel paddingN = new JPanel(new BorderLayout());
         JPanel paddingS = new JPanel();
         paddingW.setOpaque(false);
         paddingE.setOpaque(false);
@@ -56,21 +59,24 @@ public class Settings extends JPanel implements ActionListener{
         this.add(paddingE, BorderLayout.EAST);
 
         // creating the main panel that all the setting are added to
-        JPanel container = new JPanel(new GridLayout(num_of_rows, 1, 10,10));
+        JPanel container = new JPanel(new GridLayout(num_of_rows, 1, 0,0));
         container.setOpaque(false);
         this.add(container, BorderLayout.CENTER);
 
         // adds the SETTING text at the top of the menu
-        JLabel title = new JLabel("SETTINGS");
-        title.setFont(Main.Lexend30);
+        JLabel title = new JLabel("  SETTINGS");
+        title.setFont(Main.Lexend24);
         title.setForeground(Color.WHITE);
-        paddingN.add(title);
+        paddingN.add(title, BorderLayout.WEST);
 
 
         for (int i = 0; i < num_of_rows-1; i++) {
             //panelArray[i] = new JPanel(new BorderLayout());
             //panelArray[i].setOpaque(false);
             buttonArray[i].addActionListener(this);
+            buttonArray[i].setContentAreaFilled(false);
+            buttonArray[i].setBorderPainted(false);
+            buttonArray[i].setFocusPainted(false);
             panelArray[i] = createToggle(descriptons[i], buttonArray[i]);
             container.add(panelArray[i]);
         }
@@ -118,10 +124,12 @@ public class Settings extends JPanel implements ActionListener{
             if (isMusicPlaying) {
                 music.stop();
                 isMusicPlaying = false;
+                bt1.setIcon(buttonOffIcon);
             }
             else {
                 music.start();
                 isMusicPlaying = true;
+                bt1.setIcon(buttonOnIcon);
             }
         }
         if (e.getSource() == CloseButton) {
@@ -130,15 +138,18 @@ public class Settings extends JPanel implements ActionListener{
     }
 
     private JPanel createToggle(String text, JButton button) {
-        JPanel TogglePanel = new JPanel(new BorderLayout(20,0));
+        JPanel TogglePanel = new JPanel(new BorderLayout(10,0));
         JLabel description = new JLabel(text);
 
         TogglePanel.setOpaque(false);
         description.setFont(Main.Lexend18);
         description.setForeground(Color.WHITE);
 
-        TogglePanel.add(button,BorderLayout.WEST);
-        TogglePanel.add(description);
+        TogglePanel.add(button,BorderLayout.EAST);
+        TogglePanel.add(description,BorderLayout.WEST);
+
+        description.setBorder(BorderFactory.createEmptyBorder(5,12,5,5));
+        TogglePanel.setBorder(BorderFactory.createLineBorder(new Color(100,100,100)));
 
         return TogglePanel;
     }

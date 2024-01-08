@@ -28,6 +28,9 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener {
     private boolean seenScene1 = false;  // prevents the cutscene from being played more than once
 
     private double size = 0;  // the size of the planets (the formula is their normal size multiplied by this)
+    private JLabel message;
+    private int rgbvalue = 255;
+    private boolean brighten = false;
 
     public MainMenu() {
         setBackground(new Color(10,10,10));
@@ -47,6 +50,12 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener {
         //this.grabFocus();
         //this.requestFocusInWindow();
         this.addKeyListener(this);
+
+        message = new JLabel("PRESS ANY BUTTON TO START");
+        message.setFont(Main.Lexend12);
+        message.setBounds(Main.WIDTH/2-(100), Main.HEIGHT-70, 200, 10);
+        //message
+        this.add(message);
         // Add a background image to the background layer
         //JLabel backgroundImage = createBackgroundLabel("menu/parallax-space-backgound.png", IMAGE_WIDTH, IMAGE_HEIGHT);
         //layeredPane.add(backgroundImage, Integer.valueOf(-1)); // Set to -1 for the background layer
@@ -183,6 +192,19 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener {
                 //setLayerBounds(layeredPane, background2_1_planets, layer2X2_planets, 0, JLayeredPane.DEFAULT_LAYER);
                 setLayerBounds(layeredPane, background1_1_stars, layer1X2_stars, 0, JLayeredPane.DEFAULT_LAYER);
                 setLayerBounds(layeredPane, background2_1_stars, layer2X2_stars, 0, JLayeredPane.DEFAULT_LAYER);
+
+                // cause the press any button to start message to shimmer   
+                if (rgbvalue >= 255)
+                    brighten = false;
+                else if (rgbvalue <= 100)
+                    brighten = true;
+                
+                if (brighten)
+                    rgbvalue += 2;
+                else 
+                    rgbvalue -= 2;
+                message.setForeground(new Color(rgbvalue,rgbvalue,rgbvalue));
+
             }
         });
 

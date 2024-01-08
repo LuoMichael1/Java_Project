@@ -22,12 +22,7 @@ public class MenuButtons extends JPanel implements ActionListener{
         btt1.addActionListener(this);
         this.add(btt1);
 
-        JLabel message = new JLabel("PRESS ANY BUTTON TO START");
-        message.setFont(Main.Lexend12);
-        message.setForeground(Color.white);
-        message.setBounds(Main.WIDTH/2-(100), Main.HEIGHT-70, 200, 10);
-        //message
-        this.add(message);
+
         /* 
         btt2 = new JButton("START");
         btt2.setFont(Main.Lexend60);

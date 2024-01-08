@@ -26,7 +26,7 @@ public class Music {
             start();
         }
         catch (Exception e) {
-            System.out.println("Something went wrong with the music");
+            System.out.println("Something went wrong with starting the music");
         } 
 	} 
 	
