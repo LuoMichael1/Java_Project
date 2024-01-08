@@ -82,7 +82,7 @@ public class InteractivePanel extends JPanel implements Runnable {
             // Main.nextCard();
             counter = 0;
 
-            // needs to grab focus (from what? idk) so I just put it here
+            // needs to grab focus so I just put it here
             grabFocus();
         }
 

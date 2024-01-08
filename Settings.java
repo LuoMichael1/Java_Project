@@ -36,10 +36,9 @@ public class Settings extends JPanel implements ActionListener{
             System.out.println(e);
         }
 
-
         this.setLayout(new BorderLayout());
         this.setBackground(new Color(10,10,10) );
-
+        
         // Placing some empty panels so that the center panel has some space and doesn't touch the window edges
         JPanel paddingW = new JPanel();
         JPanel paddingE = new JPanel();

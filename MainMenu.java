@@ -33,6 +33,17 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener {
     private boolean brighten = false;
 
     public MainMenu() {
+
+        // ensures the menu has focus when shown
+        this.addComponentListener(new ComponentListener() {
+            public void componentShown(ComponentEvent e) {
+                MainMenu.this.requestFocusInWindow();   
+            }
+            public void componentResized(ComponentEvent e) {}
+            public void componentMoved(ComponentEvent e) {}
+            public void componentHidden(ComponentEvent e) {}
+        });
+
         setBackground(new Color(10,10,10));
         // setTitle("Main Menu");
         // setSize(1280, 720);
@@ -83,7 +94,7 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener {
         for (int i = 0; i < planets.length; i++) {
             rand = (int)(Math.random()*2)+1;
             
-            // randomly creates a size for each planet. The +0.3 prevents tiny planets
+            // randomly creates a size for each planet. The +0.5 prevents tiny planets
             size = Math.random() + 0.5;
 
             planets[i] = createBackgroundLabel("menu/parallax_planets_00" + rand + ".png", (int)(Main.WIDTH*size), (int)(Main.HEIGHT*size));
@@ -205,6 +216,10 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener {
                     rgbvalue -= 2;
                 message.setForeground(new Color(rgbvalue,rgbvalue,rgbvalue));
 
+
+
+
+                System.out.println("Focus: " + KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner());
             }
         });
 

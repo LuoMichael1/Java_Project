@@ -10,7 +10,7 @@ public class KeyHandler implements KeyListener {
     private HashSet<Integer> handledKeys = new HashSet<>();
 
     public KeyHandler() {
-        System.out.println("Keyhandler made");
+        //System.out.println("Keyhandler made");
     }
 
     @Override
