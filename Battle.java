@@ -279,7 +279,14 @@ public class Battle extends JPanel implements ActionListener {
                     if (playersArray[altTurn].getHealth() <= 0) {
                         System.out.println(playersArray[altTurn] + "loses!");
                         isWon = true;
-                        Main.showCard("Menu");
+
+                        // the the player loses, they get sent to the menu screen, if they win, they get sent back to the map
+                        if (playersArray[altTurn] == player)
+                            Main.showCard("Menu");
+                        else
+                            Main.showCard("Map");
+
+                        //InteractiveEnemy.inBattle = false;
                     }
                 }
             }

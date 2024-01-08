@@ -219,7 +219,7 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener {
 
 
 
-                System.out.println("Focus: " + KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner());
+                //System.out.println("Focus: " + KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner());
             }
         });
 

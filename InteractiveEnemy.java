@@ -39,6 +39,8 @@ public class InteractiveEnemy extends Entity {
     int initalX;
     int initalY;
 
+    static boolean inBattle = false; 
+
     public void loadImages(String type) {
 
         try {
@@ -330,9 +332,14 @@ public class InteractiveEnemy extends Entity {
                 int tileX = Math.max(0, InteractiveEnemy.x / gamePanel.TILE_SIZE);
 
                 if (tileY == currentTileY || tileY + 1 == currentTileY) {
-                    if (tileX == currentTileX || tileX + 1 == currentTileX) {
+                    if (tileX == currentTileX || tileX + 1 == currentTileX && !inBattle) {
 
                         System.out.println("You opened a InteractiveEnemy");
+                
+
+
+                        Main.showCard("CardGame");
+                        inBattle = true;
                     }
                 }
             }
