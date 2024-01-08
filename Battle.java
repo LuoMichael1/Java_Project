@@ -290,8 +290,10 @@ public class Battle extends JPanel implements ActionListener {
                             player.hand[i].setY(160);
                         }   
                         // give some extra cards as a reward
-                        for (int i = 0; i < 3; i++) {
-                            player.deck.add(new Cards(i*120+200, 420, 60, 40));
+                        if (player.deck.length <= 7) {
+                            for (int i = 0; i < 3; i++) {
+                                player.deck.add(new Cards(i*120+200, 420, 60, 40));
+                            }
                         }
                         // centers the cards
                         // gets the center of the screen
