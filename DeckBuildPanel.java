@@ -17,7 +17,7 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
     private int offsetX, offsetY;
 
     // initialize player
-    private Player player;
+    private Player player = new Player();;
 
     // initialize buttons
     private JButton battleButton; // start battle
@@ -37,6 +37,18 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
 
         initUserInterface();
         initButtons();
+
+        this.addComponentListener(new ComponentListener() {
+            public void componentShown(ComponentEvent e) {
+                for (int i = 0; i < player.hand.length; i++) {
+                    selectedCards[i] = player.hand[i];
+                    removeGaps();
+                }  
+            }
+            public void componentResized(ComponentEvent e) {}
+            public void componentMoved(ComponentEvent e) {}
+            public void componentHidden(ComponentEvent e) {}
+        });
     }
 
     public void paintComponent(Graphics g) {
@@ -91,7 +103,7 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
         // cardy = 0;
 
         // create the players deck
-        player = new Player();
+        //player = 
         // deck logic: card from deck remains in deck until put in selectedCards. Then x
         // values of all remaining cards are updated to remove gaps
 
@@ -99,7 +111,7 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
             cardBoxes[i] = new JLabel();
             cardBoxes[i].setBounds(120 + i * 130, 160, 120, 220);
 
-            // I commented out these two lines and nothing broke
+        
             //cardBoxes[i].setBorder(BorderFactory.createLineBorder(Color.BLACK));
             //this.add(cardBoxes[i]);
         }
@@ -126,8 +138,8 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
         battleButton.setBorderPainted(false);
         battleButton.setFocusPainted(false);
 
-
-        // Create the left button
+        /*
+        // Create the left button  
         leftButton = new JButton("<");
         
 
@@ -150,6 +162,7 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
             }
         });
         //this.add(rightButton, BorderLayout.EAST);
+        */
     }
 
     public void scroll(int scrollValue) {

@@ -280,6 +280,34 @@ public class Battle extends JPanel implements ActionListener {
                         System.out.println(playersArray[altTurn] + "loses!");
                         isWon = true;
 
+                        // resets health
+                        player.setHealth(player.getMaxHealth());
+                        enemy.setHealth(player.getMaxHealth());
+
+                        // resets the location of the cards so they appear in the right spot in the next battle
+                        for (int i = 0; i < player.hand.length; i++) {
+                            player.hand[i].setX(i*130 + 120);
+                            player.hand[i].setY(160);
+                        }   
+                        // give some extra cards as a reward
+                        for (int i = 0; i < 3; i++) {
+                            player.deck.add(new Cards(i*120+200, 420, 60, 40));
+                        }
+                        // centers the cards
+                        // gets the center of the screen
+                        int deckX = (Main.WIDTH)/2;
+
+                        // adjusts the start accounting for each of the cards in the deck
+                        for (int i=0; i < player.deck.size(); i++)
+                            deckX = deckX - 60;
+
+                        // puts each card after one another
+                        for (Cards card : player.deck) {
+                            card.setX(deckX);
+                            deckX += 120;
+                        }
+
+
                         // the the player loses, they get sent to the menu screen, if they win, they get sent back to the map
                         if (playersArray[altTurn] == player)
                             Main.showCard("Menu");

@@ -8,8 +8,8 @@ public abstract class Battler {
 
     public int cardsUsed = 0;
 
-    public ArrayList<Cards> deck = new ArrayList<Cards>();
-    public Cards[] hand = new Cards[10];
+    public ArrayList<Cards> deck = new ArrayList<Cards>();  // the cards that can be put into the hand
+    public Cards[] hand = new Cards[8];  // the cards that will be used in battle
 
     private ImageIcon energyIcon = new ImageIcon("images/shieldIcon.png");
     private ImageIcon shieldIcon = new ImageIcon("images/shieldIcon.png");
