@@ -27,8 +27,6 @@ class Main {
         DeckBuildPanel p4 = new DeckBuildPanel();
         Settings setting = new Settings();
 
-        p2.setInteractivePanel(p3);
-
         f.add(p, BorderLayout.CENTER);
         addCard(p1, "Menu");
         addCard(p2, "Cutscene1");

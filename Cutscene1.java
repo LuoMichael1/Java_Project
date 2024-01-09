@@ -117,16 +117,10 @@ public class Cutscene1 extends JPanel implements KeyListener, MouseListener {
     // setSize(1280, 720);
     // setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-    public void setInteractivePanel(InteractivePanel panel) {
-
-        gamePanel = panel;
-    }
-
     private void startTutorial() {
         // switches to the next card in the layout
         this.setFocusable(false);
         Main.showCard("Map");
-        gamePanel.grabFocus();
     }
 
     // public static void main(String[] args) {
