@@ -17,7 +17,7 @@ public class Vent extends Interactible {
 
     public void loadImages() {
 
-        //System.out.println("vent img loaded");
+        // System.out.println("vent img loaded");
         super.loadImages(IMAGE_PATH);
     }
 
@@ -62,8 +62,8 @@ public class Vent extends Interactible {
                             // Move the player left inside the vent
                             Vent connectedVent = vent.connections.get("left");
                             if (connectedVent != null) {
-                                player.setLocation(connectedVent.tileX * gamePanel.TILE_SIZE,
-                                        connectedVent.tileY * gamePanel.TILE_SIZE);
+                                player.setLocation(connectedVent.tileX * InteractivePanel.getTileSize(),
+                                        connectedVent.tileY * InteractivePanel.getTileSize());
                             }
                         } else if (gamePanel.keyHandler.isKeyPressed(KeyEvent.VK_S)) {
                             // Move the player down inside the vent
@@ -75,8 +75,8 @@ public class Vent extends Interactible {
                             // Move the player right inside the vent
                             Vent connectedVent = vent.connections.get("right");
                             if (connectedVent != null) {
-                                player.setLocation(connectedVent.tileX * gamePanel.TILE_SIZE,
-                                        connectedVent.tileY * gamePanel.TILE_SIZE);
+                                player.setLocation(connectedVent.tileX * InteractivePanel.getTileSize(),
+                                        connectedVent.tileY * InteractivePanel.getTileSize());
                             }
                         }
                     }

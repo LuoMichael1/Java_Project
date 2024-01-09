@@ -7,24 +7,25 @@ import java.util.ArrayList;
 
 public class Battle extends JPanel implements ActionListener {
 
-    private Battler player;  // player is made in the constructor
+    private Battler player; // player is made in the constructor
     private Battler enemy = new Enemy();
 
     private Battler playersArray[] = new Battler[2];
 
-    private int round = 0;  // player goes first in any battle
-    private int turn = 5;   // is either 0 or 1 to signify if it is the player or enemys turn to act
-    private int altTurn;    // the party that is not currently acting
-    private boolean isWon = false;  
+    private int round = 0; // player goes first in any battle
+    private int turn = 5; // is either 0 or 1 to signify if it is the player or enemys turn to act
+    private int altTurn; // the party that is not currently acting
+    private boolean isWon = false;
 
     // would probably be more acurate to call these ticks rather than frames
-    private int FPS = 60;              // frames per second (use this to change speed cuz some animations are tied to stuff) 
-    private int framesPerTurn = 60;     
-    private int frameCounter = 0;     
-    private int framesForCardUp = 5;   // how many frames for the card up animation
+    private int FPS = 60; // frames per second (use this to change speed cuz some animations are tied to
+                          // stuff)
+    private int framesPerTurn = 60;
+    private int frameCounter = 0;
+    private int framesForCardUp = 5; // how many frames for the card up animation
 
-    private final int CARDY = 520;     // the Y level the cards are drawn at
-    private int cardUpY = CARDY;       // intializing the card up offset
+    private final int CARDY = 520; // the Y level the cards are drawn at
+    private int cardUpY = CARDY; // intializing the card up offset
 
     static final int HEALTHBAR_Y = 100; // the Y level the healthbar is drawn at
     static final int HEALTHBAR_WIDTH = 250;
@@ -33,21 +34,22 @@ public class Battle extends JPanel implements ActionListener {
     private int damage = 0;
     private int shieldDamage = 0;
     private ArrayList<Integer> showDamage = new ArrayList<Integer>();
-    private int xPos = 0;       // for the damage messages
+    private int xPos = 0; // for the damage messages
     // space for messages
-    //private JLabel messageLabel;
+    // private JLabel messageLabel;
     private JLabel instructionLabel;
 
     private JButton doubleSpeed;
     private boolean doubleTime = false;
-    private int culler = 0;         // when not in double speed, discards half of the timer events
+    private int culler = 0; // when not in double speed, discards half of the timer events
     private Timer timer;
-    
+
     // images
-    //private ImageIcon background = new ImageIcon("images/background.png");
-    //private ImageIcon vulnerableIcon = new ImageIcon("images/VulnerableIcon.png");
-    //private ImageIcon strenghtIcon = new ImageIcon("images/strenghtIcon.png");
-    //private ImageIcon shieldIcon = new ImageIcon("images/shieldIcon.png");
+    // private ImageIcon background = new ImageIcon("images/background.png");
+    // private ImageIcon vulnerableIcon = new
+    // ImageIcon("images/VulnerableIcon.png");
+    // private ImageIcon strenghtIcon = new ImageIcon("images/strenghtIcon.png");
+    // private ImageIcon shieldIcon = new ImageIcon("images/shieldIcon.png");
 
     // ------------------------------------------------------------------------------------------
 
@@ -70,29 +72,28 @@ public class Battle extends JPanel implements ActionListener {
         topUIWrapper.add(instructionLabel);
 
         doubleSpeed = new JButton(">>");
-        //doubleSpeed.setHorizontalAlignment(SwingConstants.RIGHT);
-        doubleSpeed.addActionListener(this); 
+        // doubleSpeed.setHorizontalAlignment(SwingConstants.RIGHT);
+        doubleSpeed.addActionListener(this);
         topUIWrapper.add(doubleSpeed);
 
         // space for messages
-        //messageLabel = new JLabel("");
-        //this.add(messageLabel);
-        //messageLabel.setBounds(580, 60, 300, 20);
-        //messageLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        
+        // messageLabel = new JLabel("");
+        // this.add(messageLabel);
+        // messageLabel.setBounds(580, 60, 300, 20);
+        // messageLabel.setFont(new Font("Arial", Font.BOLD, 16));
 
-        //add(cardPanel, BorderLayout.CENTER);
+        // add(cardPanel, BorderLayout.CENTER);
 
         // get player and cards
         this.player = player;
         // this.playerSelectedCards = playerSelectedCards;
 
-        // create player array 
+        // create player array
         playersArray[0] = player;
         playersArray[1] = enemy;
 
         // setup timer
-        timer = new Timer(500/FPS, this);
+        timer = new Timer(500 / FPS, this);
         timer.start();
 
     }
@@ -104,44 +105,43 @@ public class Battle extends JPanel implements ActionListener {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-        //g.drawImage(background.getImage(), 0, 0, null);
+        // g.drawImage(background.getImage(), 0, 0, null);
 
         for (Battler battler : playersArray) {
             battler.drawSprite(g);
             battler.drawStatus(g);
         }
 
-        //if (damage > 0) {
-        //    g.setColor(Color.red);
-        //    g.setFont(Main.Lexend18);
-        //    if (turn == 0)
-        //        g.drawString("-" + damage, 880, HEALTHBAR_Y+10);
-        //    else 
-        //        g.drawString("-" + damage, 350, HEALTHBAR_Y+10);
-        //}
-        //System.out.println(showDamage);
+        // if (damage > 0) {
+        // g.setColor(Color.red);
+        // g.setFont(Main.Lexend18);
+        // if (turn == 0)
+        // g.drawString("-" + damage, 880, HEALTHBAR_Y+10);
+        // else
+        // g.drawString("-" + damage, 350, HEALTHBAR_Y+10);
+        // }
+        // System.out.println(showDamage);
         g.setColor(Color.red);
         g.setFont(Main.Lexend30);
-        for (int i = 0; i < showDamage.size()-1; i=i+2 ) {
+        for (int i = 0; i < showDamage.size() - 1; i = i + 2) {
             if (turn == 0)
                 xPos = 860;
-            else 
+            else
                 xPos = 350;
 
-            if (showDamage.get(i+1) <= 100)
-                g.drawString("-" + showDamage.get(i), xPos, 60+showDamage.get(i+1));
-            
-            showDamage.set(i+1, showDamage.get(i+1)-1);
+            if (showDamage.get(i + 1) <= 100)
+                g.drawString("-" + showDamage.get(i), xPos, 60 + showDamage.get(i + 1));
 
-            if (showDamage.get(i+1) == 0) {
+            showDamage.set(i + 1, showDamage.get(i + 1) - 1);
+
+            if (showDamage.get(i + 1) == 0) {
                 showDamage.remove(i);
                 showDamage.remove(i);
             }
         }
 
-
         // display player's cards
-        for (int i = DeckBuildPanel.deckSize-1; i >= 0; i--) {
+        for (int i = DeckBuildPanel.deckSize - 1; i >= 0; i--) {
             player.hand[i].setX(5 + i * 62);
             player.hand[i].setY(CARDY);
 
@@ -154,11 +154,11 @@ public class Battle extends JPanel implements ActionListener {
         }
 
         // display enemy's cards
-        for (int i = DeckBuildPanel.deckSize-1; i >= 0; i--) {
+        for (int i = DeckBuildPanel.deckSize - 1; i >= 0; i--) {
             enemy.hand[i].setX(1140 + i * -62);
             enemy.hand[i].setY(CARDY);
 
-            //System.out.println("round: " + round);
+            // System.out.println("round: " + round);
 
             // moves the currently acting card upwards 20px to make it more visible
             if (turn == 1 && i == ((round - 1) / 2) % 8)
@@ -169,8 +169,6 @@ public class Battle extends JPanel implements ActionListener {
         }
     }
 
-    
-
     private void performAttack(Cards attackerCard, Battler defender) {
         // gets ambrosia from card
         playersArray[turn].setEnergy(attackerCard.getEnergy());
@@ -179,36 +177,34 @@ public class Battle extends JPanel implements ActionListener {
         if (attackerCard.getEnergyCost() <= playersArray[turn].getEnergy()) {
 
             playersArray[turn].setEnergy(-1 * (attackerCard.getEnergyCost()));
-            playersArray[turn].setShield(attackerCard.getShield()*10);
+            playersArray[turn].setShield(attackerCard.getShield() * 10);
             playersArray[altTurn].setVulnerableStacks(attackerCard.getVulnerableStacks());
             playersArray[turn].setStrengthenStacks(attackerCard.getStrengthenStacks());
 
             // deal damage -----------------------------------
-            damage = (attackerCard.getAttack()+playersArray[turn].getStrengthenStacks()) * 10;
+            damage = (attackerCard.getAttack() + playersArray[turn].getStrengthenStacks()) * 10;
 
             if (playersArray[altTurn].getVulnerableStacks() > 0)
-                damage = damage*2;
-                int orignalDamage = damage;
+                damage = damage * 2;
+            int orignalDamage = damage;
             if (damage > 0) {
 
                 for (int i = 0; i < attackerCard.getMultiHit(); i++) {
                     damage = orignalDamage;
 
                     showDamage.add(damage);
-                    showDamage.add(100+(i*10));  // decides how long the damage message persists for
-                    //showDamage.add(shieldDamage);
+                    showDamage.add(100 + (i * 10)); // decides how long the damage message persists for
+                    // showDamage.add(shieldDamage);
 
                     // first deals damage to any shield
                     if (defender.getShield() >= damage) {
                         shieldDamage = damage;
                         damage = 0;
-                    } 
-                    else if (defender.getShield() < damage) {
+                    } else if (defender.getShield() < damage) {
                         shieldDamage = defender.getShield();
-                        damage = damage-shieldDamage;
-                        //defender.setShield(-shieldDamage);
-                    }  
-                    
+                        damage = damage - shieldDamage;
+                        // defender.setShield(-shieldDamage);
+                    }
 
                     defender.setShield(-shieldDamage);
 
@@ -224,34 +220,34 @@ public class Battle extends JPanel implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent e) {
-    
+
         if (e.getSource() == timer && !isWon) {
             if (!doubleTime) {
                 culler++;
             }
-            if (culler%2 == 0) {
-            frameCounter++;
-            
+            if (culler % 2 == 0) {
+                frameCounter++;
+
                 // first frame of turn
                 if (frameCounter == 1) {
                     altTurn = (round + 1) % 2;
                     if (round % 2 == 0) {
                         turn = 0;
-                        //messageLabel.setText("Player attacks");
+                        // messageLabel.setText("Player attacks");
                     } else {
                         turn = 1;
-                        //messageLabel.setText("Enemy attacks");
+                        // messageLabel.setText("Enemy attacks");
                     }
                     round++;
                 }
 
                 // frame 0 - 5
                 if (frameCounter <= framesForCardUp)
-                    cardUpY = cardUpY-(150/framesForCardUp);
+                    cardUpY = cardUpY - (150 / framesForCardUp);
 
                 if (frameCounter == 20)
                     performAttack(playersArray[turn].hand[(round - 1) / 2 % 8], playersArray[altTurn]);
-                    
+
                 if (frameCounter == 40)
                     player.attackAnimStop(1);
 
@@ -260,21 +256,19 @@ public class Battle extends JPanel implements ActionListener {
                 repaint();
                 // frame 55 - 60
                 if (frameCounter >= 55)
-                    cardUpY = cardUpY+(150/framesForCardUp);
+                    cardUpY = cardUpY + (150 / framesForCardUp);
 
                 // frame 60
                 if (frameCounter == framesPerTurn) {
                     frameCounter = 0;
                     cardUpY = CARDY;
-                // if round is even, it is the player's turn, if round is odd, its the enemy's
-                // turn. turn is 0 or 1 to make using an array easier
+                    // if round is even, it is the player's turn, if round is odd, its the enemy's
+                    // turn. turn is 0 or 1 to make using an array easier
 
-                    
                     damage = 0;
 
                     reduceStacks(playersArray[turn]);
                     showDamage.clear();
-                    
 
                     if (playersArray[altTurn].getHealth() <= 0) {
                         System.out.println(playersArray[altTurn] + "loses!");
@@ -284,23 +278,24 @@ public class Battle extends JPanel implements ActionListener {
                         player.setHealth(player.getMaxHealth());
                         enemy.setHealth(player.getMaxHealth());
 
-                        // resets the location of the cards so they appear in the right spot in the next battle
+                        // resets the location of the cards so they appear in the right spot in the next
+                        // battle
                         for (int i = 0; i < player.hand.length; i++) {
-                            player.hand[i].setX(i*130 + 120);
+                            player.hand[i].setX(i * 130 + 120);
                             player.hand[i].setY(160);
-                        }   
+                        }
                         // give some extra cards as a reward
-                        if (player.deck.length <= 7) {
+                        if (player.deck.size() <= 7) {
                             for (int i = 0; i < 3; i++) {
-                                player.deck.add(new Cards(i*120+200, 420, 60, 40));
+                                player.deck.add(new Cards(i * 120 + 200, 420, 60, 40));
                             }
                         }
                         // centers the cards
                         // gets the center of the screen
-                        int deckX = (Main.WIDTH)/2;
+                        int deckX = (Main.WIDTH) / 2;
 
                         // adjusts the start accounting for each of the cards in the deck
-                        for (int i=0; i < player.deck.size(); i++)
+                        for (int i = 0; i < player.deck.size(); i++)
                             deckX = deckX - 60;
 
                         // puts each card after one another
@@ -309,24 +304,22 @@ public class Battle extends JPanel implements ActionListener {
                             deckX += 120;
                         }
 
-
-                        // the the player loses, they get sent to the menu screen, if they win, they get sent back to the map
+                        // the the player loses, they get sent to the menu screen, if they win, they get
+                        // sent back to the map
                         if (playersArray[altTurn] == player)
                             Main.showCard("Menu");
                         else
                             Main.showCard("Map");
 
-                        //InteractiveEnemy.inBattle = false;
+                        // InteractiveEnemy.inBattle = false;
                     }
                 }
             }
-        }
-        else if (e.getSource() == doubleSpeed) {
+        } else if (e.getSource() == doubleSpeed) {
             if (!doubleTime) {
                 doubleTime = true;
                 culler = 0;
-            }
-            else {
+            } else {
                 doubleTime = false;
             }
         }

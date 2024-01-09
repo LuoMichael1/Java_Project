@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.io.*;
 import javax.imageio.ImageIO;
@@ -298,14 +297,14 @@ public class TileManager {
     private BufferedImage createDarkImage(int alpha) {
 
         // Create a new image
-        BufferedImage darkImage = new BufferedImage(gamePanel.TILE_SIZE, gamePanel.TILE_SIZE,
+        BufferedImage darkImage = new BufferedImage(InteractivePanel.getTileSize(), InteractivePanel.getTileSize(),
                 BufferedImage.TYPE_INT_ARGB);
 
         // Add a black graphic to the image
         Graphics2D g2 = darkImage.createGraphics();
 
         g2.setColor(new Color(0, 0, 0, alpha));
-        g2.fillRect(0, 0, gamePanel.TILE_SIZE, gamePanel.TILE_SIZE);
+        g2.fillRect(0, 0, InteractivePanel.getTileSize(), InteractivePanel.getTileSize());
         g2.dispose();
 
         return darkImage;
@@ -314,20 +313,20 @@ public class TileManager {
     public void draw(Graphics2D graphic) {
 
         // Convert the player's coordinates into the range of visible tiles
-        int start_i = Math.max(0, (player.y - player.getDrawY()) / gamePanel.TILE_SIZE);
-        int end_i = Math.min(R, start_i + Main.HEIGHT / gamePanel.TILE_SIZE + 2);
+        int start_i = Math.max(0, (player.y - player.getDrawY()) / InteractivePanel.getTileSize());
+        int end_i = Math.min(R, start_i + Main.HEIGHT / InteractivePanel.getTileSize() + 2);
 
-        int start_j = Math.max(0, (player.x - player.getDrawX()) / gamePanel.TILE_SIZE);
-        int end_j = Math.min(C, start_j + Main.WIDTH / gamePanel.TILE_SIZE + 2);
+        int start_j = Math.max(0, (player.x - player.getDrawX()) / InteractivePanel.getTileSize());
+        int end_j = Math.min(C, start_j + Main.WIDTH / InteractivePanel.getTileSize() + 2);
 
         // Draw only the visible tiles
         for (int i = start_i; i < end_i; i++) {
             for (int j = start_j; j < end_j; j++) {
                 graphic.drawImage(tile[Math.max(0, Integer.parseInt(map[i][j]))].image,
-                        j * gamePanel.TILE_SIZE - player.x + player.getDrawX(),
-                        i * gamePanel.TILE_SIZE - player.y + player.getDrawY(),
-                        gamePanel.TILE_SIZE,
-                        gamePanel.TILE_SIZE, null);
+                        j * InteractivePanel.getTileSize() - player.x + player.getDrawX(),
+                        i * InteractivePanel.getTileSize() - player.y + player.getDrawY(),
+                        InteractivePanel.getTileSize(),
+                        InteractivePanel.getTileSize(), null);
             }
         }
     }
@@ -359,19 +358,20 @@ public class TileManager {
     public void drawLighting(Graphics2D graphic) {
 
         // Convert the player's coordinates into the range of visible tiles
-        int start_i = Math.max(0, (player.y - player.getDrawY()) / gamePanel.TILE_SIZE);
-        int end_i = Math.min(R, start_i + Main.HEIGHT / gamePanel.TILE_SIZE + 2);
+        int start_i = Math.max(0, (player.y - player.getDrawY()) / InteractivePanel.getTileSize());
+        int end_i = Math.min(R, start_i + Main.HEIGHT / InteractivePanel.getTileSize() + 2);
 
-        int start_j = Math.max(0, (player.x - player.getDrawX()) / gamePanel.TILE_SIZE);
-        int end_j = Math.min(C, start_j + Main.WIDTH / gamePanel.TILE_SIZE + 2);
+        int start_j = Math.max(0, (player.x - player.getDrawX()) / InteractivePanel.getTileSize());
+        int end_j = Math.min(C, start_j + Main.WIDTH / InteractivePanel.getTileSize() + 2);
 
         // Draw only the visible tiles
         for (int i = start_i; i < end_i; i++) {
             for (int j = start_j; j < end_j; j++) {
 
                 // Overlay transparent black tiles to represent darkness
-                graphic.drawImage(darkImages[alpha[i][j]], j * gamePanel.TILE_SIZE - player.x + player.getDrawX(),
-                        i * gamePanel.TILE_SIZE - player.y + player.getDrawY(), null);
+                graphic.drawImage(darkImages[alpha[i][j]],
+                        j * InteractivePanel.getTileSize() - player.x + player.getDrawX(),
+                        i * InteractivePanel.getTileSize() - player.y + player.getDrawY(), null);
             }
         }
     }

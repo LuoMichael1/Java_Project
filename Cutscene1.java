@@ -6,6 +6,7 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.InterfaceAddress;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -24,9 +25,11 @@ public class Cutscene1 extends JPanel implements KeyListener, MouseListener {
     private boolean fadingIn = true;
     private boolean fadingOut = false;
 
+    private InteractivePanel gamePanel;
+
     public Cutscene1() {
         this.setFocusable(true);
-        //this.requestFocusInWindow();
+        // this.requestFocusInWindow();
         try {
             farBackground = ImageIO.read(new File("environment/far-buildings.png"));
             background1 = ImageIO.read(new File("environment/back-buildings.png"));
@@ -59,74 +62,79 @@ public class Cutscene1 extends JPanel implements KeyListener, MouseListener {
             }
         });
         timer.start();
-        }
+    }
 
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            int w = getWidth();
-            int h = getHeight();
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        int w = getWidth();
+        int h = getHeight();
 
-            int bg1x = -characterX / 8 % w;
-            int bg2x = -characterX / 4 % w;
-            int fgx = -characterX % w;
+        int bg1x = -characterX / 8 % w;
+        int bg2x = -characterX / 4 % w;
+        int fgx = -characterX % w;
 
-            final int BAR_HEIGHT = getHeight() / 8;
+        final int BAR_HEIGHT = getHeight() / 8;
 
-            g.drawImage(farBackground, 0, 0, w, h, null);
+        g.drawImage(farBackground, 0, 0, w, h, null);
 
-            g.drawImage(background1, bg1x, 0, w, h, null);
-            g.drawImage(background1, bg1x + w, 0, w, h, null);
+        g.drawImage(background1, bg1x, 0, w, h, null);
+        g.drawImage(background1, bg1x + w, 0, w, h, null);
 
-            g.drawImage(background2, bg2x, 0, w, h, null);
-            g.drawImage(background2, bg2x + w, 0, w, h, null);
+        g.drawImage(background2, bg2x, 0, w, h, null);
+        g.drawImage(background2, bg2x + w, 0, w, h, null);
 
-            // Calculate the y-coordinate based on a sine function
-            int characterY = (int) ((h - (h / 3)) + Math.sin(characterX / 100.0));
-            g.drawImage(carSprites[spriteIndex], w / 3, characterY, w / 3, h / 4, null);
+        // Calculate the y-coordinate based on a sine function
+        int characterY = (int) ((h - (h / 3)) + Math.sin(characterX / 100.0));
+        g.drawImage(carSprites[spriteIndex], w / 3, characterY, w / 3, h / 4, null);
 
-            g.drawImage(foreground, fgx, -200, w / 2, h + (h / 3), null);
-            g.drawImage(foreground, fgx + w, -200, w / 2, h + (h / 3), null);
+        g.drawImage(foreground, fgx, -200, w / 2, h + (h / 3), null);
+        g.drawImage(foreground, fgx + w, -200, w / 2, h + (h / 3), null);
 
-            g.drawImage(blackBar, 0, 0, w, BAR_HEIGHT, null);
-            g.drawImage(blackBar, 0, h - BAR_HEIGHT, w, BAR_HEIGHT, null);
+        g.drawImage(blackBar, 0, 0, w, BAR_HEIGHT, null);
+        g.drawImage(blackBar, 0, h - BAR_HEIGHT, w, BAR_HEIGHT, null);
 
-            if (dialogue.index < dialogue.dialogues.size())
-                dialogue.draw(g);
+        if (dialogue.index < dialogue.dialogues.size())
+            dialogue.draw(g);
 
-            if (fadingIn) {
-                fadeAlpha -= 255 / 60; // Decrease alpha over 60 frames for fade-out
-                if (fadeAlpha < 0) {
-                    fadeAlpha = 0;
-                    fadingIn = false;
-                }
-            } else if (fadingOut) {
-                fadeAlpha += 255 / 60; // Decrease alpha over 60 frames for fade-in
-                if (fadeAlpha > 255) {
-                    fadeAlpha = 255;
-                }
+        if (fadingIn) {
+            fadeAlpha -= 255 / 60; // Decrease alpha over 60 frames for fade-out
+            if (fadeAlpha < 0) {
+                fadeAlpha = 0;
+                fadingIn = false;
             }
-
-            g.setColor(new Color(0, 0, 0, fadeAlpha));
-            g.fillRect(0, 0, w, h);
+        } else if (fadingOut) {
+            fadeAlpha += 255 / 60; // Decrease alpha over 60 frames for fade-in
+            if (fadeAlpha > 255) {
+                fadeAlpha = 255;
+            }
         }
 
-        //add(panel, BorderLayout.CENTER);
-        //setSize(1280, 720);
-        //setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        g.setColor(new Color(0, 0, 0, fadeAlpha));
+        g.fillRect(0, 0, w, h);
+    }
 
+    // add(panel, BorderLayout.CENTER);
+    // setSize(1280, 720);
+    // setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+    public void setInteractivePanel(InteractivePanel panel) {
+
+        gamePanel = panel;
+    }
 
     private void startTutorial() {
         // switches to the next card in the layout
         this.setFocusable(false);
         Main.showCard("Map");
+        gamePanel.grabFocus();
     }
 
-    //public static void main(String[] args) {
-    //    SwingUtilities.invokeLater(() -> {
-    //        Cutscene1 game = new Cutscene1();
-    //        game.setVisible(true);
-    //    });
-    //}
+    // public static void main(String[] args) {
+    // SwingUtilities.invokeLater(() -> {
+    // Cutscene1 game = new Cutscene1();
+    // game.setVisible(true);
+    // });
+    // }
 
     class Dialogue {
         private ArrayList<String[]> dialogues = new ArrayList<>();
@@ -219,19 +227,28 @@ public class Cutscene1 extends JPanel implements KeyListener, MouseListener {
         }
     }
 
-    public void mousePressed(MouseEvent e) {}
-    public void mouseReleased(MouseEvent e) {}
-    public void mouseEntered(MouseEvent e) {}
-    public void mouseExited(MouseEvent e) {}
+    public void mousePressed(MouseEvent e) {
+    }
+
+    public void mouseReleased(MouseEvent e) {
+    }
+
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    public void mouseExited(MouseEvent e) {
+    }
 
     public void keyTyped(KeyEvent e) {
-        //System.out.println(e);
+        // System.out.println(e);
     }
+
     public void keyPressed(KeyEvent e) {
-        //System.out.println(e);
+        // System.out.println(e);
     }
+
     public void keyReleased(KeyEvent e) {
-        //System.out.println(e);
+        // System.out.println(e);
 
         // skip cutscene if x is pressed
         if (e.getKeyCode() == 88)

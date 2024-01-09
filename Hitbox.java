@@ -12,7 +12,7 @@ public class Hitbox {
         bot = top + height;
         right = left + width;
         centerX = left + width / 2;
-        centerY = top + width / 2;
+        centerY = top + height / 2;
     }
 
     public boolean intersects(Hitbox other) {

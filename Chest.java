@@ -59,9 +59,9 @@ public class Chest extends Interactible {
 
     public static void drawChestStand(Graphics2D graphic, PlayerMovable player, InteractivePanel gamePanel) {
 
-        graphic.drawImage(chestStandImage, chestStandX * gamePanel.TILE_SIZE - player.x + player.getDrawX(),
-                chestStandY * gamePanel.TILE_SIZE - player.y + player.getDrawY(),
-                gamePanel.TILE_SIZE * WIDTH,
-                gamePanel.TILE_SIZE * HEIGHT + gamePanel.TILE_SIZE, null);
+        graphic.drawImage(chestStandImage, chestStandX * InteractivePanel.getTileSize() - player.x + player.getDrawX(),
+                chestStandY * InteractivePanel.getTileSize() - player.y + player.getDrawY(),
+                InteractivePanel.getTileSize() * WIDTH,
+                InteractivePanel.getTileSize() * HEIGHT + InteractivePanel.getTileSize(), null);
     }
 }

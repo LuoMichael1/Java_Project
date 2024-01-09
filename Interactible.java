@@ -30,9 +30,9 @@ public class Interactible {
 
     public void draw(Graphics2D graphic, PlayerMovable player, InteractivePanel gamePanel) {
 
-        graphic.drawImage(image, tileX * gamePanel.TILE_SIZE - player.x + player.getDrawX(),
-                tileY * gamePanel.TILE_SIZE - player.y + player.getDrawY(),
-                gamePanel.TILE_SIZE * WIDTH,
-                gamePanel.TILE_SIZE * HEIGHT, null);
+        graphic.drawImage(image, tileX * InteractivePanel.getTileSize() - player.x + player.getDrawX(),
+                tileY * InteractivePanel.getTileSize() - player.y + player.getDrawY(),
+                InteractivePanel.getTileSize() * WIDTH,
+                InteractivePanel.getTileSize() * HEIGHT, null);
     }
 }

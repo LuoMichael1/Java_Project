@@ -39,7 +39,7 @@ public class InteractiveEnemy extends Entity {
     int initalX;
     int initalY;
 
-    static boolean inBattle = false; 
+    static boolean inBattle = false;
 
     public void loadImages(String type) {
 
@@ -71,8 +71,8 @@ public class InteractiveEnemy extends Entity {
 
     public InteractiveEnemy(int x, int y, InteractivePanel gamePanel, String enemyType, ArrayList<Point> triggerTiles) {
 
-        this.x = x * gamePanel.TILE_SIZE;
-        this.y = y * gamePanel.TILE_SIZE;
+        this.x = x * InteractivePanel.getTileSize();
+        this.y = y * InteractivePanel.getTileSize();
 
         initalX = this.x;
         initalY = this.y;
@@ -109,17 +109,13 @@ public class InteractiveEnemy extends Entity {
 
     public void chasingUpdate(PlayerMovable player, InteractivePanel gamePanel) {
 
-        hitbox = new Hitbox(y + gamePanel.TILE_SIZE * InteractiveEnemy_HEIGHT / 4,
-                x + gamePanel.TILE_SIZE * InteractiveEnemy_WIDTH / 4,
-                gamePanel.TILE_SIZE * InteractiveEnemy_WIDTH / 2,
-                gamePanel.TILE_SIZE * InteractiveEnemy_HEIGHT / 4 * 3);
-
-        if (hitbox.centerX / gamePanel.TILE_SIZE == initalX / gamePanel.TILE_SIZE
-                && hitbox.centerY / gamePanel.TILE_SIZE == initalY / gamePanel.TILE_SIZE
+        if (hitbox.centerX / InteractivePanel.getTileSize() == initalX / InteractivePanel.getTileSize()
+                && hitbox.centerY / InteractivePanel.getTileSize() == initalY / InteractivePanel.getTileSize()
                 && !chasing) {
 
             System.out.println(
-                    "arrived home at " + initalX / gamePanel.TILE_SIZE + ", " + initalY / gamePanel.TILE_SIZE);
+                    "arrived home at " + initalX / InteractivePanel.getTileSize() + ", "
+                            + initalY / InteractivePanel.getTileSize());
             chasing = false;
             goingHome = false;
             awayFromHome = false;
@@ -150,8 +146,8 @@ public class InteractiveEnemy extends Entity {
             }
 
             Point nextStep = path.get(0);
-            int dx = nextStep.x - hitbox.centerX / gamePanel.TILE_SIZE;
-            int dy = nextStep.y - hitbox.centerY / gamePanel.TILE_SIZE;
+            int dx = nextStep.x - hitbox.centerX / InteractivePanel.getTileSize();
+            int dy = nextStep.y - hitbox.centerY / InteractivePanel.getTileSize();
 
             // Normalize the distances so that the enemy moves at a constant speed
             double distance = Math.sqrt(dx * dx + dy * dy);
@@ -160,13 +156,18 @@ public class InteractiveEnemy extends Entity {
                 dy /= distance;
             }
 
+            int speed = 4;
+
             // Move the enemy towards the next step
-            this.x += dx * 4;
-            this.y += dy * 4;
+            this.x += dx * speed;
+            this.y += dy * speed;
+
+            System.out.println("x: " + dx);
+            System.out.println("y: " + dy);
 
             // If the enemy has reached the next step, remove it from the path
-            if (hitbox.centerX / gamePanel.TILE_SIZE == nextStep.x
-                    && hitbox.centerY / gamePanel.TILE_SIZE == nextStep.y) {
+            if (hitbox.centerX / InteractivePanel.getTileSize() == nextStep.x
+                    && hitbox.centerY / InteractivePanel.getTileSize() == nextStep.y) {
                 path.remove(0);
             }
         }
@@ -181,7 +182,8 @@ public class InteractiveEnemy extends Entity {
         PriorityQueue<Point> openList = new PriorityQueue<>(Comparator.comparingInt(n -> n.f));
         Set<Point> closedList = new HashSet<>();
 
-        current = new Point(hitbox.centerX / gamePanel.TILE_SIZE, hitbox.centerY / gamePanel.TILE_SIZE);
+        current = new Point(hitbox.centerX / InteractivePanel.getTileSize(),
+                hitbox.centerY / InteractivePanel.getTileSize());
 
         // Add the current enemy's position to the open list
         openList.add(current);
@@ -193,8 +195,8 @@ public class InteractiveEnemy extends Entity {
             current = openList.poll();
 
             // If the current node is the player's position, we've found the shortest path
-            if (current.equals(new Point(targetX / gamePanel.TILE_SIZE,
-                    targetY / gamePanel.TILE_SIZE))) {
+            if (current.equals(new Point(targetX / InteractivePanel.getTileSize(),
+                    targetY / InteractivePanel.getTileSize()))) {
                 break;
             }
 
@@ -217,8 +219,8 @@ public class InteractiveEnemy extends Entity {
                                                                                  // neighboring
                                                                                  // node from the start
                     neighbor.h = distanceBetween(neighbor,
-                            new Point(targetX / gamePanel.TILE_SIZE,
-                                    targetY / gamePanel.TILE_SIZE)); // The
+                            new Point(targetX / InteractivePanel.getTileSize(),
+                                    targetY / InteractivePanel.getTileSize())); // The
                     // estimated
                     // cost from
                     // the
@@ -247,7 +249,8 @@ public class InteractiveEnemy extends Entity {
         ArrayList<Point> path = new ArrayList<>();
         while (current != null
                 && !current.equals(
-                        new Point(hitbox.centerX / gamePanel.TILE_SIZE, hitbox.centerY / gamePanel.TILE_SIZE))) {
+                        new Point(hitbox.centerX / InteractivePanel.getTileSize(),
+                                hitbox.centerY / InteractivePanel.getTileSize()))) {
             path.add(0, current);
             current = current.parent;
         }
@@ -292,6 +295,13 @@ public class InteractiveEnemy extends Entity {
 
     public void update(PlayerMovable player, InteractivePanel gamePanel) {
 
+        hitbox = new Hitbox(y + InteractivePanel.getTileSize(),
+                x + InteractivePanel.getTileSize() * InteractiveEnemy_WIDTH / 4,
+                InteractivePanel.getTileSize(),
+                InteractivePanel.getTileSize());
+
+        checkCollision(player, gamePanel);
+
         for (Point triggerTile : triggerTiles) {
 
             if (player.getCurrentTileX() == triggerTile.x && player.getCurrentTileY() == triggerTile.y
@@ -313,35 +323,25 @@ public class InteractiveEnemy extends Entity {
 
         graphic.drawImage(image, x - player.x + player.getDrawX(),
                 y - player.y + player.getDrawY(),
-                gamePanel.TILE_SIZE * InteractiveEnemy_WIDTH,
-                gamePanel.TILE_SIZE * InteractiveEnemy_HEIGHT, null);
+                InteractivePanel.getTileSize() * InteractiveEnemy_WIDTH,
+                InteractivePanel.getTileSize() * InteractiveEnemy_HEIGHT, null);
     }
 
-    static void checkCollision(PlayerMovable player, InteractivePanel gamePanel) {
+    public void checkCollision(PlayerMovable player, InteractivePanel gamePanel) {
 
         if (!player.inVent) {
 
-            // Get player's current tile
-            int currentTileY = Math.max(0, player.hitbox.centerY / gamePanel.TILE_SIZE);
-            int currentTileX = Math.max(0, player.hitbox.centerX / gamePanel.TILE_SIZE);
+            if (hitbox.centerX / InteractivePanel.getTileSize() == player.hitbox.centerX
+                    / InteractivePanel.getTileSize()
+                    && hitbox.centerY / InteractivePanel.getTileSize() == player.hitbox.centerY
+                            / InteractivePanel.getTileSize()) {
 
-            for (InteractiveEnemy InteractiveEnemy : InteractiveEnemies) {
+                System.out.println("You opened a InteractiveEnemy");
 
-                // Get enemy's current tile
-                int tileY = Math.max(0, InteractiveEnemy.y / gamePanel.TILE_SIZE);
-                int tileX = Math.max(0, InteractiveEnemy.x / gamePanel.TILE_SIZE);
+                InteractivePanel.active = false;
+                Main.showCard("CardGame");
+                inBattle = true;
 
-                if (tileY == currentTileY || tileY + 1 == currentTileY) {
-                    if (tileX == currentTileX || tileX + 1 == currentTileX && !inBattle) {
-
-                        System.out.println("You opened a InteractiveEnemy");
-                
-
-
-                        Main.showCard("CardGame");
-                        inBattle = true;
-                    }
-                }
             }
         }
     }

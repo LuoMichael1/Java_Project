@@ -1,21 +1,29 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class InteractivePanel extends JPanel implements Runnable {
 
-    final int ORIGINAL_TILE_SIZE = 8;
-    final int SCALE = 8;
-    final int TILE_SIZE = ORIGINAL_TILE_SIZE * SCALE;
+    static boolean active;
 
-    // Define screen as 4:3 ratio
-    // final int MAX_SCREEN_COL = 16;
-    // final int MAX_SCREEN_ROW = 12;
+    private static final int ORIGINAL_TILE_SIZE = 8; // number of pixels in each tile
+    private static final int SCALE = 8; // multiplier to make tiles appear bigger
+    private static final int TILE_SIZE = ORIGINAL_TILE_SIZE * SCALE; // amount of actual pixels each tile takes up on
+                                                                     // screen
 
-    Thread gameThread;
-    KeyHandler keyHandler = new KeyHandler();
+    private Thread gameThread; // thread to run the game loop
+    KeyHandler keyHandler = new KeyHandler(); // class to handle key inputs
 
-    int FPS = 60;
-    int counter = 0;
+    private static final int FPS = 60;
+    public static final double NANOSECONDS_PER_SECOND = 1000000000;
+    public static final double FRAME_DURATION = NANOSECONDS_PER_SECOND / FPS;
+
+    private final Lock lock = new ReentrantLock();
+    private final Condition condition = lock.newCondition();
 
     PlayerMovable player = new PlayerMovable(this, keyHandler);
     TileManager tile = new TileManager(this, player);
@@ -28,7 +36,31 @@ public class InteractivePanel extends JPanel implements Runnable {
 
         this.setFocusable(true);
         this.addKeyListener(keyHandler);
+
+        addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                System.out.println("focus gained");
+                lock.lock();
+                try {
+                    condition.signal();
+                } finally {
+                    lock.unlock();
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                System.out.println("focus lost");
+                active = false;
+            }
+        });
+
         startGameThread();
+    }
+
+    public static int getTileSize() {
+        return TILE_SIZE;
     }
 
     public void startGameThread() {
@@ -40,28 +72,30 @@ public class InteractivePanel extends JPanel implements Runnable {
     @Override
     public void run() {
 
-        double drawInterval = 1000000000 / FPS;
-        double nextDrawTime = System.nanoTime() + drawInterval;
-
+        long lastTime = System.nanoTime();
+        double delta = 0.0;
         while (gameThread != null) {
-
-            update();
-
-            repaint();
-
+            lock.lock();
             try {
+                while (!hasFocus()) {
+                    try {
+                        condition.await();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } finally {
+                lock.unlock();
+            }
 
-                double remainingTime = nextDrawTime - System.nanoTime();
-                remainingTime = remainingTime / 1000000; // Convert nanoseconds to miliseconds
+            long now = System.nanoTime();
+            delta += (now - lastTime) / FRAME_DURATION;
+            lastTime = now;
+            if (delta >= 1.0) {
 
-                remainingTime = Math.max(0, remainingTime);
-
-                nextDrawTime += drawInterval;
-
-                Thread.sleep((long) remainingTime);
-
-            } catch (Exception e) {
-                e.printStackTrace();
+                update();
+                repaint();
+                delta--;
             }
         }
     }
@@ -75,20 +109,8 @@ public class InteractivePanel extends JPanel implements Runnable {
             enemy.update(player, this);
         }
 
-        // after 1 seconds you enter battle
-        counter++;
-        // System.out.println(counter);
-        if (counter == 60 * 1) {
-            // Main.nextCard();
-            counter = 0;
-
-            // needs to grab focus so I just put it here
-            grabFocus();
-        }
-
         Chest.checkCollision(player, this);
         Vent.checkCollision(player, this);
-        InteractiveEnemy.checkCollision(player, this);
         OrbStand.checkCollision(player, this);
     }
 
@@ -117,24 +139,4 @@ public class InteractivePanel extends JPanel implements Runnable {
             stand.draw(g, player, this);
         }
     }
-
-    /*
-     * public static void main(String args[]) {
-     * 
-     * JFrame window = new JFrame();
-     * window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-     * window.setResizable(false);
-     * window.setTitle("Game Name");
-     * 
-     * 
-     * window.add(panel);
-     * 
-     * window.pack();
-     * 
-     * window.setLocationRelativeTo(null); // Set window location to center
-     * window.setVisible(true);
-     * 
-     * panel.startGameThread();
-     * }
-     */
 }
