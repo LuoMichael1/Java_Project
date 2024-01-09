@@ -24,8 +24,8 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
     private JButton leftButton; // scroll left
     private JButton rightButton; // scroll right
 
-    private JLabel[] cardBoxes = new JLabel[9]; // the slots that a card can be dragged to
-    private Cards[] selectedCards = new Cards[8];
+    private JLabel[] cardBoxes = new JLabel[9];   // the slots that a card can be dragged to (player hand)
+    private Cards[] selectedCards = new Cards[8]; // the cards actually in the card boxes
     private int cardsSelected = 0;
 
     private JLabel instructionLabel;
@@ -33,15 +33,11 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
     private int scrollValue = 0;
 
     public DeckBuildPanel() {
-        this.setLayout(new BorderLayout());
-
-        initUserInterface();
-        initButtons();
-
+        /* 
         this.addComponentListener(new ComponentListener() {
             public void componentShown(ComponentEvent e) {
                 for (int i = 0; i < player.hand.length; i++) {
-                    selectedCards[i] = player.hand[i];
+                    //selectedCards[i] = player.hand[i];
                     removeGaps();
                 }  
             }
@@ -49,6 +45,10 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
             public void componentMoved(ComponentEvent e) {}
             public void componentHidden(ComponentEvent e) {}
         });
+*/
+        this.setLayout(new BorderLayout());
+        initUserInterface();
+        initButtons();
     }
 
     public void paintComponent(Graphics g) {
@@ -71,7 +71,7 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
 
             g.setColor(new Color(58, 57, 74));
             
-            
+            // draw the number inside the box
             g.setFont(Main.Lexend60);
             g.drawString(""+ counter, 165 + i * 130, 295);
             counter++;
@@ -92,29 +92,31 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
         this.addMouseMotionListener(this);
         this.addMouseListener(this);
 
-        instructionLabel = new JLabel((
-                "Drag exactly " + deckSize
-                        + " cards into the boxes to take into battle, then press Start Battle").toUpperCase());
+        instructionLabel = new JLabel(("Drag exactly " + deckSize + " cards into the boxes to take into battle, then press Start Battle").toUpperCase());
         instructionLabel.setHorizontalAlignment(SwingConstants.CENTER);
         instructionLabel.setFont(Main.Lexend18);
         this.add(instructionLabel, BorderLayout.NORTH);
 
-        // cardx = 0;
-        // cardy = 0;
-
-        // create the players deck
-        //player = 
-        // deck logic: card from deck remains in deck until put in selectedCards. Then x
-        // values of all remaining cards are updated to remove gaps
-
+        
         for (int i = 0; i < deckSize + 1; i++) {
             cardBoxes[i] = new JLabel();
             cardBoxes[i].setBounds(120 + i * 130, 160, 120, 220);
-
-        
-            //cardBoxes[i].setBorder(BorderFactory.createLineBorder(Color.BLACK));
-            //this.add(cardBoxes[i]);
         }
+    
+        
+        /* 
+        cardx = 0;
+        cardy = 0;
+
+        create the players deck
+        player = 
+        deck logic: card from deck remains in deck until put in selectedCards. Then x
+        values of all remaining cards are updated to remove gaps
+
+        cardBoxes[i].setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        this.add(cardBoxes[i]);
+        */
+        
     }
 
     private void initButtons() {
@@ -180,8 +182,9 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
         if (cardsSelected == deckSize) {
             Battle battle = new Battle(player, selectedCards);
             Main.addCard(battle, "battle");
-            //Main.nextCard();
+            
             /* 
+            Main.nextCard();
             removeAll();
             revalidate();
             repaint();
@@ -217,30 +220,23 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
     }
 
     public void mousePressed(MouseEvent e) {
-
         for (Cards card : player.deck) {
-
             if (card != null && card.isInside(e.getX(), e.getY())) {
-
+                
                 selected = card;
-
                 // set offsets
                 offsetX = e.getX() - selected.getX();
                 offsetY = e.getY() - selected.getY();
-
                 break;
             }
         }
         for (Cards card : selectedCards) {
-
             if (card != null && card.isInside(e.getX(), e.getY())) {
 
                 selected = card;
-
                 // set offsets
                 offsetX = e.getX() - selected.getX();
                 offsetY = e.getY() - selected.getY();
-
                 break;
             }
         }
@@ -254,20 +250,22 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
 
         if (selected != null) {
             boolean putInBox = false;
+            boolean leveled = false;  // prevents removing the card that leveled up
+
             for (int i = 0; i < deckSize; i++) {
-                if (e.getX() >= cardBoxes[i].getX() && e.getX() <= cardBoxes[i].getX() + cardBoxes[i].getWidth()
-                        && e.getY() >= cardBoxes[i].getY()
-                        && e.getY() <= cardBoxes[i].getY() + cardBoxes[i].getHeight()) {
+                // checks if the mouse is within the dimensions of a card box
+                if (e.getX() >= cardBoxes[i].getX() && e.getX() <= (cardBoxes[i].getX() + cardBoxes[i].getWidth()) && e.getY() >= cardBoxes[i].getY() && e.getY() <= (cardBoxes[i].getY() + cardBoxes[i].getHeight())) {
                     
                     // if the same card is in the box already, merge the two cards. else just remove the card
                     if (selectedCards[i] != null) {
-
+                        // if two cards have the same id | checks if you are trying to place the same card in the same spot | prevents you from leveling past level 3
                         if (selectedCards[i].getID() == selected.getID() && !(selectedCards[i] == selected) && !(selected.getLevel() > 2)) {
-                            selected.increaseLevel();
+                            selectedCards[i].increaseLevel();
+                            leveled = true;
                         }
                         else {
-                        selectedCards[i].setX(selectedCards[i].getOriginalX());
-                        selectedCards[i].setY(selectedCards[i].getOriginalY());
+                            selectedCards[i].setX(selectedCards[i].getOriginalX());
+                            selectedCards[i].setY(selectedCards[i].getOriginalY());
 
                         removeCard(selectedCards[i]);
                         }
@@ -282,11 +280,15 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
                     selected.setX(cardBoxes[i].getX());
                     selected.setY(cardBoxes[i].getY());
                     selected.setSelectionIndex(i);
-                    selectedCards[i] = selected;
-                    cardsSelected++;
+                    if (!leveled) {
+                        selectedCards[i] = selected;
+                        cardsSelected++;
+                    }
+
+                    //cardsSelected++;
                     // remove the card from the deck
                     player.deck.remove(selected);
-                    removeGaps();
+                    //removeGaps();
 
                     putInBox = true;
                 }
@@ -299,23 +301,28 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
                 selected.setX(selected.getOriginalX());
                 selected.setY(selected.getOriginalY());
 
-                removeGaps();
+                
             }
 
+            removeGaps();
             selected = null;
             repaint();
         }
-        System.out.println("selected");
+        System.out.println("\nselected-------------------");
         for (Cards card : selectedCards) {
 
             if (card != null)
-                System.out.println(card.getHealth() + " " + card.getAttack());
+                System.out.println(card.getID());
+            else
+                System.out.println("null");
         }
-        System.out.println("deck");
+        System.out.println("deck-------------------");
         for (Cards card : player.deck) {
 
             if (card != null)
-                System.out.println(card.getHealth() + " " + card.getAttack());
+                System.out.println(card.getID());
+            else
+                System.out.println("null");
         }
     }
 
@@ -327,22 +334,24 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
 
         // adjusts the start accounting for each of the cards in the deck
         for (int i=0; i < player.deck.size(); i++)
+            // subtract 60 because that is half of the width of a card which is what we want because we want to center them
             deckX = deckX - 60;
 
         // puts each card after one another
         for (Cards card : player.deck) {
-            card.setX(deckX + scrollValue);
+            card.setX(deckX);
             deckX += 120;
         }
     }
 
     public void removeCard(Cards card) {
-
         selectedCards[card.getSelectionIndex()] = null;
+
         card.setSelectionIndex(-1);
         cardsSelected--;
         // add card back to deck
         player.deck.add(card);
+        //removeGaps();
     }
 
     public void mouseDragged(MouseEvent e) {
@@ -373,21 +382,8 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
         repaint();
     }
 
-    public void mouseClicked(MouseEvent e) {
-
-    }
-
-    public void mouseMoved(MouseEvent e) {
-        x = e.getX();
-        y = e.getY();
-        repaint();
-    }
-
-    public void mouseExited(MouseEvent e) {
-
-    }
-
-    public void actionPerformed(ActionEvent e) {
-
-    }
+    public void mouseClicked(MouseEvent e) {}
+    public void mouseMoved(MouseEvent e) {}
+    public void mouseExited(MouseEvent e) {}
+    public void actionPerformed(ActionEvent e) {}
 }
