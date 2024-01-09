@@ -19,7 +19,7 @@ public class KeyHandler implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        System.out.println("Keyhandler doing things");
+        //System.out.println("Keyhandler doing things");
         int code = e.getKeyCode();
 
         switch (code) {

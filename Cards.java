@@ -80,7 +80,7 @@ public class Cards implements MouseMotionListener {
 
         filesc.close();
     }
-
+    /*
     public Cards(int x, int y, int health, int attack, int originalX, int originalY, int selectionIndex) {
 
         cardImage = new ImageIcon("card.png");
@@ -97,7 +97,7 @@ public class Cards implements MouseMotionListener {
     public Cards makeCopy() {
         return new Cards(x, y, health, attack, originalX, originalY, selectionIndex);
     }
-
+    */
     public boolean isInside(int mx, int my) {
         return (x - 10 < mx && y - 10 < my && x + CARDWIDTH > mx && y + CARDHIGHT > my);
     }

@@ -141,7 +141,7 @@ public class Battle extends JPanel implements ActionListener {
         }
 
         // display player's cards
-        for (int i = DeckBuildPanel.deckSize - 1; i >= 0; i--) {
+        for (int i = player.hand.length - 1; i >= 0; i--) {
             player.hand[i].setX(5 + i * 62);
             player.hand[i].setY(CARDY);
 
@@ -290,12 +290,22 @@ public class Battle extends JPanel implements ActionListener {
                                 player.deck.add(new Cards(i * 120 + 200, 420, 60, 40));
                             }
                         }
+                        else {
+                            for (int i = player.deck.size(); i < 10; i++) {
+                                player.deck.add(new Cards(i*120+200, 420, 60, 40));
+                            }
+                        }
+                        else {
+                            for (int i = player.deck.size(); i < 10; i++) {
+                                player.deck.add(new Cards(i*120+200, 420, 60, 40));
+                            }
+                        }
                         // centers the cards
                         // gets the center of the screen
                         int deckX = (Main.WIDTH) / 2;
 
-                        // adjusts the start accounting for each of the cards in the deck
-                        for (int i = 0; i < player.deck.size(); i++)
+                        // adjusts the starting x of the cards accounting for each of the cards in the deck
+                        for (int i=0; i < player.deck.size(); i++)
                             deckX = deckX - 60;
 
                         // puts each card after one another

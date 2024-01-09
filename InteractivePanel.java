@@ -5,6 +5,8 @@ import java.awt.event.FocusListener;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 
 public class InteractivePanel extends JPanel implements Runnable {
 
@@ -29,6 +31,21 @@ public class InteractivePanel extends JPanel implements Runnable {
     TileManager tile = new TileManager(this, player);
 
     public InteractivePanel() {
+        this.addComponentListener(new ComponentListener() {
+            public void componentResized(ComponentEvent e) {
+            }
+
+            public void componentMoved(ComponentEvent e) {
+            }
+
+            public void componentShown(ComponentEvent e) {
+                InteractivePanel.this.requestFocusInWindow();
+            }
+
+            public void componentHidden(ComponentEvent e) {
+            }
+
+        });
 
         this.setPreferredSize(new Dimension(Main.WIDTH, Main.HEIGHT));
         this.setBackground(Color.black);
