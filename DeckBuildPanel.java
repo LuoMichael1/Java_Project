@@ -3,6 +3,7 @@
 import javax.swing.*;
 //import javax.swing.border.Border;
 //import javax.swing.border.EmptyBorder;
+import javax.swing.border.Border;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -21,16 +22,24 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
 
     // initialize buttons
     private JButton battleButton; // start battle
+
     private JButton leftButton; // scroll left
     private JButton rightButton; // scroll right
+    private int scrollValue = 0;
 
     private JLabel[] cardBoxes = new JLabel[9];   // the slots that a card can be dragged to (player hand)
     private Cards[] selectedCards = new Cards[8]; // the cards actually in the card boxes
     private int cardsSelected = 0;
 
+    // card columns describe the area that a card can be dropped and return to a specfic part of the deck
+    // for example, dropping a card in the leftmost column will put the card at the leftmost place in the deck
+    private int cardColumnsWidth = 120; 
+    private int indexCounter = 0;  // used to finds the original index in the deck the selected card came from 
+    private int deckIndex = 0;
+
     private JLabel instructionLabel;
 
-    private int scrollValue = 0;
+    
 
     public DeckBuildPanel() {
         /* 
@@ -221,17 +230,11 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
 
     public void mousePressed(MouseEvent e) {
         for (Cards card : player.deck) {
+            indexCounter++;
+
             if (card != null && card.isInside(e.getX(), e.getY())) {
-                
-                selected = card;
-                // set offsets
-                offsetX = e.getX() - selected.getX();
-                offsetY = e.getY() - selected.getY();
-                break;
-            }
-        }
-        for (Cards card : selectedCards) {
-            if (card != null && card.isInside(e.getX(), e.getY())) {
+
+                deckIndex = indexCounter;
 
                 selected = card;
                 // set offsets
@@ -240,6 +243,23 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
                 break;
             }
         }
+        indexCounter = 0;
+
+        for (Cards card : selectedCards) {
+            indexCounter++;
+
+            if (card != null && card.isInside(e.getX(), e.getY())) {
+
+                deckIndex = indexCounter;
+
+                selected = card;
+                // set offsets
+                offsetX = e.getX() - selected.getX();
+                offsetY = e.getY() - selected.getY();
+                break;
+            }
+        }
+        indexCounter = 0;
     }
 
     public void mouseEntered(MouseEvent e) {
@@ -250,13 +270,13 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
 
         if (selected != null) {
             boolean putInBox = false;
-            boolean leveled = false;  // prevents removing the card that leveled up
+            boolean leveled = false;  // prevents replacing the card that leveled up with the card that was used to merge
 
             for (int i = 0; i < deckSize; i++) {
                 // checks if the mouse is within the dimensions of a card box
                 if (e.getX() >= cardBoxes[i].getX() && e.getX() <= (cardBoxes[i].getX() + cardBoxes[i].getWidth()) && e.getY() >= cardBoxes[i].getY() && e.getY() <= (cardBoxes[i].getY() + cardBoxes[i].getHeight())) {
                     
-                    // if the same card is in the box already, merge the two cards. else just remove the card
+                    // if the same card is in the box already, merge the two cards. Otherwise remove the card curretly in the box
                     if (selectedCards[i] != null) {
                         // if two cards have the same id | checks if you are trying to place the same card in the same spot | prevents you from leveling past level 3
                         if (selectedCards[i].getID() == selected.getID() && !(selectedCards[i] == selected) && !(selected.getLevel() > 2)) {
@@ -267,14 +287,14 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
                             selectedCards[i].setX(selectedCards[i].getOriginalX());
                             selectedCards[i].setY(selectedCards[i].getOriginalY());
 
-                        removeCard(selectedCards[i]);
+                            removeCard(selectedCards[i], deckIndex);
                         }
                     }
 
                     // remove card from current position in selection if applicable to support
                     // reordering
                     if (selected.getSelectionIndex() != -1) {
-                        removeCard(selected);
+                        removeCard(selected, 0);
                     }
                     // put the card in the box
                     selected.setX(cardBoxes[i].getX());
@@ -293,21 +313,22 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
                     putInBox = true;
                 }
             }
+            // I think this is for if the card selected is from the selectedCards hand and is dragged off into the deck
             if (!putInBox) { // remove selected card from selectedCards
 
                 if (selected.getSelectionIndex() != -1)
-                    removeCard(selected);
+                    removeCard(selected, 0);
 
                 selected.setX(selected.getOriginalX());
-                selected.setY(selected.getOriginalY());
-
-                
+                selected.setY(selected.getOriginalY());   
             }
 
             removeGaps();
             selected = null;
             repaint();
         }
+
+        // debugging code
         System.out.println("\nselected-------------------");
         for (Cards card : selectedCards) {
 
@@ -336,7 +357,7 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
         for (int i=0; i < player.deck.size(); i++)
             // subtract 60 because that is half of the width of a card which is what we want because we want to center them
             deckX = deckX - 60;
-
+        
         // puts each card after one another
         for (Cards card : player.deck) {
             card.setX(deckX);
@@ -344,13 +365,13 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
         }
     }
 
-    public void removeCard(Cards card) {
+    public void removeCard(Cards card, int index) {
         selectedCards[card.getSelectionIndex()] = null;
 
         card.setSelectionIndex(-1);
         cardsSelected--;
         // add card back to deck
-        player.deck.add(card);
+        player.deck.add(index, card);
         //removeGaps();
     }
 

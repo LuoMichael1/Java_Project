@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 
 public class InteractivePanel extends JPanel implements Runnable {
 
@@ -21,6 +23,15 @@ public class InteractivePanel extends JPanel implements Runnable {
     TileManager tile = new TileManager(this, player);
 
     public InteractivePanel() {
+        this.addComponentListener(new ComponentListener() {
+            public void componentResized(ComponentEvent e) {}
+            public void componentMoved(ComponentEvent e) {}
+            public void componentShown(ComponentEvent e) {
+                InteractivePanel.this.requestFocusInWindow();
+            }
+            public void componentHidden(ComponentEvent e) {}
+            
+        });
 
         this.setPreferredSize(new Dimension(Main.WIDTH, Main.HEIGHT));
         this.setBackground(Color.black);
@@ -73,17 +84,6 @@ public class InteractivePanel extends JPanel implements Runnable {
         for (InteractiveEnemy enemy : InteractiveEnemy.InteractiveEnemies) {
 
             enemy.update(player, this);
-        }
-
-        // after 1 seconds you enter battle
-        counter++;
-        // System.out.println(counter);
-        if (counter == 60 * 1) {
-            // Main.nextCard();
-            counter = 0;
-
-            // needs to grab focus so I just put it here
-            grabFocus();
         }
 
         Chest.checkCollision(player, this);
