@@ -9,32 +9,33 @@ class Main {
 
     // Window size
     public static final int WIDTH = 1280;
-    public static final int HEIGHT = 720;   
-    
+    public static final int HEIGHT = 720;
+
     static CardLayout cardLayout;
     static JPanel p = new JPanel(new CardLayout());
 
     public static void main(String[] args) {
-        //JPanel p;
+        // JPanel p;
         ImageIcon test = new ImageIcon("images/favicon.png");
 
         JFrame f = new JFrame("BEFALL");
         f.setIconImage(test.getImage());
 
-        
         MainMenu p1 = new MainMenu();
         Cutscene1 p2 = new Cutscene1();
         InteractivePanel p3 = new InteractivePanel();
         DeckBuildPanel p4 = new DeckBuildPanel();
         Settings setting = new Settings();
-        
+
+        p2.setInteractivePanel(p3);
+
         f.add(p, BorderLayout.CENTER);
         addCard(p1, "Menu");
         addCard(p2, "Cutscene1");
         addCard(p3, "Map");
         addCard(setting, "Settings");
         addCard(p4, "CardGame");
-        
+
         // idk why but keylistener does not work unless I do this
         f.addKeyListener(p2);
         f.addKeyListener(p3.keyHandler);
@@ -43,21 +44,21 @@ class Main {
         f.setSize(WIDTH, HEIGHT);
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setResizable(false);
-        //f.setFocusable(false);
+        // f.setFocusable(false);
 
         cardLayout = (CardLayout) p.getLayout();
         showCard("Menu");
 
-        
     }
-    
 
     static public void nextCard() {
         cardLayout.next(p);
     }
+
     static public void showCard(String name) {
         cardLayout.show(p, name);
     }
+
     static public void addCard(JPanel jPanel, String name) {
         p.add(jPanel, name);
     }

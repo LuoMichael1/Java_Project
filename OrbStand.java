@@ -131,26 +131,26 @@ public class OrbStand extends Interactible {
 
         if (hasOrb) {
 
-            graphic.drawImage(fullImage, tileX * gamePanel.TILE_SIZE - player.x + player.getDrawX(),
-                    tileY * gamePanel.TILE_SIZE - player.y + player.getDrawY(),
-                    gamePanel.TILE_SIZE * WIDTH,
-                    gamePanel.TILE_SIZE * HEIGHT, null);
+            graphic.drawImage(fullImage, tileX * InteractivePanel.getTileSize() - player.x + player.getDrawX(),
+                    tileY * InteractivePanel.getTileSize() - player.y + player.getDrawY(),
+                    InteractivePanel.getTileSize() * WIDTH,
+                    InteractivePanel.getTileSize() * HEIGHT, null);
         } else {
 
-            graphic.drawImage(emptyImage, tileX * gamePanel.TILE_SIZE - player.x + player.getDrawX(),
-                    tileY * gamePanel.TILE_SIZE - player.y + player.getDrawY(),
-                    gamePanel.TILE_SIZE * WIDTH,
-                    gamePanel.TILE_SIZE * HEIGHT, null);
+            graphic.drawImage(emptyImage, tileX * InteractivePanel.getTileSize() - player.x + player.getDrawX(),
+                    tileY * InteractivePanel.getTileSize() - player.y + player.getDrawY(),
+                    InteractivePanel.getTileSize() * WIDTH,
+                    InteractivePanel.getTileSize() * HEIGHT, null);
         }
 
         if (player.hasOrb) {
 
             int yoffset = -20;
 
-            graphic.drawImage(orbImage, player.getDrawX() - gamePanel.TILE_SIZE / 2,
-                    player.getDrawY() - gamePanel.TILE_SIZE + yoffset,
-                    gamePanel.TILE_SIZE * WIDTH,
-                    gamePanel.TILE_SIZE * HEIGHT, null);
+            graphic.drawImage(orbImage, player.getDrawX() - InteractivePanel.getTileSize() / 2,
+                    player.getDrawY() - InteractivePanel.getTileSize() + yoffset,
+                    InteractivePanel.getTileSize() * WIDTH,
+                    InteractivePanel.getTileSize() * HEIGHT, null);
         }
     }
 }

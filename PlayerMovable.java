@@ -40,8 +40,8 @@ public class PlayerMovable extends Entity {
 
     public void setDefaultValues() {
 
-        x = 4 * gamePanel.TILE_SIZE;
-        y = 6 * gamePanel.TILE_SIZE;
+        x = 4 * InteractivePanel.getTileSize();
+        y = 6 * InteractivePanel.getTileSize();
         speed = 6;
         direction = "right";
 
@@ -88,44 +88,49 @@ public class PlayerMovable extends Entity {
     public void update() {
 
         // Generate new coordinates of player hitbox
-        hitbox = new Hitbox(y + gamePanel.TILE_SIZE / 4, x + gamePanel.TILE_SIZE / 4, gamePanel.TILE_SIZE / 2,
-                gamePanel.TILE_SIZE / 4 * 3);
+        hitbox = new Hitbox(y + InteractivePanel.getTileSize() / 4, x + InteractivePanel.getTileSize() / 4,
+                InteractivePanel.getTileSize() / 2,
+                InteractivePanel.getTileSize() / 4 * 3);
 
         // Get current tile
-        int currentTileY = Math.max(0, hitbox.centerY / gamePanel.TILE_SIZE);
-        int currentTileX = Math.max(0, hitbox.centerX / gamePanel.TILE_SIZE);
+        int currentTileY = Math.max(0, hitbox.centerY / InteractivePanel.getTileSize());
+        int currentTileX = Math.max(0, hitbox.centerX / InteractivePanel.getTileSize());
 
         if (!inVent) {
 
             if (keyHandler.up == true) {
                 if (!collisionTiles.contains(Integer.parseInt(map[currentTileY - 1][currentTileX]))
                         || !hitbox.intersects(
-                                new Hitbox((currentTileY - 1) * gamePanel.TILE_SIZE, currentTileX * gamePanel.TILE_SIZE,
-                                        gamePanel.TILE_SIZE, gamePanel.TILE_SIZE)))
+                                new Hitbox((currentTileY - 1) * InteractivePanel.getTileSize(),
+                                        currentTileX * InteractivePanel.getTileSize(),
+                                        InteractivePanel.getTileSize(), InteractivePanel.getTileSize())))
                     y -= speed;
                 direction = "up";
                 spriteCounter++;
             } else if (keyHandler.down == true) {
                 if (!collisionTiles.contains(Integer.parseInt(map[currentTileY + 1][currentTileX]))
                         || !hitbox.intersects(
-                                new Hitbox((currentTileY + 1) * gamePanel.TILE_SIZE, currentTileX * gamePanel.TILE_SIZE,
-                                        gamePanel.TILE_SIZE, gamePanel.TILE_SIZE)))
+                                new Hitbox((currentTileY + 1) * InteractivePanel.getTileSize(),
+                                        currentTileX * InteractivePanel.getTileSize(),
+                                        InteractivePanel.getTileSize(), InteractivePanel.getTileSize())))
                     y += speed;
                 direction = "down";
                 spriteCounter++;
             } else if (keyHandler.left == true) {
                 if (!collisionTiles.contains(Integer.parseInt(map[currentTileY][currentTileX - 1]))
                         || !hitbox.intersects(
-                                new Hitbox(currentTileY * gamePanel.TILE_SIZE, (currentTileX - 1) * gamePanel.TILE_SIZE,
-                                        gamePanel.TILE_SIZE, gamePanel.TILE_SIZE)))
+                                new Hitbox(currentTileY * InteractivePanel.getTileSize(),
+                                        (currentTileX - 1) * InteractivePanel.getTileSize(),
+                                        InteractivePanel.getTileSize(), InteractivePanel.getTileSize())))
                     x -= speed;
                 direction = "left";
                 spriteCounter++;
             } else if (keyHandler.right == true) {
                 if (!collisionTiles.contains(Integer.parseInt(map[currentTileY][currentTileX + 1]))
                         || !hitbox.intersects(
-                                new Hitbox(currentTileY * gamePanel.TILE_SIZE, (currentTileX + 1) * gamePanel.TILE_SIZE,
-                                        gamePanel.TILE_SIZE, gamePanel.TILE_SIZE)))
+                                new Hitbox(currentTileY * InteractivePanel.getTileSize(),
+                                        (currentTileX + 1) * InteractivePanel.getTileSize(),
+                                        InteractivePanel.getTileSize(), InteractivePanel.getTileSize())))
                     x += speed;
                 direction = "right";
                 spriteCounter++;
@@ -170,7 +175,8 @@ public class PlayerMovable extends Entity {
             // altGraphic.drawImage(image, x, y, gamePanel.TILE_SIZE, gamePanel.TILE_SIZE,
             // null);
             // Draw player sprite at center of screen
-            altGraphic.drawImage(image, drawX, drawY, gamePanel.TILE_SIZE, gamePanel.TILE_SIZE, null);
+            altGraphic.drawImage(image, drawX, drawY, InteractivePanel.getTileSize(), InteractivePanel.getTileSize(),
+                    null);
 
             if (spriteCounter >= 10) {
                 if (spriteNum == 1)
@@ -199,11 +205,11 @@ public class PlayerMovable extends Entity {
 
     public int getCurrentTileX() {
 
-        return Math.max(0, hitbox.centerX / gamePanel.TILE_SIZE);
+        return Math.max(0, hitbox.centerX / InteractivePanel.getTileSize());
     }
 
     public int getCurrentTileY() {
 
-        return Math.max(0, hitbox.centerY / gamePanel.TILE_SIZE);
+        return Math.max(0, hitbox.centerY / InteractivePanel.getTileSize());
     }
 }
