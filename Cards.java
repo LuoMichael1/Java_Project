@@ -80,24 +80,7 @@ public class Cards implements MouseMotionListener {
 
         filesc.close();
     }
-    /*
-    public Cards(int x, int y, int health, int attack, int originalX, int originalY, int selectionIndex) {
-
-        cardImage = new ImageIcon("card.png");
-
-        this.x = x;
-        this.y = y;
-        this.health = health;
-        this.attack = attack;
-        this.originalX = originalX;
-        this.originalY = originalY;
-        this.selectionIndex = selectionIndex;
-    }
-
-    public Cards makeCopy() {
-        return new Cards(x, y, health, attack, originalX, originalY, selectionIndex);
-    }
-    */
+  
     public boolean isInside(int mx, int my) {
         return (x - 10 < mx && y - 10 < my && x + CARDWIDTH > mx && y + CARDHIGHT > my);
     }
@@ -266,19 +249,10 @@ public class Cards implements MouseMotionListener {
             g.drawImage(star.getImage(), getX()+8, getY()+28 + i*22, null);
         }
 
-        //g.drawString(description[0], getX() + 15, getY() + 50);
-        //g.drawString("Attack: " + getAttack(), getX() + 15, getY() + 70);
     }
 
     public void mouseDragged(MouseEvent e) {
-        /*
-         * * x = e.getX();
-         * y = e.getY();
-         * System.out.println(x);
-         * System.out.println(y);
-         * 
-         * this.myDraw(g);
-         */
+
     }
 
     public void mouseMoved(MouseEvent e) {

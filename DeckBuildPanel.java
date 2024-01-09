@@ -192,18 +192,7 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
         if (cardsSelected == deckSize) {
             Battle battle = new Battle(player, selectedCards);
             Main.addCard(battle, "battle");
-            
-            /* 
-            Main.nextCard();
-            removeAll();
-            revalidate();
-            repaint();
 
-            Battle battle = new Battle(player, selectedCards);
-            add(battle, BorderLayout.CENTER);
-            revalidate();
-            repaint();
-            */
         } 
         // if you didn't fill out your deck, it will generate some random cards to use
         else {
@@ -215,16 +204,7 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
             }
             Battle battle = new Battle(player, selectedCards);
             Main.addCard(battle, "battle");
-            /* 
-            removeAll();
-            revalidate();
-            repaint();
-
-            Battle battle = new Battle(player, selectedCards);
-            add(battle, BorderLayout.CENTER);
-            revalidate();
-            repaint();
-        */
+         
         }
         Main.showCard("battle");
     }

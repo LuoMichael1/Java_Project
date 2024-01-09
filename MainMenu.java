@@ -45,10 +45,7 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener {
         });
 
         setBackground(new Color(10,10,10));
-        // setTitle("Main Menu");
-        // setSize(1280, 720);
-        // setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // setLocationRelativeTo(null);
+   
         this.setLayout(new BorderLayout());
         this.addMouseListener(this);
         
@@ -67,24 +64,7 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener {
         message.setBounds(Main.WIDTH/2-(100), Main.HEIGHT-70, 200, 10);
         //message
         this.add(message);
-        // Add a background image to the background layer
-        //JLabel backgroundImage = createBackgroundLabel("menu/parallax-space-backgound.png", IMAGE_WIDTH, IMAGE_HEIGHT);
-        //layeredPane.add(backgroundImage, Integer.valueOf(-1)); // Set to -1 for the background layer
-        //setLayerBounds(layeredPane, backgroundImage, 0, 0, -1);
-
-        // add black bars
-        //JLabel bar1 = createBackgroundLabel("menu/black-bar.png", IMAGE_WIDTH, IMAGE_HEIGHT / 6);
-        //JLabel bar2 = createBackgroundLabel("menu/black-bar.png", IMAGE_WIDTH, IMAGE_HEIGHT / 6);
-
-        //layeredPane.add(bar1, 1);
-        //layeredPane.add(bar2, 1);
-
-        //setLayerBounds(layeredPane, bar1, 0, 0, 100);
-        //setLayerBounds(layeredPane, bar2, 0, 564, 100); // later update magic values
-
-        //JLabel background1_1_planets = createBackgroundLabel("menu/parallax-space-far-planets.png", Main.WIDTH, Main.HEIGHT);
-        //JLabel background2_1_planets = createBackgroundLabel("menu/parallax-space-far-planets.png", Main.WIDTH, Main.HEIGHT);
-        
+     
         // create planets -----------------------------------
         JLabel[] planets = new JLabel[3];
         int[] planetsX = new int[3];
@@ -106,44 +86,14 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener {
 
         }
 
-        
-        /* 
-        //settingsIcon.setBorderPainted()
-        JButton btt1 = new JButton(settingsIcon);
-        //btt1.setContentAreaFilled(false);
-        btt1.setBorderPainted(false);
-        //btt1.setBounds(0, 0, 110, 110);
-        
-        
-        JPanel container1 = new JPanel(new BorderLayout());
-        JPanel container2 = new JPanel(new GridBagLayout());
-
-        for (int i =0; i < 3; i++) {
-            JPanel empty = new JPanel();
-            empty.setOpaque(false);
-            container2.add(empty);
-        }
-        container1.setOpaque(false);
-        container2.setOpaque(false);
-        
-        container1.setBounds(0, 0, Main.WIDTH, Main.HEIGHT);
-        container1.add(container2, BorderLayout.EAST);
-        container2.add(btt1);
-        layeredPane.add(container1, new Integer(1));
-        */
-        
+       
         
         JLabel background1_1_stars = createBackgroundLabel("menu/parallax-space-stars.png", Main.WIDTH, Main.HEIGHT);
         JLabel background2_1_stars = createBackgroundLabel("menu/parallax-space-stars.png", Main.WIDTH, Main.HEIGHT);
 
         // Add parallax layers to the background layer
-        //layeredPane.add(background1_1_planets, Integer.valueOf(0));
-        //layeredPane.add(background2_1_planets, Integer.valueOf(0));
         layeredPane.add(background1_1_stars, JLayeredPane.DEFAULT_LAYER);
         layeredPane.add(background2_1_stars, JLayeredPane.DEFAULT_LAYER);
-
-        //setLayerBounds(layeredPane, background1_1_planets, 0, 0, JLayeredPane.DEFAULT_LAYER);
-        //setLayerBounds(layeredPane, background2_1_planets, Main.WIDTH, 0, JLayeredPane.DEFAULT_LAYER);
         setLayerBounds(layeredPane, background1_1_stars, 0, 0, JLayeredPane.DEFAULT_LAYER);
         setLayerBounds(layeredPane, background2_1_stars, Main.WIDTH, 0, JLayeredPane.DEFAULT_LAYER);
 
@@ -161,11 +111,6 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener {
                         planetsY[i] = (int)(Math.random()*Main.HEIGHT)+1;
                     }
                 }
-                //layer1X1_planets -= LAYER_SPEED_PLANETS;
-                //layer2X1_planets -= LAYER_SPEED_PLANETS;
-
-                //layer1X2_planets -= LAYER_SPEED_PLANETS;
-                //layer2X2_planets -= LAYER_SPEED_PLANETS;
 
                 // Update parallax layers for stars
                 layer1X1_stars -= LAYER_SPEED_STARS;
@@ -187,20 +132,15 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener {
                 }
                 
                 
-                //if (layer2X1_planets <= -Main.WIDTH) {
-                //    layer2X1_planets = Main.WIDTH;
-                //}
-                
                 for (int i = 0; i < planets.length; i++) {
                     //countY = (int)(Math.random()*500)+1;
                     setLayerBounds(layeredPane, planets[i], planetsX[i], planetsY[i], JLayeredPane.DEFAULT_LAYER);
                 }
-                //setLayerBounds(layeredPane, background2_1_planets, layer2X1_planets, 0, JLayeredPane.DEFAULT_LAYER);
+              
                 setLayerBounds(layeredPane, background1_1_stars, layer1X1_stars, 0, JLayeredPane.DEFAULT_LAYER);
                 setLayerBounds(layeredPane, background2_1_stars, layer2X1_stars, 0, JLayeredPane.DEFAULT_LAYER);
                 
-                //setLayerBounds(layeredPane, background1_1_planets, layer1X2_planets, 0, JLayeredPane.DEFAULT_LAYER);
-                //setLayerBounds(layeredPane, background2_1_planets, layer2X2_planets, 0, JLayeredPane.DEFAULT_LAYER);
+            
                 setLayerBounds(layeredPane, background1_1_stars, layer1X2_stars, 0, JLayeredPane.DEFAULT_LAYER);
                 setLayerBounds(layeredPane, background2_1_stars, layer2X2_stars, 0, JLayeredPane.DEFAULT_LAYER);
 
@@ -225,8 +165,7 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener {
 
         timer.start();
         this.add(layeredPane, BorderLayout.CENTER);
-        //this.setVisible(true);
-        // setContentPane(layeredPane);
+
     }
 
     private JLabel createBackgroundLabel(String imagePath, int width, int height) {
@@ -243,15 +182,6 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener {
         component.setBounds(x, y, component.getWidth(), component.getHeight());
         layeredPane.setLayer(component, layer);
     }
-
-    //public static void main(String[] args) {
-    //    SwingUtilities.invokeLater(new Runnable() {
-    //        @Override
-    //        public void run() {
-    //            new MainMenu().setVisible(true);
-    //        }
-    //    });
-    //}
 
     public void mouseClicked(MouseEvent e) {
     }

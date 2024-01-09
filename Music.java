@@ -1,9 +1,6 @@
 // Use to play music
 // MP3s will probably not work
 
-// used this website for help with the music
-// https://www.geeksforgeeks.org/play-audio-file-using-java/
-
 import java.io.File; 
 import javax.sound.sampled.*;
 

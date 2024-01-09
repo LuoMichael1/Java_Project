@@ -44,13 +44,6 @@ public class Battle extends JPanel implements ActionListener {
     private int culler = 0; // when not in double speed, discards half of the timer events
     private Timer timer;
 
-    // images
-    // private ImageIcon background = new ImageIcon("images/background.png");
-    // private ImageIcon vulnerableIcon = new
-    // ImageIcon("images/VulnerableIcon.png");
-    // private ImageIcon strenghtIcon = new ImageIcon("images/strenghtIcon.png");
-    // private ImageIcon shieldIcon = new ImageIcon("images/shieldIcon.png");
-
     // ------------------------------------------------------------------------------------------
 
     public Battle(Player player, Cards[] playerSelectedCards) {
@@ -75,14 +68,6 @@ public class Battle extends JPanel implements ActionListener {
         // doubleSpeed.setHorizontalAlignment(SwingConstants.RIGHT);
         doubleSpeed.addActionListener(this);
         topUIWrapper.add(doubleSpeed);
-
-        // space for messages
-        // messageLabel = new JLabel("");
-        // this.add(messageLabel);
-        // messageLabel.setBounds(580, 60, 300, 20);
-        // messageLabel.setFont(new Font("Arial", Font.BOLD, 16));
-
-        // add(cardPanel, BorderLayout.CENTER);
 
         // get player and cards
         this.player = player;
@@ -112,14 +97,7 @@ public class Battle extends JPanel implements ActionListener {
             battler.drawStatus(g);
         }
 
-        // if (damage > 0) {
-        // g.setColor(Color.red);
-        // g.setFont(Main.Lexend18);
-        // if (turn == 0)
-        // g.drawString("-" + damage, 880, HEALTHBAR_Y+10);
-        // else
-        // g.drawString("-" + damage, 350, HEALTHBAR_Y+10);
-        // }
+
         // System.out.println(showDamage);
         g.setColor(Color.red);
         g.setFont(Main.Lexend30);

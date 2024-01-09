@@ -113,10 +113,6 @@ public class Cutscene1 extends JPanel implements KeyListener, MouseListener {
         g.fillRect(0, 0, w, h);
     }
 
-    // add(panel, BorderLayout.CENTER);
-    // setSize(1280, 720);
-    // setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
     public void setInteractivePanel(InteractivePanel panel) {
 
         gamePanel = panel;
@@ -129,12 +125,6 @@ public class Cutscene1 extends JPanel implements KeyListener, MouseListener {
         gamePanel.grabFocus();
     }
 
-    // public static void main(String[] args) {
-    // SwingUtilities.invokeLater(() -> {
-    // Cutscene1 game = new Cutscene1();
-    // game.setVisible(true);
-    // });
-    // }
 
     class Dialogue {
         private ArrayList<String[]> dialogues = new ArrayList<>();
