@@ -295,11 +295,6 @@ public class Battle extends JPanel implements ActionListener {
                                 player.deck.add(new Cards(i*120+200, 420, 60, 40));
                             }
                         }
-                        else {
-                            for (int i = player.deck.size(); i < 10; i++) {
-                                player.deck.add(new Cards(i*120+200, 420, 60, 40));
-                            }
-                        }
                         // centers the cards
                         // gets the center of the screen
                         int deckX = (Main.WIDTH) / 2;
