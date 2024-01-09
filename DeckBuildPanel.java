@@ -33,7 +33,8 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
 
     // card columns describe the area that a card can be dropped and return to a specfic part of the deck
     // for example, dropping a card in the leftmost column will put the card at the leftmost place in the deck
-    private int cardColumnsWidth = 120; 
+    private int cardColumnsWidth = 120;
+    private int numberOfColumns = 0;
     private int indexCounter = 0;  // used to finds the original index in the deck the selected card came from 
     private int deckIndex = 0;
 
@@ -294,12 +295,13 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
                     // remove card from current position in selection if applicable to support
                     // reordering
                     if (selected.getSelectionIndex() != -1) {
-                        removeCard(selected, 0);
+                        removeCard(selected, getCardColumns(e.getX(), e.getY()));
                     }
                     // put the card in the box
                     selected.setX(cardBoxes[i].getX());
                     selected.setY(cardBoxes[i].getY());
                     selected.setSelectionIndex(i);
+                    
                     if (!leveled) {
                         selectedCards[i] = selected;
                         cardsSelected++;
@@ -309,15 +311,15 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
                     // remove the card from the deck
                     player.deck.remove(selected);
                     //removeGaps();
-
+                    System.out.println("Put in box");
                     putInBox = true;
                 }
             }
             // I think this is for if the card selected is from the selectedCards hand and is dragged off into the deck
             if (!putInBox) { // remove selected card from selectedCards
-
+                System.out.println("not put in box");
                 if (selected.getSelectionIndex() != -1)
-                    removeCard(selected, 0);
+                    removeCard(selected, getCardColumns(e.getX(), e.getY()));
 
                 selected.setX(selected.getOriginalX());
                 selected.setY(selected.getOriginalY());   
@@ -370,36 +372,25 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
 
         card.setSelectionIndex(-1);
         cardsSelected--;
+
         // add card back to deck
-        player.deck.add(index, card);
-        //removeGaps();
+        if (index == player.deck.size()) {
+            System.out.println("Placing card at: " + index);
+            player.deck.add(card);
+        }
+        else {
+            System.out.println("Placing card at: " + index);
+            player.deck.add(index, card);
+        }
+        //removeGaps();  <-- moved this to the end of the mouse released method
     }
 
     public void mouseDragged(MouseEvent e) {
-
+        // moves the card that was clicked on
         if (selected != null) {
-
             selected.setX(e.getX() - offsetX);
             selected.setY(e.getY() - offsetY);
         }
-        // only if the mouse is on top of the card then the card moves
-        /*
-         * if (cardx - 80 < e.getX() && cardy - 120 < e.getY() && cardx + 150 > e.getX()
-         * && cardy + 220 > e.getY()) {
-         * cardx = e.getX();
-         * cardy = e.getY(); * }
-         * 
-         * for (int i = 0; i < deck.length; i++) {
-         * if (deck[i].getX() - 80 < e.getX() && deck[i].getY() - 120 < e.getY() &&
-         * deck[i].getX() + 150 > e.getX()
-         * && deck[i].getY() + 220 > e.getY()) {
-         * deck[i].setX(e.getX());
-         * deck[i].setY(e.getY());
-         * 
-         * }
-         * repaint();
-         * }
-         */
         repaint();
     }
 
@@ -407,4 +398,57 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
     public void mouseMoved(MouseEvent e) {}
     public void mouseExited(MouseEvent e) {}
     public void actionPerformed(ActionEvent e) {}
+
+
+    public int getCardColumns(int x, int y) {
+        int index = 0;
+        numberOfColumns = player.deck.size() + 1;
+        int widthOfColumns = numberOfColumns*120;
+
+        // if there is only one column, it should take up the entire screen
+        if (numberOfColumns == 1) {
+            widthOfColumns = Main.WIDTH;
+            index = 0;
+        }
+        // two columns
+        else if (numberOfColumns == 2) {
+            widthOfColumns = Main.WIDTH/2;
+            if (x < widthOfColumns) {
+                index = 0;
+            }
+            else
+                index = 1;
+        }
+        // if number of columns is greater than 2
+        else {
+            System.out.println("I DID A THINGY");
+            widthOfColumns = (numberOfColumns-2)*120;
+            System.out.println(widthOfColumns);
+
+            int widthOfSideColumns = (Main.WIDTH-widthOfColumns)/2;
+            System.out.println(widthOfSideColumns);
+            if (x < widthOfSideColumns) {
+                index = 0;
+            }
+            else if (x < widthOfColumns+widthOfSideColumns){
+                System.out.println("between 1 and end");
+                for (int i = 0; i < numberOfColumns-2; i++) {
+                    if (x > widthOfSideColumns + (i)*120) {
+                        index = i+1;
+                        System.out.println("index:" + index);
+                        System.out.println("I Also DID A THINGY");
+                        
+                    }
+                    else 
+                        break;
+                        
+                }
+            }
+            else {
+                index = player.deck.size();
+            }
+        }
+        System.out.println("returned index" + index);
+        return index;
+    }
 }
