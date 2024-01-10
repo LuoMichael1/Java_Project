@@ -27,13 +27,12 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
     private JButton rightButton; // scroll right
     private int scrollValue = 0;
 
-    private JLabel[] cardBoxes = new JLabel[9];   // the slots that a card can be dragged to (player hand)
-    private Cards[] selectedCards = new Cards[8]; // the cards actually in the card boxes
+    private JLabel[] cardBoxes = new JLabel[9];   // the slots that a card can be dragged to (the player's hand)
+    private Cards[] handCards = new Cards[8];     // the cards actually in the card boxes
     private int cardsSelected = 0;
 
     // card columns describe the area that a card can be dropped and return to a specfic part of the deck
     // for example, dropping a card in the leftmost column will put the card at the leftmost place in the deck
-    private int cardColumnsWidth = 120;
     private int numberOfColumns = 0;
     private int indexCounter = 0;  // used to finds the original index in the deck the selected card came from 
     private int deckIndex = 0;
@@ -43,19 +42,6 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
     
 
     public DeckBuildPanel() {
-        /* 
-        this.addComponentListener(new ComponentListener() {
-            public void componentShown(ComponentEvent e) {
-                for (int i = 0; i < player.hand.length; i++) {
-                    //selectedCards[i] = player.hand[i];
-                    removeGaps();
-                }  
-            }
-            public void componentResized(ComponentEvent e) {}
-            public void componentMoved(ComponentEvent e) {}
-            public void componentHidden(ComponentEvent e) {}
-        });
-*/
         this.setLayout(new BorderLayout());
         initUserInterface();
         initButtons();
@@ -91,7 +77,7 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
         for (Cards card : player.deck) {
             card.myDraw(g);
         }
-        for (Cards card : selectedCards) {
+        for (Cards card : handCards) {
             if (card != null)
                 card.myDraw(g);
         }
@@ -149,32 +135,6 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
         battleButton.setBackground(Color.white);
         battleButton.setBorderPainted(false);
         battleButton.setFocusPainted(false);
-
-        /*
-        // Create the left button  
-        leftButton = new JButton("<");
-        
-
-        leftButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("left button");
-                scroll(50);
-            }
-        });
-        //this.add(leftButton, BorderLayout.WEST);
-
-        // Create the right button
-        rightButton = new JButton(">");
-        rightButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("right button");
-                scroll(-50);
-            }
-        });
-        //this.add(rightButton, BorderLayout.EAST);
-        */
     }
 
     public void scroll(int scrollValue) {
@@ -190,7 +150,7 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
     private void startBattle() {
 
         if (cardsSelected == deckSize) {
-            Battle battle = new Battle(player, selectedCards);
+            Battle battle = new Battle(player, handCards);
             Main.addCard(battle, "battle");
             
             /* 
@@ -208,12 +168,12 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
         // if you didn't fill out your deck, it will generate some random cards to use
         else {
             for (int i = 0; i < deckSize; i++) {
-                if (selectedCards[i] == null) {
-                    selectedCards[i] = new Cards(0,0,100,0);
+                if (handCards[i] == null) {
+                    handCards[i] = new Cards(0,0,100,0);
                     cardsSelected++;
                 }
             }
-            Battle battle = new Battle(player, selectedCards);
+            Battle battle = new Battle(player, handCards);
             Main.addCard(battle, "battle");
             /* 
             removeAll();
@@ -246,7 +206,7 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
         }
         indexCounter = 0;
 
-        for (Cards card : selectedCards) {
+        for (Cards card : handCards) {
             indexCounter++;
 
             if (card != null && card.isInside(e.getX(), e.getY())) {
@@ -277,33 +237,69 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
                 // checks if the mouse is within the dimensions of a card box
                 if (e.getX() >= cardBoxes[i].getX() && e.getX() <= (cardBoxes[i].getX() + cardBoxes[i].getWidth()) && e.getY() >= cardBoxes[i].getY() && e.getY() <= (cardBoxes[i].getY() + cardBoxes[i].getHeight())) {
                     
-                    // if the same card is in the box already, merge the two cards. Otherwise remove the card curretly in the box
-                    if (selectedCards[i] != null) {
+                    // if the same card is in the box already, merge the two cards. Otherwise switch the cards
+                    if (handCards[i] != null) {
+
                         // if two cards have the same id | checks if you are trying to place the same card in the same spot | prevents you from leveling past level 3
-                        if (selectedCards[i].getID() == selected.getID() && !(selectedCards[i] == selected) && !(selected.getLevel() > 2)) {
-                            selectedCards[i].increaseLevel();
+                        if (handCards[i].getID() == selected.getID() && !(handCards[i] == selected) && !(selected.getLevel() > 2)) {
+                            handCards[i].increaseLevel();
+
                             leveled = true;
+                            if (selected.getSelectionIndex() != -1)
+                                handCards[selected.getSelectionIndex()] = null;
+
+                                player.deck.remove(selected);
+                                selected= null;
+                        }
+                        else if (handCards[i] == selected) {
+                            System.out.println("WOW");
+                            // nothing happens if someone drops a card in the spot it is already in
                         }
                         else {
-                            selectedCards[i].setX(selectedCards[i].getOriginalX());
-                            selectedCards[i].setY(selectedCards[i].getOriginalY());
+                            System.out.println("WOWERER");
+                            // if the selected card is in the hand already
+                            if (selected.getSelectionIndex() != -1) {
+                                player.deck.add(handCards[i]);
+                                
+                                int temp = selected.getSelectionIndex();
+                                
+                                //selected.setSelectionIndex(i);
+                                //selectedCards[i] = selected;
 
-                            removeCard(selectedCards[i], deckIndex);
+                                handCards[temp] = player.deck.get(player.deck.size()-1);
+                                handCards[temp].setSelectionIndex(temp);
+                                handCards[temp].setX(cardBoxes[temp].getX());
+                                handCards[temp].setY(cardBoxes[temp].getY());
+
+                                player.deck.remove(player.deck.size()-1);
+                            }
+                            // if the selected card comes from the deck
+                            else {
+                                handCards[i].setX(handCards[i].getOriginalX());
+                                handCards[i].setY(handCards[i].getOriginalY());
+
+                                removeCard(handCards[i], deckIndex);
+                            }
+                            
                         }
                     }
 
-                    // remove card from current position in selection if applicable to support
-                    // reordering
-                    if (selected.getSelectionIndex() != -1) {
-                        removeCard(selected, getCardColumns(e.getX(), e.getY()));
-                    }
-                    // put the card in the box
-                    selected.setX(cardBoxes[i].getX());
-                    selected.setY(cardBoxes[i].getY());
-                    selected.setSelectionIndex(i);
+                    // remove card from current position in selection if applicable (As long as the selected card is currently in the hand) to support reordering
+                    // basically, you can move cards in the hand to different positions in the hand
+                    //if (selected.getSelectionIndex() != -1) {
+                    //    
+                    //    removeCard(selected, getCardColumns(e.getX(), e.getY()));
+                    //}
+                    
+                    
                     
                     if (!leveled) {
-                        selectedCards[i] = selected;
+                        // put the card in the box
+                        selected.setX(cardBoxes[i].getX());
+                        selected.setY(cardBoxes[i].getY());
+                        selected.setSelectionIndex(i);
+
+                        handCards[i] = selected;
                         cardsSelected++;
                     }
 
@@ -318,7 +314,10 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
             // I think this is for if the card selected is from the selectedCards hand and is dragged off into the deck
             if (!putInBox) { // remove selected card from selectedCards
                 System.out.println("not put in box");
+                
+                // removes card from hand only if the card is in the hand (as opposed to being in the deck which would cause an error)
                 if (selected.getSelectionIndex() != -1)
+                System.out.println("WOWERERER");
                     removeCard(selected, getCardColumns(e.getX(), e.getY()));
 
                 selected.setX(selected.getOriginalX());
@@ -332,7 +331,7 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
 
         // debugging code
         System.out.println("\nselected-------------------");
-        for (Cards card : selectedCards) {
+        for (Cards card : handCards) {
 
             if (card != null)
                 System.out.println(card.getID());
@@ -368,7 +367,7 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
     }
 
     public void removeCard(Cards card, int index) {
-        selectedCards[card.getSelectionIndex()] = null;
+        handCards[card.getSelectionIndex()] = null;
 
         card.setSelectionIndex(-1);
         cardsSelected--;
