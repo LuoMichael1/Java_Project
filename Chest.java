@@ -1,4 +1,5 @@
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -40,7 +41,7 @@ public class Chest extends Interactible {
         super(x, y, WIDTH, HEIGHT);
     }
 
-    static void checkCollision(PlayerMovable player, InteractivePanel gamePanel) {
+    static boolean checkCollision(PlayerMovable player, InteractivePanel gamePanel) {
 
         // Get current tile
         int currentTileY = player.getCurrentTileY();
@@ -51,13 +52,17 @@ public class Chest extends Interactible {
             if (chest.tileY + 1 == currentTileY) {
                 if (chest.tileX == currentTileX || chest.tileX + 1 == currentTileX) {
 
-                    System.out.println("You opened a chest");
+                    if (gamePanel.keyHandler.isKeyPressed(KeyEvent.VK_SPACE)) {
+                        System.out.println("You opened a chest");
+                    }
+                    return true;
                 }
             }
         }
+        return false;
     }
 
-    public static void drawChestStand(Graphics2D graphic, PlayerMovable player, InteractivePanel gamePanel) {
+    public static void drawChestStand(Graphics2D graphic, PlayerMovable player) {
 
         graphic.drawImage(chestStandImage, chestStandX * InteractivePanel.getTileSize() - player.x + player.getDrawX(),
                 chestStandY * InteractivePanel.getTileSize() - player.y + player.getDrawY(),

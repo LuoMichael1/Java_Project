@@ -4,6 +4,11 @@ public class Hitbox {
 
     public Hitbox(int top, int left, int width, int height) {
 
+        update(top, left, width, height);
+    }
+
+    public void update(int top, int left, int width, int height) {
+
         this.top = top;
         this.left = left;
         this.width = width;

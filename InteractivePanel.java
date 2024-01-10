@@ -10,15 +10,10 @@ import java.awt.event.ComponentListener;
 
 public class InteractivePanel extends JPanel implements Runnable {
 
-    static boolean active;
-
     private static final int ORIGINAL_TILE_SIZE = 8; // number of pixels in each tile
     private static final int SCALE = 8; // multiplier to make tiles appear bigger
     private static final int TILE_SIZE = ORIGINAL_TILE_SIZE * SCALE; // amount of actual pixels each tile takes up on
                                                                      // screen
-
-    private Thread gameThread; // thread to run the game loop
-    KeyHandler keyHandler = new KeyHandler(); // class to handle key inputs
 
     private static final int FPS = 60;
     public static final double NANOSECONDS_PER_SECOND = 1000000000;
@@ -27,10 +22,19 @@ public class InteractivePanel extends JPanel implements Runnable {
     private final Lock lock = new ReentrantLock();
     private final Condition condition = lock.newCondition();
 
-    PlayerMovable player = new PlayerMovable(this, keyHandler);
-    TileManager tile = new TileManager(this, player);
+    private Thread gameThread; // thread to run the game loop
+    KeyHandler keyHandler; // class to handle key inputs
+    private PlayerMovable player;
+    private TileManager tile;
+
+    String event;
 
     public InteractivePanel() {
+
+        this.keyHandler = new KeyHandler();
+        this.player = new PlayerMovable(keyHandler);
+        this.tile = new TileManager(this, player);
+
         this.addComponentListener(new ComponentListener() {
             public void componentResized(ComponentEvent e) {
             }
@@ -69,9 +73,10 @@ public class InteractivePanel extends JPanel implements Runnable {
             @Override
             public void focusLost(FocusEvent e) {
                 System.out.println("focus lost");
-                active = false;
             }
         });
+
+        InstructionLabel.loadInstructionLabels();
 
         startGameThread();
     }
@@ -92,6 +97,7 @@ public class InteractivePanel extends JPanel implements Runnable {
         long lastTime = System.nanoTime();
         double delta = 0.0;
         while (gameThread != null) {
+
             lock.lock();
             try {
                 while (!hasFocus()) {
@@ -126,34 +132,44 @@ public class InteractivePanel extends JPanel implements Runnable {
             enemy.update(player, this);
         }
 
-        Chest.checkCollision(player, this);
-        Vent.checkCollision(player, this);
-        OrbStand.checkCollision(player, this);
+        checkCollisions();
+    }
+
+    public void checkCollisions() {
+
+        if (Chest.checkCollision(player, this))
+            event = "chest";
+        else if (Vent.checkCollision(player, this))
+            event = "vent";
+        else if (OrbStand.checkCollision(player, this))
+            event = "orb";
+        else
+            event = "walk";
+
+        if (player.inVent)
+            event = "inVent";
     }
 
     public void paintComponent(Graphics graphic) {
 
         super.paintComponent(graphic);
 
-        Graphics2D altGraphic = (Graphics2D) graphic;
+        Graphics2D graphic2d = (Graphics2D) graphic;
 
-        tile.draw(altGraphic);
-        Chest.drawChestStand(altGraphic, player, this);
-        tile.drawChests(altGraphic);
-        tile.drawVents(altGraphic);
-        drawStands(altGraphic);
-        tile.drawEnemies(altGraphic);
-        player.draw(altGraphic);
-        tile.drawLighting(altGraphic);
+        tile.draw(graphic2d);
+        player.draw(graphic2d);
+        this.drawEnemies(graphic2d);
+        tile.drawLighting(graphic2d);
+        InstructionLabel.drawLine(graphic2d, event);
 
-        altGraphic.dispose();
+        graphic2d.dispose();
     }
 
-    public void drawStands(Graphics2D g) {
+    public void drawEnemies(Graphics2D g) {
 
-        for (OrbStand stand : OrbStand.stands) {
+        for (InteractiveEnemy enemy : InteractiveEnemy.InteractiveEnemies) {
 
-            stand.draw(g, player, this);
+            enemy.draw(g, player);
         }
     }
 }

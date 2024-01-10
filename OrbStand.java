@@ -78,7 +78,7 @@ public class OrbStand extends Interactible {
         this.objective = objective;
     }
 
-    static void checkCollision(PlayerMovable player, InteractivePanel gamePanel) {
+    static boolean checkCollision(PlayerMovable player, InteractivePanel gamePanel) {
 
         // Get current tile
         int currentTileY = player.getCurrentTileY();
@@ -112,11 +112,12 @@ public class OrbStand extends Interactible {
                             }
                         }
                     }
-
+                    return true;
                 }
             }
         }
         checkCompletion();
+        return false;
     }
 
     static void checkCompletion() {
@@ -127,7 +128,7 @@ public class OrbStand extends Interactible {
         }
     }
 
-    public void draw(Graphics2D graphic, PlayerMovable player, InteractivePanel gamePanel) {
+    public void draw(Graphics2D graphic, PlayerMovable player) {
 
         if (hasOrb) {
 

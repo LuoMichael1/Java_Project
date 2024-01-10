@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,10 +12,12 @@ import javax.imageio.ImageIO;
 
 public class PlayerMovable extends Entity {
 
-    InteractivePanel gamePanel;
     KeyHandler keyHandler;
 
-    Set<Integer> collisionTiles = new HashSet<>();
+    Set<Integer> collisionTiles = TileManager.getCollisionTiles();
+
+    private final int SPRITE_OFFSET = -(InteractivePanel.getTileSize() / 2 * 3);
+    private final int SPRITE_SCALE = 4;
 
     private int drawX = Main.WIDTH / 2;
     private int drawY = Main.HEIGHT / 2;
@@ -26,9 +29,8 @@ public class PlayerMovable extends Entity {
     boolean inVent;
     boolean hasOrb;
 
-    public PlayerMovable(InteractivePanel gamePanel, KeyHandler keyHandler) {
+    public PlayerMovable(KeyHandler keyHandler) {
 
-        this.gamePanel = gamePanel;
         this.keyHandler = keyHandler;
 
         map = new String[R][C];
@@ -44,23 +46,23 @@ public class PlayerMovable extends Entity {
         y = 6 * InteractivePanel.getTileSize();
         speed = 6;
         direction = "right";
-
-        collisionTiles
-                .addAll(Arrays.asList(new Integer[] { 105, 84, 85, 95, 98, 132, 0, 96, 103, 108, 111, 112, 113, 114 }));
+        hitbox = new Hitbox(y + InteractivePanel.getTileSize() / 4, x + InteractivePanel.getTileSize() / 4,
+                InteractivePanel.getTileSize() / 2,
+                InteractivePanel.getTileSize() / 4 * 3);
     }
 
     public void getPlayerImage() {
 
         try {
 
-            up1 = ImageIO.read(getClass().getResourceAsStream("player/boy_up_1.png"));
-            up2 = ImageIO.read(getClass().getResourceAsStream("player/boy_up_2.png"));
-            down1 = ImageIO.read(getClass().getResourceAsStream("player/boy_down_1.png"));
-            down2 = ImageIO.read(getClass().getResourceAsStream("player/boy_down_2.png"));
-            left1 = ImageIO.read(getClass().getResourceAsStream("player/boy_left_1.png"));
-            left2 = ImageIO.read(getClass().getResourceAsStream("player/boy_left_2.png"));
-            right1 = ImageIO.read(getClass().getResourceAsStream("player/boy_right_1.png"));
-            right2 = ImageIO.read(getClass().getResourceAsStream("player/boy_right_2.png"));
+            up1 = ImageIO.read(getClass().getResourceAsStream("walk/walk up1.png"));
+            up2 = ImageIO.read(getClass().getResourceAsStream("walk/walk up2.png"));
+            down1 = ImageIO.read(getClass().getResourceAsStream("walk/walk down1.png"));
+            down2 = ImageIO.read(getClass().getResourceAsStream("walk/walk down2.png"));
+            left1 = ImageIO.read(getClass().getResourceAsStream("walk/walk left1.png"));
+            left2 = ImageIO.read(getClass().getResourceAsStream("walk/walk left2.png"));
+            right1 = ImageIO.read(getClass().getResourceAsStream("walk/walk right1.png"));
+            right2 = ImageIO.read(getClass().getResourceAsStream("walk/walk right2.png"));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -88,7 +90,7 @@ public class PlayerMovable extends Entity {
     public void update() {
 
         // Generate new coordinates of player hitbox
-        hitbox = new Hitbox(y + InteractivePanel.getTileSize() / 4, x + InteractivePanel.getTileSize() / 4,
+        hitbox.update(y + InteractivePanel.getTileSize() / 4, x + InteractivePanel.getTileSize() / 4,
                 InteractivePanel.getTileSize() / 2,
                 InteractivePanel.getTileSize() / 4 * 3);
 
@@ -96,49 +98,33 @@ public class PlayerMovable extends Entity {
         int currentTileY = Math.max(0, hitbox.centerY / InteractivePanel.getTileSize());
         int currentTileX = Math.max(0, hitbox.centerX / InteractivePanel.getTileSize());
 
-        if (!inVent) {
+        Point[] neighbors = new Point[] {
+                new Point(currentTileX, currentTileY - 1),
+                new Point(currentTileX, currentTileY + 1),
+                new Point(currentTileX - 1, currentTileY),
+                new Point(currentTileX + 1, currentTileY) };
+        String[] directions = new String[] { "up", "down", "left", "right" };
+        int[][] movement = new int[][] { { -speed, 0 }, { speed, 0 }, { 0, -speed }, { 0, speed } };
+        int[] keyEvents = new int[] { KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_A, KeyEvent.VK_D };
 
-            if (keyHandler.up == true) {
-                if (!collisionTiles.contains(Integer.parseInt(map[currentTileY - 1][currentTileX]))
-                        || !hitbox.intersects(
-                                new Hitbox((currentTileY - 1) * InteractivePanel.getTileSize(),
-                                        currentTileX * InteractivePanel.getTileSize(),
-                                        InteractivePanel.getTileSize(), InteractivePanel.getTileSize())))
-                    y -= speed;
-                direction = "up";
-                spriteCounter++;
-            } else if (keyHandler.down == true) {
-                if (!collisionTiles.contains(Integer.parseInt(map[currentTileY + 1][currentTileX]))
-                        || !hitbox.intersects(
-                                new Hitbox((currentTileY + 1) * InteractivePanel.getTileSize(),
-                                        currentTileX * InteractivePanel.getTileSize(),
-                                        InteractivePanel.getTileSize(), InteractivePanel.getTileSize())))
-                    y += speed;
-                direction = "down";
-                spriteCounter++;
-            } else if (keyHandler.left == true) {
-                if (!collisionTiles.contains(Integer.parseInt(map[currentTileY][currentTileX - 1]))
-                        || !hitbox.intersects(
-                                new Hitbox(currentTileY * InteractivePanel.getTileSize(),
-                                        (currentTileX - 1) * InteractivePanel.getTileSize(),
-                                        InteractivePanel.getTileSize(), InteractivePanel.getTileSize())))
-                    x -= speed;
-                direction = "left";
-                spriteCounter++;
-            } else if (keyHandler.right == true) {
-                if (!collisionTiles.contains(Integer.parseInt(map[currentTileY][currentTileX + 1]))
-                        || !hitbox.intersects(
-                                new Hitbox(currentTileY * InteractivePanel.getTileSize(),
-                                        (currentTileX + 1) * InteractivePanel.getTileSize(),
-                                        InteractivePanel.getTileSize(), InteractivePanel.getTileSize())))
-                    x += speed;
-                direction = "right";
-                spriteCounter++;
+        for (int i = 0; i < neighbors.length; i++) {
+
+            if (!inVent) {
+
+                if (keyHandler.isKeyHeld(keyEvents[i])) {
+                    if (!TileManager.getTiles()[Integer.parseInt(map[neighbors[i].y][neighbors[i].x])].collision
+                            || !hitbox.intersects(TileManager.getTileHitboxes()[neighbors[i].y][neighbors[i].x])) {
+                        y += movement[i][0];
+                        x += movement[i][1];
+                    }
+                    direction = directions[i];
+                    spriteCounter++;
+                }
             }
         }
     }
 
-    public void draw(Graphics2D altGraphic) {
+    public void draw(Graphics2D graphic) {
 
         if (!inVent) {
 
@@ -146,36 +132,23 @@ public class PlayerMovable extends Entity {
 
             switch (direction) {
                 case "up":
-                    if (spriteNum == 1) {
-                        image = up1;
-                    } else
-                        image = up2;
+                    image = (spriteNum == 1) ? up1 : up2;
                     break;
                 case "down":
-                    if (spriteNum == 1) {
-                        image = down1;
-                    } else
-                        image = down2;
+                    image = (spriteNum == 1) ? down1 : down2;
                     break;
                 case "left":
-                    if (spriteNum == 1) {
-                        image = left1;
-                    } else
-                        image = left2;
+                    image = (spriteNum == 1) ? left1 : left2;
                     break;
-
                 case "right":
-                    if (spriteNum == 1) {
-                        image = right1;
-                    } else
-                        image = right2;
+                    image = (spriteNum == 1) ? right1 : right2;
                     break;
             }
 
-            // altGraphic.drawImage(image, x, y, gamePanel.TILE_SIZE, gamePanel.TILE_SIZE,
-            // null);
             // Draw player sprite at center of screen
-            altGraphic.drawImage(image, drawX, drawY, InteractivePanel.getTileSize(), InteractivePanel.getTileSize(),
+            graphic.drawImage(image, drawX + SPRITE_OFFSET, drawY + SPRITE_OFFSET,
+                    InteractivePanel.getTileSize() * SPRITE_SCALE,
+                    InteractivePanel.getTileSize() * SPRITE_SCALE,
                     null);
 
             if (spriteCounter >= 10) {

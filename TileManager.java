@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 import java.io.*;
@@ -11,22 +12,26 @@ import javax.imageio.ImageIO;
 
 public class TileManager {
 
-    InteractivePanel gamePanel;
-    Tile[] tile;
-    String[][] map;
-    int[][] alpha;
-    Set<Integer> lightSources = new HashSet<>();
-    Set<Integer> nonIlluminable = new HashSet<>();
-    Set<Integer> collisionTiles = new HashSet<>();
-
     private static final int MAX_ALPHA = 255;
+    private static final int MAX_ILLUMINATION_DISTANCE = 7;
+
+    private InteractivePanel gamePanel;
+    private PlayerMovable player;
+
+    private static Tile[] tile;
+    private static Hitbox[][] tileHitboxes;
+    private int[][] map;
+    private int[][] alpha;
+
+    private Set<Integer> lightSources = new HashSet<>();
+    private Set<Integer> nonIlluminable = new HashSet<>();
+    private static Set<Integer> collisionTiles = new HashSet<>();
+
     private BufferedImage[] darkImages = new BufferedImage[MAX_ALPHA];
 
-    int C = 63;
-    int R = 43;
-    int NUM_TILES = 134;
-
-    PlayerMovable player;
+    private final int NUM_COLS = 63;
+    private final int NUM_ROWS = 43;
+    private final int NUM_TILES = 134;
 
     public TileManager(InteractivePanel gamePanel, PlayerMovable player) {
 
@@ -34,16 +39,19 @@ public class TileManager {
         this.player = player;
 
         tile = new Tile[NUM_TILES + 1];
-        map = new String[R][C];
-        alpha = new int[R][C];
+        map = new int[NUM_ROWS][NUM_COLS];
+        alpha = new int[NUM_ROWS][NUM_COLS];
+        tileHitboxes = new Hitbox[NUM_ROWS][NUM_COLS];
 
         lightSources.addAll(Arrays.asList(new Integer[] { 114 }));
         nonIlluminable.addAll(Arrays.asList(new Integer[] { 105, 84, 85, 95, 98, 132 }));
         collisionTiles
-                .addAll(Arrays.asList(new Integer[] { 105, 84, 85, 95, 98, 132, 0, 96, 103, 108, 111, 112, 113, 114 }));
+                .addAll(Arrays.asList(new Integer[] { 105, 84, 85, 95, 98, 132, 0, 96, 103, 108, 111, 112, 113, 114, 7,
+                        91, 94, 106, 107, 133, 134, 130 }));
 
         getTileImage();
         loadMap("maps/base-map2.csv");
+        generateHitboxes();
         loadObjects();
         getLighting(map);
     }
@@ -63,12 +71,13 @@ public class TileManager {
 
         try {
 
+            String line;
             BufferedReader reader = new BufferedReader(
                     new InputStreamReader(getClass().getResourceAsStream(file)));
 
-            for (int i = 0; i < R; i++) {
-                String[] line = reader.readLine().split(",");
-                chestCoordinates.add(new Point(Integer.parseInt(line[0]), Integer.parseInt(line[1])));
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                chestCoordinates.add(new Point(Integer.parseInt(parts[0]), Integer.parseInt(parts[1])));
             }
 
         } catch (Exception e) {
@@ -87,15 +96,16 @@ public class TileManager {
 
         try {
 
+            String line;
             BufferedReader reader = new BufferedReader(
                     new InputStreamReader(getClass().getResourceAsStream(file)));
 
-            for (int i = 0; i < R; i++) {
-                String[] line = reader.readLine().split(",");
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
 
-                int ventX = Integer.parseInt(line[0]);
-                int ventY = Integer.parseInt(line[1]);
-                String ventName = line[2];
+                int ventX = Integer.parseInt(parts[0]);
+                int ventY = Integer.parseInt(parts[1]);
+                String ventName = parts[2];
 
                 Vent vent = new Vent(ventX, ventY, ventName);
                 vent.loadImages();
@@ -150,19 +160,20 @@ public class TileManager {
 
         try {
 
+            String line;
             BufferedReader reader = new BufferedReader(
                     new InputStreamReader(getClass().getResourceAsStream(file)));
 
-            for (int i = 0; i < R; i++) {
-                String[] line = reader.readLine().split(",");
-                int x = Integer.parseInt(line[0]);
-                int y = Integer.parseInt(line[1]);
-                String type = line[2];
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                int x = Integer.parseInt(parts[0]);
+                int y = Integer.parseInt(parts[1]);
+                String type = parts[2];
 
                 ArrayList<Point> triggers = new ArrayList<>();
-                for (int j = 3; j < line.length; j += 2) {
+                for (int j = 3; j < parts.length; j += 2) {
 
-                    triggers.add(new Point(Integer.parseInt(line[j]), Integer.parseInt(line[j + 1])));
+                    triggers.add(new Point(Integer.parseInt(parts[j]), Integer.parseInt(parts[j + 1])));
                 }
 
                 InteractiveEnemy enemy = new InteractiveEnemy(x, y, gamePanel, type, triggers);
@@ -174,14 +185,14 @@ public class TileManager {
         }
     }
 
-    public void getLighting(String[][] map) {
+    public void getLighting(int[][] map) {
 
         ArrayList<Point> lightSourcePositions = new ArrayList<>();
 
-        for (int i = 0; i < R; i++) {
-            for (int j = 0; j < C; j++) {
+        for (int i = 0; i < NUM_ROWS; i++) {
+            for (int j = 0; j < NUM_COLS; j++) {
 
-                if (lightSources.contains(Integer.parseInt(map[i][j]))) {
+                if (lightSources.contains(map[i][j])) {
 
                     lightSourcePositions.add(new Point(i, j));
                 }
@@ -203,30 +214,25 @@ public class TileManager {
 
     public void getSurroundingAlpha(Point start) {
 
-        final int MAX_ILLUMINATION_DISTANCE = 6;
-
-        Set<Point> visited = new HashSet<>();
-        ArrayList<Point> queue = new ArrayList<>();
+        boolean[][] visited = new boolean[NUM_ROWS][NUM_COLS];
+        LinkedList<Point> queue = new LinkedList<>();
         Map<Point, Integer> distance = new HashMap<>();
 
         queue.add(start);
-        visited.add(start);
+        visited[start.x][start.y] = true;
         distance.put(start, 0);
 
-        int i = 0;
+        while (!queue.isEmpty()) {
 
-        while (i < queue.size()) {
-
-            Point current = queue.get(i);
-            i++;
+            Point current = queue.poll();
 
             if (distance.get(current) > MAX_ILLUMINATION_DISTANCE)
                 break;
 
             for (Point neighbor : getNeighbors(current)) {
 
-                if (!visited.contains(neighbor)
-                        && !nonIlluminable.contains(Integer.parseInt(map[neighbor.x][neighbor.y]))) {
+                if (!visited[neighbor.x][neighbor.y]
+                        && !nonIlluminable.contains(map[neighbor.x][neighbor.y])) {
 
                     int temp = distance.get(current) + 1;
 
@@ -236,7 +242,7 @@ public class TileManager {
                         alpha[neighbor.x][neighbor.y] = alpha[neighbor.x][neighbor.y]
                                 - alpha[neighbor.x][neighbor.y] / temp;
 
-                        visited.add(neighbor);
+                        visited[neighbor.x][neighbor.y] = true;
                         queue.add(neighbor);
                     }
                 }
@@ -252,9 +258,9 @@ public class TileManager {
             neighbors.add(new Point(current.x - 1, current.y));
         if (current.y != 0)
             neighbors.add(new Point(current.x, current.y - 1));
-        if (current.x < R - 1)
+        if (current.x < NUM_ROWS - 1)
             neighbors.add(new Point(current.x + 1, current.y));
-        if (current.y < C - 1)
+        if (current.y < NUM_COLS - 1)
             neighbors.add(new Point(current.x, current.y + 1));
 
         return neighbors;
@@ -269,10 +275,26 @@ public class TileManager {
                 tile[i] = new Tile();
                 tile[i].image = ImageIO
                         .read(getClass().getResourceAsStream("base-map/tile" + String.format("%03d", i) + ".png"));
+                tile[i].collision = (collisionTiles.contains(i)) ? true : false;
             }
 
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public void generateHitboxes() {
+
+        for (int i = 0; i < NUM_ROWS; i++) {
+            for (int j = 0; j < NUM_COLS; j++) {
+
+                if (tile[map[i][j]].collision) {
+
+                    tileHitboxes[i][j] = new Hitbox(i * InteractivePanel.getTileSize(),
+                            j * InteractivePanel.getTileSize(), InteractivePanel.getTileSize(),
+                            InteractivePanel.getTileSize());
+                }
+            }
         }
     }
 
@@ -283,9 +305,12 @@ public class TileManager {
             BufferedReader reader = new BufferedReader(
                     new InputStreamReader(getClass().getResourceAsStream(file)));
 
-            for (int i = 0; i < R; i++) {
-                map[i] = reader.readLine().split(",");
-                // System.out.println(Arrays.toString(map[i]));
+            for (int i = 0; i < NUM_ROWS; i++) {
+                String[] line = reader.readLine().split(",");
+
+                for (int j = 0; j < NUM_COLS; j++) {
+                    map[i][j] = Integer.parseInt(line[j]);
+                }
             }
 
         } catch (Exception e) {
@@ -312,17 +337,26 @@ public class TileManager {
 
     public void draw(Graphics2D graphic) {
 
+        drawTiles(graphic);
+        Chest.drawChestStand(graphic, player);
+        drawChests(graphic);
+        drawVents(graphic);
+        drawStands(graphic);
+    }
+
+    public void drawTiles(Graphics2D graphic) {
+
         // Convert the player's coordinates into the range of visible tiles
         int start_i = Math.max(0, (player.y - player.getDrawY()) / InteractivePanel.getTileSize());
-        int end_i = Math.min(R, start_i + Main.HEIGHT / InteractivePanel.getTileSize() + 2);
+        int end_i = Math.min(NUM_ROWS, start_i + Main.HEIGHT / InteractivePanel.getTileSize() + 2);
 
         int start_j = Math.max(0, (player.x - player.getDrawX()) / InteractivePanel.getTileSize());
-        int end_j = Math.min(C, start_j + Main.WIDTH / InteractivePanel.getTileSize() + 2);
+        int end_j = Math.min(NUM_COLS, start_j + Main.WIDTH / InteractivePanel.getTileSize() + 2);
 
         // Draw only the visible tiles
         for (int i = start_i; i < end_i; i++) {
             for (int j = start_j; j < end_j; j++) {
-                graphic.drawImage(tile[Math.max(0, Integer.parseInt(map[i][j]))].image,
+                graphic.drawImage(tile[Math.max(0, map[i][j])].image,
                         j * InteractivePanel.getTileSize() - player.x + player.getDrawX(),
                         i * InteractivePanel.getTileSize() - player.y + player.getDrawY(),
                         InteractivePanel.getTileSize(),
@@ -347,11 +381,11 @@ public class TileManager {
         }
     }
 
-    public void drawEnemies(Graphics2D g) {
+    public void drawStands(Graphics2D g) {
 
-        for (InteractiveEnemy enemy : InteractiveEnemy.InteractiveEnemies) {
+        for (OrbStand stand : OrbStand.stands) {
 
-            enemy.draw(g, player, gamePanel);
+            stand.draw(g, player);
         }
     }
 
@@ -359,10 +393,10 @@ public class TileManager {
 
         // Convert the player's coordinates into the range of visible tiles
         int start_i = Math.max(0, (player.y - player.getDrawY()) / InteractivePanel.getTileSize());
-        int end_i = Math.min(R, start_i + Main.HEIGHT / InteractivePanel.getTileSize() + 2);
+        int end_i = Math.min(NUM_ROWS, start_i + Main.HEIGHT / InteractivePanel.getTileSize() + 2);
 
         int start_j = Math.max(0, (player.x - player.getDrawX()) / InteractivePanel.getTileSize());
-        int end_j = Math.min(C, start_j + Main.WIDTH / InteractivePanel.getTileSize() + 2);
+        int end_j = Math.min(NUM_COLS, start_j + Main.WIDTH / InteractivePanel.getTileSize() + 2);
 
         // Draw only the visible tiles
         for (int i = start_i; i < end_i; i++) {
@@ -374,5 +408,17 @@ public class TileManager {
                         i * InteractivePanel.getTileSize() - player.y + player.getDrawY(), null);
             }
         }
+    }
+
+    public static Set<Integer> getCollisionTiles() {
+        return collisionTiles;
+    }
+
+    public static Tile[] getTiles() {
+        return tile;
+    }
+
+    public static Hitbox[][] getTileHitboxes() {
+        return tileHitboxes;
     }
 }

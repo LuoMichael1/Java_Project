@@ -85,6 +85,11 @@ public class InteractiveEnemy extends Entity {
 
         loadImages(enemyType);
         loadMap("maps/base-map2.csv");
+
+        hitbox = new Hitbox(y + InteractivePanel.getTileSize(),
+                x + InteractivePanel.getTileSize() * InteractiveEnemy_WIDTH / 4,
+                InteractivePanel.getTileSize(),
+                InteractivePanel.getTileSize());
     }
 
     public void loadMap(String file) {
@@ -149,23 +154,14 @@ public class InteractiveEnemy extends Entity {
             int dx = nextStep.x - hitbox.centerX / InteractivePanel.getTileSize();
             int dy = nextStep.y - hitbox.centerY / InteractivePanel.getTileSize();
 
-            // Normalize the distances so that the enemy moves at a constant speed
-            double distance = Math.sqrt(dx * dx + dy * dy);
-            if (distance != 0) { // Avoid division by zero
-                dx /= distance;
-                dy /= distance;
-            }
-
             int speed = 4;
 
-            // Move the enemy towards the next step
             this.x += dx * speed;
             this.y += dy * speed;
 
             System.out.println("x: " + dx);
             System.out.println("y: " + dy);
 
-            // If the enemy has reached the next step, remove it from the path
             if (hitbox.centerX / InteractivePanel.getTileSize() == nextStep.x
                     && hitbox.centerY / InteractivePanel.getTileSize() == nextStep.y) {
                 path.remove(0);
@@ -175,61 +171,52 @@ public class InteractiveEnemy extends Entity {
         frameCounter++;
     }
 
+    // A* (A-star) pathfinding algorithm to generate a path between enemy's current
+    // position and a target position
     ArrayList<Point> calculatePath(InteractivePanel gamePanel, int targetX, int targetY) {
 
-        // Create a list of nodes to be evaluated (openList) and a list of nodes already
-        // evaluated (closedList)
-        PriorityQueue<Point> openList = new PriorityQueue<>(Comparator.comparingInt(n -> n.f));
+        // evaluate nodes in openlist and skip nodes in closedList (already evaluated)
+        PriorityQueue<Point> openList = new PriorityQueue<>(Comparator.comparingInt(n -> n.f)); // prioritize nodes with
+                                                                                                // smallest f value
         Set<Point> closedList = new HashSet<>();
 
+        // get target coordinates as a point for comparision
+        Point target = new Point(targetX / InteractivePanel.getTileSize(),
+                targetY / InteractivePanel.getTileSize());
+
+        // add the starting position to openList
         current = new Point(hitbox.centerX / InteractivePanel.getTileSize(),
                 hitbox.centerY / InteractivePanel.getTileSize());
-
-        // Add the current enemy's position to the open list
         openList.add(current);
 
-        // Keep looping until there are no more nodes to be evaluated
+        // evaluate all nodes in openList
         while (!openList.isEmpty()) {
-            // Find the node with the lowest f value (the estimated cost of the cheapest
-            // solution through it)
+            // this gets the node with the smallest f value
             current = openList.poll();
 
-            // If the current node is the player's position, we've found the shortest path
-            if (current.equals(new Point(targetX / InteractivePanel.getTileSize(),
-                    targetY / InteractivePanel.getTileSize()))) {
+            // path is complete once current tile equals target tile
+            if (current.equals(target)) {
                 break;
             }
 
-            // Generate all the neighboring nodes
             ArrayList<Point> neighbors = generateNeighbors(current);
 
-            // Evaluate each neighboring node
             for (Point neighbor : neighbors) {
-                // If the neighboring node is already evaluated and has a lower f value, or if
-                // the node is not traversable, skip it
+                // skip if the neighboring node is already evaluated and has a lower f value or
+                // if
+                // the node is not traversable
                 if (closedList.contains(neighbor) && neighbor.f <= current.f
                         || collisionTiles.contains(Integer.parseInt(map[neighbor.y][neighbor.x]))) {
                     continue;
                 }
 
-                // If the neighboring node is not yet evaluated or has a higher f value, update
-                // it and add it to the open list
                 if (!openList.contains(neighbor) || neighbor.f > current.f) {
-                    neighbor.g = current.g + distanceBetween(current, neighbor); // The cost to reach the
-                                                                                 // neighboring
-                                                                                 // node from the start
-                    neighbor.h = distanceBetween(neighbor,
-                            new Point(targetX / InteractivePanel.getTileSize(),
-                                    targetY / InteractivePanel.getTileSize())); // The
-                    // estimated
-                    // cost from
-                    // the
-                    // neighboring node to the goal
-                    neighbor.f = neighbor.g + neighbor.h; // The estimated cost of the cheapest solution through the
-                                                          // neighboring node
-                    neighbor.parent = current; // The node that can be reached with the lowest cost from the
-                                               // neighboring
-                                               // node
+                    neighbor.g = current.g + distanceBetween(current, neighbor); // g cost is the estimated distance
+                                                                                 // from the initial position
+                    neighbor.h = distanceBetween(neighbor, target); // h cost is the estimated distance from the
+                                                                    // position to the target
+                    neighbor.f = neighbor.g + neighbor.h; // f cost is the sum of g and h costs
+                    neighbor.parent = current; // set parent node to find path later
                     // System.out.println(
                     // neighbor.x + ", " + neighbor.y + "'s parent is " + current.x + ", " +
                     // current.y);
@@ -240,11 +227,10 @@ public class InteractiveEnemy extends Entity {
                 }
             }
 
-            // Add the current node to the closed list
             closedList.add(current);
         }
 
-        // Trace back from the player's position to the enemy's position to get the
+        // Trace back from the target position to the enemy's position to get the
         // shortest path
         ArrayList<Point> path = new ArrayList<>();
         while (current != null
@@ -258,44 +244,25 @@ public class InteractiveEnemy extends Entity {
         return path;
     }
 
-    // This method generates all valid neighbors of the current node
     ArrayList<Point> generateNeighbors(Point current) {
         ArrayList<Point> neighbors = new ArrayList<>();
 
-        // Add the points to the north, south, east, and west of the current point
-        // Make sure to check if these points are within the bounds of your game map
-        // if (!collisionTiles.contains(Integer.parseInt(map[current.y][current.x -
-        // 1])))
-        neighbors.add(new Point(current.x, current.y - 1)); // North
-        // if (!collisionTiles.contains(Integer.parseInt(map[current.y][current.x +
-        // 1])))
-        neighbors.add(new Point(current.x, current.y + 1)); // South
-        // if (!collisionTiles.contains(Integer.parseInt(map[current.y -
-        // 1][current.x])))
-        neighbors.add(new Point(current.x - 1, current.y)); // West
-        // if (!collisionTiles.contains(Integer.parseInt(map[current.y +
-        // 1][current.x])))
-        neighbors.add(new Point(current.x + 1, current.y)); // East
+        neighbors.add(new Point(current.x, current.y - 1));
+        neighbors.add(new Point(current.x, current.y + 1));
+        neighbors.add(new Point(current.x - 1, current.y));
+        neighbors.add(new Point(current.x + 1, current.y));
 
-        // Diagonals
-        /*
-         * neighbors.add(new Point(current.x - 1, current.y - 1)); // North
-         * neighbors.add(new Point(current.x + 1, current.y + 1)); // South
-         * neighbors.add(new Point(current.x - 1, current.y + 1)); // West
-         * neighbors.add(new Point(current.x + 1, current.y - 1));
-         */
         return neighbors;
     }
 
-    // This method returns the actual distance between two points
-    int distanceBetween(Point a, Point b) {
+    public int distanceBetween(Point a, Point b) {
         return (int) (Math.sqrt(Math.abs(a.x - b.x) * Math.abs(a.x - b.x) + Math.abs(a.y - b.y) * Math.abs(a.y - b.y))
                 * 10);
     }
 
     public void update(PlayerMovable player, InteractivePanel gamePanel) {
 
-        hitbox = new Hitbox(y + InteractivePanel.getTileSize(),
+        hitbox.update(y + InteractivePanel.getTileSize(),
                 x + InteractivePanel.getTileSize() * InteractiveEnemy_WIDTH / 4,
                 InteractivePanel.getTileSize(),
                 InteractivePanel.getTileSize());
@@ -319,7 +286,7 @@ public class InteractiveEnemy extends Entity {
         }
     }
 
-    public void draw(Graphics2D graphic, PlayerMovable player, InteractivePanel gamePanel) {
+    public void draw(Graphics2D graphic, PlayerMovable player) {
 
         graphic.drawImage(image, x - player.x + player.getDrawX(),
                 y - player.y + player.getDrawY(),
@@ -338,7 +305,6 @@ public class InteractiveEnemy extends Entity {
 
                 System.out.println("You opened a InteractiveEnemy");
 
-                InteractivePanel.active = false;
                 Main.showCard("CardGame");
                 inBattle = true;
 

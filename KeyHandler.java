@@ -10,7 +10,7 @@ public class KeyHandler implements KeyListener {
     private HashSet<Integer> handledKeys = new HashSet<>();
 
     public KeyHandler() {
-        //System.out.println("Keyhandler made");
+        // System.out.println("Keyhandler made");
     }
 
     @Override
@@ -19,7 +19,7 @@ public class KeyHandler implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        //System.out.println("Keyhandler doing things");
+        // System.out.println("Keyhandler doing things");
         int code = e.getKeyCode();
 
         switch (code) {
@@ -72,5 +72,10 @@ public class KeyHandler implements KeyListener {
             return true;
         }
         return false;
+    }
+
+    public boolean isKeyHeld(int keyCode) {
+
+        return pressedKeys.contains(keyCode);
     }
 }

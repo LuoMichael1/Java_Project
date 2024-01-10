@@ -32,7 +32,7 @@ public class Vent extends Interactible {
         connections.put(direction, vent);
     }
 
-    static void checkCollision(PlayerMovable player, InteractivePanel gamePanel) {
+    static boolean checkCollision(PlayerMovable player, InteractivePanel gamePanel) {
 
         // Get current tile
         int currentTileY = player.getCurrentTileY();
@@ -80,9 +80,11 @@ public class Vent extends Interactible {
                             }
                         }
                     }
+                    return true;
                 }
             }
         }
+        return false;
     }
 
     public String getName() {
