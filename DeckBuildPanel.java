@@ -214,6 +214,8 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
                 deckIndex = indexCounter;
 
                 selected = card;
+                //handCards[deckIndex-1] = null;
+
                 // set offsets
                 offsetX = e.getX() - selected.getX();
                 offsetY = e.getY() - selected.getY();
@@ -247,24 +249,29 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
                             leveled = true;
                             if (selected.getSelectionIndex() != -1)
                                 handCards[selected.getSelectionIndex()] = null;
-
+                            else
                                 player.deck.remove(selected);
-                                selected= null;
+                            selected= null;
                         }
                         else if (handCards[i] == selected) {
                             System.out.println("WOW");
                             // nothing happens if someone drops a card in the spot it is already in
+                            // this offsets cardSelected++ lower down
+                            //cardsSelected--;
                         }
                         else {
                             System.out.println("WOWERER");
                             // if the selected card is in the hand already
                             if (selected.getSelectionIndex() != -1) {
+
+
                                 player.deck.add(handCards[i]);
                                 
                                 int temp = selected.getSelectionIndex();
-                                
+                                System.out.println("temp: " + temp);
                                 //selected.setSelectionIndex(i);
-                                //selectedCards[i] = selected;
+                                //handCards[i] = selected;
+                                //handCards[i].setSelectionIndex(i);
 
                                 handCards[temp] = player.deck.get(player.deck.size()-1);
                                 handCards[temp].setSelectionIndex(temp);
@@ -272,6 +279,10 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
                                 handCards[temp].setY(cardBoxes[temp].getY());
 
                                 player.deck.remove(player.deck.size()-1);
+
+                                // this offsets cardSelected++ lower down
+                                //cardsSelected--;
+                                leveled = true;
                             }
                             // if the selected card comes from the deck
                             else {
@@ -283,7 +294,14 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
                             
                         }
                     }
-
+                    else if (handCards[i] == null) {
+                        if (selected.getSelectionIndex() != -1) {
+                            Cards tempcard = selected;
+                            handCards[selected.getSelectionIndex()] = null;
+                            
+                            selected = tempcard;
+                        }
+                    }
                     // remove card from current position in selection if applicable (As long as the selected card is currently in the hand) to support reordering
                     // basically, you can move cards in the hand to different positions in the hand
                     //if (selected.getSelectionIndex() != -1) {
