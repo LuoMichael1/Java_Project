@@ -37,6 +37,8 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
     private int indexCounter = 0;  // used to finds the original index in the deck the selected card came from 
     private int deckIndex = 0;
 
+    public static int difficulty = 5; //<-- the number of cards the enemy has
+
     private JLabel instructionLabel;
 
     
@@ -173,11 +175,11 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
             for (int i = 0; i < temp.size(); i++) {
                 temp2[i] = temp.get(i);
             }
-            Battle battle = new Battle(player, temp2);
+            Battle battle = new Battle(player, temp2, difficulty);
             Main.addCard(battle, "battle");
         }
         else {
-            Battle battle = new Battle(player, handCards);
+            Battle battle = new Battle(player, handCards, difficulty);
             Main.addCard(battle, "battle");
         }
 

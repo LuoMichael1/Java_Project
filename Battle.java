@@ -8,7 +8,8 @@ import java.util.ArrayList;
 public class Battle extends JPanel implements ActionListener {
 
     private Battler player; // player is made in the constructor
-    private Battler enemy = new Enemy();
+    private Battler enemy;
+     
 
     private Battler playersArray[] = new Battler[2];
 
@@ -53,7 +54,7 @@ public class Battle extends JPanel implements ActionListener {
 
     // ------------------------------------------------------------------------------------------
 
-    public Battle(Player player, Cards[] playerSelectedCards) {
+    public Battle(Player player, Cards[] playerSelectedCards, int difficulty) {
 
         // put playerSelectedCards into player.hand
         for (int i = 0; i < playerSelectedCards.length; i++) {
@@ -90,6 +91,8 @@ public class Battle extends JPanel implements ActionListener {
 
         // create player array
         playersArray[0] = player;
+        
+        enemy = new Enemy(difficulty);
         playersArray[1] = enemy;
 
         // setup timer
@@ -157,16 +160,18 @@ public class Battle extends JPanel implements ActionListener {
 
         // display enemy's cards
         for (int i = DeckBuildPanel.deckSize - 1; i >= 0; i--) {
-            enemy.hand[i].setX(1140 + i * -62);
-            enemy.hand[i].setY(CARDY);
+            if (enemy.hand[i] != null) {
+                enemy.hand[i].setX(1140 + i * -62);
+                enemy.hand[i].setY(CARDY);
 
-            // System.out.println("round: " + round);
+                // System.out.println("round: " + round);
 
-            // moves the currently acting card upwards 20px to make it more visible
-            if (turn == 1 && i == ((round - 1) / 2) % 8)
-                enemy.hand[i].setY(cardUpY);
+                // moves the currently acting card upwards 20px to make it more visible
+                if (turn == 1 && i == ((round - 1) / 2) % 8)
+                    enemy.hand[i].setY(cardUpY);
 
-            enemy.hand[i].myDraw(g);
+                enemy.hand[i].myDraw(g);
+            }
             // drawCardInfo(g, enemy.hand[i]);
         }
     }
@@ -319,13 +324,25 @@ public class Battle extends JPanel implements ActionListener {
                             deckX += 120;
                         }
 
+                        // reset the enemy
+                        if (DeckBuildPanel.difficulty == 5) {
+                            DeckBuildPanel.difficulty = 6;
+                        }
+                        else if (DeckBuildPanel.difficulty == 6) { 
+                            DeckBuildPanel.difficulty = 8;
+                        }
+                   
                         // the the player loses, they get sent to the menu screen, if they win, they get
                         // sent back to the map
                         if (playersArray[altTurn] == player)
                             Main.showCard("Menu");
-                        else
+                        else {
                             Main.showCard("Map");
 
+                            
+                        }
+                        
+                        
                         // InteractiveEnemy.inBattle = false;
                     }
                 }
