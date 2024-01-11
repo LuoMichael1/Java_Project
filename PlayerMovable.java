@@ -33,8 +33,6 @@ public class PlayerMovable extends Entity {
 
         this.keyHandler = keyHandler;
 
-        map = new String[R][C];
-
         setDefaultValues();
         getPlayerImage();
         loadMap("maps/base-map2.csv");
@@ -49,19 +47,25 @@ public class PlayerMovable extends Entity {
         hitbox = new Hitbox(y + InteractivePanel.getTileSize() / 4, x + InteractivePanel.getTileSize() / 4,
                 InteractivePanel.getTileSize() / 2,
                 InteractivePanel.getTileSize() / 4 * 3);
+        map = new String[R][C];
+
+        up = new BufferedImage[5];
+        down = new BufferedImage[5];
+        left = new BufferedImage[5];
+        right = new BufferedImage[5];
     }
 
     public void getPlayerImage() {
 
         try {
-            up1 = ImageIO.read(getClass().getResourceAsStream("walk/walk up1.png"));
-            up2 = ImageIO.read(getClass().getResourceAsStream("walk/walk up2.png"));
-            down1 = ImageIO.read(getClass().getResourceAsStream("walk/walk down1.png"));
-            down2 = ImageIO.read(getClass().getResourceAsStream("walk/walk down2.png"));
-            left1 = ImageIO.read(getClass().getResourceAsStream("walk/walk left1.png"));
-            left2 = ImageIO.read(getClass().getResourceAsStream("walk/walk left2.png"));
-            right1 = ImageIO.read(getClass().getResourceAsStream("walk/walk right1.png"));
-            right2 = ImageIO.read(getClass().getResourceAsStream("walk/walk right2.png"));
+
+            for (int i = 1; i <= 4; i++) {
+
+                up[i] = ImageIO.read(getClass().getResourceAsStream("walk/walk up" + i + ".png"));
+                down[i] = ImageIO.read(getClass().getResourceAsStream("walk/walk down" + i + ".png"));
+                left[i] = ImageIO.read(getClass().getResourceAsStream("walk/walk left" + i + ".png"));
+                right[i] = ImageIO.read(getClass().getResourceAsStream("walk/walk right" + i + ".png"));
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -131,16 +135,16 @@ public class PlayerMovable extends Entity {
 
             switch (direction) {
                 case "up":
-                    image = (spriteNum == 1) ? up1 : up2;
+                    image = up[spriteNum];
                     break;
                 case "down":
-                    image = (spriteNum == 1) ? down1 : down2;
+                    image = down[spriteNum];
                     break;
                 case "left":
-                    image = (spriteNum == 1) ? left1 : left2;
+                    image = left[spriteNum];
                     break;
                 case "right":
-                    image = (spriteNum == 1) ? right1 : right2;
+                    image = right[spriteNum];
                     break;
             }
 
@@ -151,11 +155,8 @@ public class PlayerMovable extends Entity {
                     null);
 
             if (spriteCounter >= 10) {
-                if (spriteNum == 1)
-                    spriteNum = 2;
-                else
-                    spriteNum = 1;
 
+                spriteNum = (spriteNum == 4) ? 1 : spriteNum + 1;
                 spriteCounter = 0;
             }
         }

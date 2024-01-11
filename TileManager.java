@@ -13,6 +13,7 @@ import javax.imageio.ImageIO;
 public class TileManager {
 
     private static final int MAX_ALPHA = 255;
+    private static final int MAX_LIGHT_ALPHA = 60;
     private static final int MAX_ILLUMINATION_DISTANCE = 7;
 
     private InteractivePanel gamePanel;
@@ -22,12 +23,14 @@ public class TileManager {
     private static Hitbox[][] tileHitboxes;
     private int[][] map;
     private int[][] alpha;
+    private int[][] lightAlpha;
 
     private Set<Integer> lightSources = new HashSet<>();
     private Set<Integer> nonIlluminable = new HashSet<>();
     private static Set<Integer> collisionTiles = new HashSet<>();
 
     private BufferedImage[] darkImages = new BufferedImage[MAX_ALPHA];
+    private BufferedImage[] lightImages = new BufferedImage[MAX_ALPHA];
 
     private final int NUM_COLS = 63;
     private final int NUM_ROWS = 43;
@@ -41,6 +44,7 @@ public class TileManager {
         tile = new Tile[NUM_TILES + 1];
         map = new int[NUM_ROWS][NUM_COLS];
         alpha = new int[NUM_ROWS][NUM_COLS];
+        lightAlpha = new int[NUM_ROWS][NUM_COLS];
         tileHitboxes = new Hitbox[NUM_ROWS][NUM_COLS];
 
         lightSources.addAll(Arrays.asList(new Integer[] { 114 }));
@@ -204,11 +208,13 @@ public class TileManager {
         for (Point position : lightSourcePositions) {
 
             alpha[position.x][position.y] = 0;
+            lightAlpha[position.x][position.y] = MAX_LIGHT_ALPHA;
             getSurroundingAlpha(position);
         }
 
         for (int alpha = 0; alpha < MAX_ALPHA; alpha++) {
-            darkImages[alpha] = createDarkImage(alpha);
+            darkImages[alpha] = createImage(alpha, 0, 0, 0);
+            lightImages[alpha] = createImage(alpha, 80, 80, 0);
         }
     }
 
@@ -241,6 +247,8 @@ public class TileManager {
                         distance.put(neighbor, temp);
                         alpha[neighbor.x][neighbor.y] = alpha[neighbor.x][neighbor.y]
                                 - alpha[neighbor.x][neighbor.y] / temp;
+                        lightAlpha[neighbor.x][neighbor.y] = Math.max(0,
+                                MAX_LIGHT_ALPHA - alpha[neighbor.x][neighbor.y] / 3);
 
                         visited[neighbor.x][neighbor.y] = true;
                         queue.add(neighbor);
@@ -319,7 +327,7 @@ public class TileManager {
         }
     }
 
-    private BufferedImage createDarkImage(int alpha) {
+    private BufferedImage createImage(int alpha, int r, int g, int b) {
 
         // Create a new image
         BufferedImage darkImage = new BufferedImage(InteractivePanel.getTileSize(), InteractivePanel.getTileSize(),
@@ -328,7 +336,7 @@ public class TileManager {
         // Add a black graphic to the image
         Graphics2D g2 = darkImage.createGraphics();
 
-        g2.setColor(new Color(0, 0, 0, alpha));
+        g2.setColor(new Color(r, g, b, alpha));
         g2.fillRect(0, 0, InteractivePanel.getTileSize(), InteractivePanel.getTileSize());
         g2.dispose();
 
@@ -404,6 +412,10 @@ public class TileManager {
 
                 // Overlay transparent black tiles to represent darkness
                 graphic.drawImage(darkImages[alpha[i][j]],
+                        j * InteractivePanel.getTileSize() - player.x + player.getDrawX(),
+                        i * InteractivePanel.getTileSize() - player.y + player.getDrawY(), null);
+
+                graphic.drawImage(lightImages[lightAlpha[i][j]],
                         j * InteractivePanel.getTileSize() - player.x + player.getDrawX(),
                         i * InteractivePanel.getTileSize() - player.y + player.getDrawY(), null);
             }
