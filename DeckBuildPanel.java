@@ -256,14 +256,11 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
                         else if (handCards[i] == selected) {
                             System.out.println("WOW");
                             // nothing happens if someone drops a card in the spot it is already in
-                            // this offsets cardSelected++ lower down
-                            //cardsSelected--;
                         }
                         else {
                             System.out.println("WOWERER");
                             // if the selected card is in the hand already
                             if (selected.getSelectionIndex() != -1) {
-
 
                                 player.deck.add(handCards[i]);
                                 
@@ -282,7 +279,7 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
 
                                 // this offsets cardSelected++ lower down
                                 //cardsSelected--;
-                                leveled = true;
+                                //leveled = true;
                             }
                             // if the selected card comes from the deck
                             else {
