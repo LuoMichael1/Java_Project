@@ -54,7 +54,6 @@ public class PlayerMovable extends Entity {
     public void getPlayerImage() {
 
         try {
-
             up1 = ImageIO.read(getClass().getResourceAsStream("walk/walk up1.png"));
             up2 = ImageIO.read(getClass().getResourceAsStream("walk/walk up2.png"));
             down1 = ImageIO.read(getClass().getResourceAsStream("walk/walk down1.png"));
@@ -64,7 +63,7 @@ public class PlayerMovable extends Entity {
             right1 = ImageIO.read(getClass().getResourceAsStream("walk/walk right1.png"));
             right2 = ImageIO.read(getClass().getResourceAsStream("walk/walk right2.png"));
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

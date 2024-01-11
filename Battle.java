@@ -142,14 +142,16 @@ public class Battle extends JPanel implements ActionListener {
 
         // display player's cards
         for (int i = player.hand.length - 1; i >= 0; i--) {
-            player.hand[i].setX(5 + i * 62);
-            player.hand[i].setY(CARDY);
-
+            if (player.hand[i] != null) {
+                player.hand[i].setX(5 + i * 62);
+                player.hand[i].setY(CARDY);
+                
             // moves the currently acting card upwards 20px to make it more visible
             if (turn == 0 && i == (round - 1) / 2 % 8)
                 player.hand[i].setY(cardUpY);
 
             player.hand[i].myDraw(g);
+            }
             // drawCardInfo(g, player.hand[i]);
         }
 
@@ -245,8 +247,10 @@ public class Battle extends JPanel implements ActionListener {
                 if (frameCounter <= framesForCardUp)
                     cardUpY = cardUpY - (150 / framesForCardUp);
 
-                if (frameCounter == 20)
-                    performAttack(playersArray[turn].hand[(round - 1) / 2 % 8], playersArray[altTurn]);
+                if (frameCounter == 20) {
+                    if (playersArray[turn].hand[(round - 1) / 2 % 8] != null)
+                        performAttack(playersArray[turn].hand[(round - 1) / 2 % 8], playersArray[altTurn]);
+                }
 
                 if (frameCounter == 40)
                     player.attackAnimStop(1);
@@ -281,8 +285,10 @@ public class Battle extends JPanel implements ActionListener {
                         // resets the location of the cards so they appear in the right spot in the next
                         // battle
                         for (int i = 0; i < player.hand.length; i++) {
-                            player.hand[i].setX(i * 130 + 120);
-                            player.hand[i].setY(160);
+                            if (player.hand[i] != null) {
+                                player.hand[i].setX(i * 130 + 120);
+                                player.hand[i].setY(160);
+                            }
                         }
                         // give some extra cards as a reward
                         if (player.deck.size() <= 7) {

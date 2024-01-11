@@ -148,44 +148,39 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
     }
 
     private void startBattle() {
-
-        if (cardsSelected == deckSize) {
-            Battle battle = new Battle(player, handCards);
-            Main.addCard(battle, "battle");
-            
-            /* 
-            Main.nextCard();
-            removeAll();
-            revalidate();
-            repaint();
-
-            Battle battle = new Battle(player, selectedCards);
-            add(battle, BorderLayout.CENTER);
-            revalidate();
-            repaint();
-            */
-        } 
+        /* 
         // if you didn't fill out your deck, it will generate some random cards to use
-        else {
+        if (cardsSelected != deckSize) {
             for (int i = 0; i < deckSize; i++) {
                 if (handCards[i] == null) {
                     handCards[i] = new Cards(0,0,100,0);
                     cardsSelected++;
                 }
             }
+        }
+        */
+        ArrayList<Cards> temp = new ArrayList<Cards>();
+
+        // resizes all the nessary arrays so that the number of cards placed is the size of the array
+        if (cardsSelected != deckSize) { 
+            for (int i = 0; i < deckSize; i++) {
+                if (handCards[i] != null) {
+                    temp.add(handCards[i]);
+                }
+            }
+            Cards[] temp2 = new Cards[temp.size()];
+            for (int i = 0; i < temp.size(); i++) {
+                temp2[i] = temp.get(i);
+            }
+            Battle battle = new Battle(player, temp2);
+            Main.addCard(battle, "battle");
+        }
+        else {
             Battle battle = new Battle(player, handCards);
             Main.addCard(battle, "battle");
-            /* 
-            removeAll();
-            revalidate();
-            repaint();
-
-            Battle battle = new Battle(player, selectedCards);
-            add(battle, BorderLayout.CENTER);
-            revalidate();
-            repaint();
-        */
         }
+
+       
         Main.showCard("battle");
     }
 
