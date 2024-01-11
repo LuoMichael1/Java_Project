@@ -331,10 +331,11 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
                 System.out.println("not put in box");
                 
                 // removes card from hand only if the card is in the hand (as opposed to being in the deck which would cause an error)
-                if (selected.getSelectionIndex() != -1)
-                System.out.println("WOWERERER");
+                if (selected.getSelectionIndex() != -1) {
+                    System.out.println("WOWERERER");
                     removeCard(selected, getCardColumns(e.getX(), e.getY()));
-
+                }
+                
                 selected.setX(selected.getOriginalX());
                 selected.setY(selected.getOriginalY());   
             }
