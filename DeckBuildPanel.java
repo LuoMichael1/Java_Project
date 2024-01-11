@@ -243,7 +243,7 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
                     if (handCards[i] != null) {
 
                         // if two cards have the same id | checks if you are trying to place the same card in the same spot | prevents you from leveling past level 3
-                        if (handCards[i].getID() == selected.getID() && !(handCards[i] == selected) && !(selected.getLevel() > 2)) {
+                        if (handCards[i].getID() == selected.getID() && !(handCards[i] == selected) && !(handCards[i].getLevel() == 2)) {
                             handCards[i].increaseLevel();
 
                             leveled = true;
@@ -256,6 +256,8 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
                         else if (handCards[i] == selected) {
                             System.out.println("WOW");
                             // nothing happens if someone drops a card in the spot it is already in
+                            // this offsets cardSelected++ lower down
+                            cardsSelected--;
                         }
                         else {
                             System.out.println("WOWERER");
@@ -335,7 +337,7 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
                     System.out.println("WOWERERER");
                     removeCard(selected, getCardColumns(e.getX(), e.getY()));
                 }
-                
+
                 selected.setX(selected.getOriginalX());
                 selected.setY(selected.getOriginalY());   
             }
