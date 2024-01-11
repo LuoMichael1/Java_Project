@@ -45,6 +45,7 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
         this.setLayout(new BorderLayout());
         initUserInterface();
         initButtons();
+        removeGaps();
     }
 
     public void paintComponent(Graphics g) {
