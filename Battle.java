@@ -230,6 +230,7 @@ public class Battle extends JPanel implements ActionListener {
             if (culler % 2 == 0) {
                 frameCounter++;
 
+            
                 // first frame of turn
                 if (frameCounter == 1) {
                     altTurn = (round + 1) % 2;
@@ -241,6 +242,10 @@ public class Battle extends JPanel implements ActionListener {
                         // messageLabel.setText("Enemy attacks");
                     }
                     round++;
+
+                    // skips turn if you dont have a card in that slot
+                    if (playersArray[turn].hand[(round - 1) / 2 % 8] == null)
+                        frameCounter = framesPerTurn;
                 }
 
                 // frame 0 - 5
@@ -248,8 +253,7 @@ public class Battle extends JPanel implements ActionListener {
                     cardUpY = cardUpY - (150 / framesForCardUp);
 
                 if (frameCounter == 20) {
-                    if (playersArray[turn].hand[(round - 1) / 2 % 8] != null)
-                        performAttack(playersArray[turn].hand[(round - 1) / 2 % 8], playersArray[altTurn]);
+                    performAttack(playersArray[turn].hand[(round - 1) / 2 % 8], playersArray[altTurn]);
                 }
 
                 if (frameCounter == 40)
