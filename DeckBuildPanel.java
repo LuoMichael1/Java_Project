@@ -178,7 +178,7 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
         for (int i = 0; i < temp.size(); i++) {
             temp2[i] = temp.get(i);
         }
-        Battle battle = new Battle(player, temp2, difficulty);
+        Battle battle = new Battle(player, temp2, difficulty, handCards);
         Main.addCard(battle, "battle");
         Main.showCard("battle");
     }
@@ -468,5 +468,13 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
         }
         System.out.println("returned index" + index);
         return index;
+    }
+
+
+    public JLabel[] getCardBoxes() {
+        return cardBoxes;
+    }
+    public Cards[] getHandCards() {
+        return handCards;
     }
 }

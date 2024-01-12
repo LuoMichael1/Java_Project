@@ -51,15 +51,17 @@ public class Battle extends JPanel implements ActionListener {
     // ImageIcon("images/VulnerableIcon.png");
     // private ImageIcon strenghtIcon = new ImageIcon("images/strenghtIcon.png");
     // private ImageIcon shieldIcon = new ImageIcon("images/shieldIcon.png");
+    Cards[] originalHand; // this is soley here because I need to know where the cards where in the array so that I can move them back after battle
 
     // ------------------------------------------------------------------------------------------
 
-    public Battle(Player player, Cards[] playerSelectedCards, int difficulty) {
+    public Battle(Player player, Cards[] playerSelectedCards, int difficulty, Cards[] originalHand) {
 
         // put playerSelectedCards into player.hand
         for (int i = 0; i < playerSelectedCards.length; i++) {
             player.hand[i] = playerSelectedCards[i];
         }
+        this.originalHand = originalHand;
 
         setLayout(new BorderLayout());
 
@@ -295,12 +297,32 @@ public class Battle extends JPanel implements ActionListener {
 
                         // resets the location of the cards so they appear in the right spot in the next
                         // battle
+                        /*
                         for (int i = 0; i < player.hand.length; i++) {
                             if (player.hand[i] != null) {
                                 player.hand[i].setX(i * 130 + 120);
                                 player.hand[i].setY(260);
                             }
                         }
+                        */
+                        int tempCardx = 0;
+                        int tempCounter = 0;
+                        for (int i = 0; i < player.hand.length; i++) {
+                            tempCardx = i * 130 + 120;
+                            if (originalHand[i] != null) {
+                                
+                                for (int j = tempCounter; j < player.hand.length; j++) {
+                                    tempCounter++;
+                                    if (player.hand[j] != null) {
+                                        
+                                        player.hand[j].setX(tempCardx);
+                                        player.hand[j].setY(160);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        
                         // give some extra cards as a reward
                         if (player.deck.size() <= 7) {
                             for (int i = 0; i < 3; i++) {
