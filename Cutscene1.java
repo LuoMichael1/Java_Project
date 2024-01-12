@@ -6,7 +6,6 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.net.InterfaceAddress;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -26,6 +25,8 @@ public class Cutscene1 extends JPanel implements KeyListener, MouseListener {
     private boolean fadingOut = false;
 
     private InteractivePanel gamePanel;
+    private JPanel controls = new JPanel(new BorderLayout());
+    private JLabel skipText = new JLabel("Press X to skip");
 
     public Cutscene1() {
         this.setFocusable(true);
@@ -46,6 +47,15 @@ public class Cutscene1 extends JPanel implements KeyListener, MouseListener {
         dialogue = new Dialogue();
         this.addKeyListener(this);
         this.addMouseListener(this);
+
+        this.setLayout(new BorderLayout());
+        controls.setOpaque(false);
+        this.add(controls, BorderLayout.SOUTH);
+
+        skipText.setBorder(BorderFactory.createEmptyBorder(30, 50, 30, 1000));
+        skipText.setFont(FontFactory.loadFont("fonts/lexend/static/Lexend-Regular.ttf", 16));
+        skipText.setForeground(new Color(200, 200, 200));
+        controls.add(skipText);
 
         Timer timer = new Timer(1000 / 60, e -> {
             long currentTime = System.currentTimeMillis();

@@ -9,7 +9,7 @@ public class InstructionLabel {
 
     private static List<String> lines;
     private static final String FILE_PATH = "dialogue/instruction-labels.txt";
-    private static final int drawY = (int) (Main.HEIGHT * 0.8);
+    private static final int drawY = (int) (Main.HEIGHT * 0.87);
     private static final int BORDER_WIDTH = 2;
     private static int drawX;
 

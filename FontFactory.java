@@ -5,7 +5,7 @@ import java.awt.Font;
 public class FontFactory {
 
     // new FontFactory.loadFont(filepath, fontsize)
-    public Font loadFont(String path, float size) {
+    public static Font loadFont(String path, float size) {
         Font font = null;
         try {
             font = Font.createFont(Font.TRUETYPE_FONT, new File(path)).deriveFont(size);
