@@ -68,6 +68,10 @@ public abstract class Battler {
     public void increaseCounter() {
         counter++;
     }
+    public void clearStatus() {
+        for (int i = 0; i < statusNum.length; i++)
+            statusNum[i] =0;
+    }
     // Getters -----------------------------------
     public int getShield() {
         return shield;
