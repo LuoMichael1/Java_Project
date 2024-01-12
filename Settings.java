@@ -29,7 +29,7 @@ public class Settings extends JPanel implements ActionListener{
         // start back ground music 
         // placed music here because the music setting are also here
         try {
-            music = new Music("music/bg.wav", 0);
+            music = new Music("music/bg.wav", -1);
             isMusicPlaying = true;
         }
         catch (Exception e) {

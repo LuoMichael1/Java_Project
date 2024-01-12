@@ -230,6 +230,8 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
     public void mouseReleased(MouseEvent e) {
 
         if (selected != null) {
+            
+
             boolean putInBox = false;
             boolean leveled = false;  // prevents replacing the card that leveled up with the card that was used to merge
 
@@ -343,6 +345,7 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
             removeGaps();
             selected = null;
             repaint();
+            Music soundeffect = new Music("music/test3.wav", 0);
         }
 
         // debugging code

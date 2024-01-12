@@ -12,13 +12,13 @@ public class Music {
 	private Clip clip; 	
 
 
-    // play a sound and you can specifiy how many times it repeats. Setting how many times it loops to 0 will make it loop forever
+    // play a sound and you can specifiy how many times it repeats. Setting how many times it loops to -1 will make it loop forever
     public Music(String filePath, int loop) { 
         try {
             clip = AudioSystem.getClip(); 
             clip.open(AudioSystem.getAudioInputStream(new File(filePath))); 
 
-            if (loop == 0) 
+            if (loop == -1) 
                 clip.loop(Clip.LOOP_CONTINUOUSLY); 
             else
                 clip.loop(loop); 
@@ -26,7 +26,7 @@ public class Music {
             start();
         }
         catch (Exception e) {
-            System.out.println("Something went wrong with starting the music");
+            System.out.println("Something went wrong with starting the music" + e);
         } 
 	} 
 	
