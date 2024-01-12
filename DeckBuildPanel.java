@@ -88,12 +88,13 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
         }
 
 
-        for (Cards card : player.deck) {
-            card.myDraw(g);
-        }
+        
         for (Cards card : handCards) {
             if (card != null)
                 card.myDraw(g);
+        }
+        for (Cards card : player.deck) {
+            card.myDraw(g);
         }
     }
 

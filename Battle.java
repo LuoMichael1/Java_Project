@@ -355,12 +355,15 @@ public class Battle extends JPanel implements ActionListener {
                             DeckBuildPanel.difficulty = 8;
                         }
                         // resets health
-                        for (Battler battler : playersArray) {
-                            battler.setMaxHealth(DeckBuildPanel.difficulty*100);
-                            battler.setHealth(battler.getMaxHealth());
-                        }
-                        //player.setHealth(player.getMaxHealth());
-                        //enemy.setHealth(player.getMaxHealth());
+                        //for (Battler battler : playersArray) {
+                        //    battler.setMaxHealth(DeckBuildPanel.difficulty*100);
+                        //    battler.setHealth(battler.getMaxHealth());
+                        // }
+                        player.setMaxHealth(DeckBuildPanel.difficulty*100);
+                        player.setHealth(player.getMaxHealth());
+                        
+                        enemy.setMaxHealth(DeckBuildPanel.difficulty*100);
+                        enemy.setHealth(enemy.getMaxHealth());
 
                    
                         // the the player loses, they get sent to the menu screen, if they win, they get
