@@ -255,6 +255,7 @@ public class Battle extends JPanel implements ActionListener {
 
                 // frame 0 - 5
                 if (frameCounter <= framesForCardUp)
+                    // moves the acting card up
                     cardUpY = cardUpY - (150 / framesForCardUp);
 
                 if (frameCounter == 20) {
@@ -269,6 +270,7 @@ public class Battle extends JPanel implements ActionListener {
                 repaint();
                 // frame 55 - 60
                 if (frameCounter >= 55)
+                    // moves the acting card back down
                     cardUpY = cardUpY + (150 / framesForCardUp);
 
                 // frame 60
@@ -296,7 +298,7 @@ public class Battle extends JPanel implements ActionListener {
                         for (int i = 0; i < player.hand.length; i++) {
                             if (player.hand[i] != null) {
                                 player.hand[i].setX(i * 130 + 120);
-                                player.hand[i].setY(160);
+                                player.hand[i].setY(260);
                             }
                         }
                         // give some extra cards as a reward
@@ -309,7 +311,8 @@ public class Battle extends JPanel implements ActionListener {
                                 player.deck.add(new Cards(i * 120 + 200, 420, 60, 40));
                             }
                         }
-                        // centers the cards
+
+                        // centers the cards in deck ---------------------
                         // gets the center of the screen
                         int deckX = (Main.WIDTH) / 2;
 
@@ -324,7 +327,7 @@ public class Battle extends JPanel implements ActionListener {
                             deckX += 120;
                         }
 
-                        // reset the enemy
+                        // reset the enemy ----------------------------
                         if (DeckBuildPanel.difficulty == 5) {
                             DeckBuildPanel.difficulty = 6;
                         }

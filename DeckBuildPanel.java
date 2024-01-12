@@ -29,7 +29,7 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
 
     private JLabel[] cardBoxes = new JLabel[9];   // the slots that a card can be dragged to (the player's hand)
     private Cards[] handCards = new Cards[8];     // the cards actually in the card boxes
-    private int cardsSelected = 0;
+    //private int cardsSelected = 0;
 
     // card columns describe the area that a card can be dropped and return to a specfic part of the deck
     // for example, dropping a card in the leftmost column will put the card at the leftmost place in the deck
@@ -162,28 +162,24 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
             }
         }
         */
+        
+
+        // resizes the nessary arrays so that the number of cards placed is the size of the array
+        
+        // first moves our hand array to an arraylist to get rid of empty spaces
         ArrayList<Cards> temp = new ArrayList<Cards>();
-
-        // resizes all the nessary arrays so that the number of cards placed is the size of the array
-        if (cardsSelected != deckSize) { 
-            for (int i = 0; i < deckSize; i++) {
-                if (handCards[i] != null) {
-                    temp.add(handCards[i]);
-                }
+        for (int i = 0; i < deckSize; i++) {
+            if (handCards[i] != null) {
+                temp.add(handCards[i]);
             }
-            Cards[] temp2 = new Cards[temp.size()];
-            for (int i = 0; i < temp.size(); i++) {
-                temp2[i] = temp.get(i);
-            }
-            Battle battle = new Battle(player, temp2, difficulty);
-            Main.addCard(battle, "battle");
         }
-        else {
-            Battle battle = new Battle(player, handCards, difficulty);
-            Main.addCard(battle, "battle");
+        // then moves the cards back into a properly sized array so that it can been given to the battle constructor
+        Cards[] temp2 = new Cards[temp.size()];
+        for (int i = 0; i < temp.size(); i++) {
+            temp2[i] = temp.get(i);
         }
-
-       
+        Battle battle = new Battle(player, temp2, difficulty);
+        Main.addCard(battle, "battle");
         Main.showCard("battle");
     }
 
@@ -257,7 +253,7 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
                             System.out.println("WOW");
                             // nothing happens if someone drops a card in the spot it is already in
                             // this offsets cardSelected++ lower down
-                            cardsSelected--;
+                            //cardsSelected--;
                         }
                         else {
                             System.out.println("WOWERER");
@@ -299,6 +295,7 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
                             handCards[selected.getSelectionIndex()] = null;
                             
                             selected = tempcard;
+                            //cardsSelected--;
                         }
                     }
                     // remove card from current position in selection if applicable (As long as the selected card is currently in the hand) to support reordering
@@ -317,7 +314,7 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
                         selected.setSelectionIndex(i);
 
                         handCards[i] = selected;
-                        cardsSelected++;
+                        //cardsSelected++;
                     }
 
                     //cardsSelected++;
@@ -345,6 +342,8 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
             removeGaps();
             selected = null;
             repaint();
+
+            // little bubble sound effect
             Music soundeffect = new Music("music/test3.wav", 0);
         }
 
@@ -365,6 +364,7 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
             else
                 System.out.println("null");
         }
+        //System.out.println("cardsSelected: " + cardsSelected);
     }
 
     // remove gaps between cards in the deck as cards are removed. Tries to center the cards
@@ -389,7 +389,7 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
         handCards[card.getSelectionIndex()] = null;
 
         card.setSelectionIndex(-1);
-        cardsSelected--;
+        //cardsSelected--;
 
         // add card back to deck
         if (index == player.deck.size()) {
