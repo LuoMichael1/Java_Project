@@ -89,7 +89,7 @@ public class Player extends Battler {
         g.setColor(Color.gray);
         g.fillRect(36, 100+1, 250, 24);
         g.setColor(Color.red);
-        g.fillRect(36, 100+1, super.getHealth() / (super.getMaxHealth() / 250), 24);
+        g.fillRect(36, 100+1, (int)(super.getHealth()*1.0 / (super.getMaxHealth()) * 250), 24);
         
         g.setColor(Color.black);
         g.setFont(Main.Lexend18);

@@ -5,12 +5,15 @@ public class Enemy extends Battler {
 
     private int yoffset = 0;
     private ImageIcon enemySprite = new ImageIcon("images/enemy.png");
+    public static int maxHp = 500;
 
     public Enemy(int numberOfCards) {
         super("Enemy");
         for (int i = 0; i < numberOfCards; i++) {
             hand[i] = new Cards(i * 150 + 20, 600, 70, 30);
         }
+
+        super.setMaxHealth(maxHp);
     }
 
     
@@ -25,7 +28,7 @@ public class Enemy extends Battler {
         g.setColor(Color.gray);
         g.fillRect(950 + 1, 100+1, 250, 24);
         g.setColor(Color.red);
-        g.fillRect(950 + 1, 100+1, super.getHealth() / (super.getMaxHealth() / 250), 24);
+        g.fillRect(950 + 1, 100+1, (int)(super.getHealth()*1.0 / (super.getMaxHealth()) * 250), 24);
         
         g.setColor(Color.black);
         g.setFont(Main.Lexend18);
