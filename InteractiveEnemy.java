@@ -312,4 +312,10 @@ public class InteractiveEnemy extends Entity {
             }
         }
     }
+    public boolean isInBattle() {
+        return inBattle;
+    }
+    public static void setInBattle(boolean bool) {
+        inBattle = bool;
+    }
 }
