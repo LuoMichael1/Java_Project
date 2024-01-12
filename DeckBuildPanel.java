@@ -52,6 +52,20 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
         initUserInterface();
         initButtons();
         removeGaps();
+
+        this.addComponentListener(new ComponentListener() {
+            public void componentResized(ComponentEvent e) {}
+            public void componentMoved(ComponentEvent e) {} 
+            public void componentShown(ComponentEvent e) {
+                for (int i = 0; i < Chest.giveCards; i++) {
+                    player.deck.add(new Cards(0, 420, 30, 70));
+                }
+                removeGaps();
+                Chest.giveCards = 0;
+                repaint();
+            }
+            public void componentHidden(ComponentEvent e) {}
+        });
     }
 
     public void paintComponent(Graphics g) {

@@ -19,7 +19,9 @@ public class Chest extends Interactible {
     static BufferedImage chestStandImage;
 
     static ArrayList<Chest> chests = new ArrayList<>();
+    static int giveCards = 0;
 
+    
     public void loadImages() {
 
         super.loadImages(IMAGE_PATH);
@@ -39,6 +41,7 @@ public class Chest extends Interactible {
     public Chest(int x, int y) {
 
         super(x, y, WIDTH, HEIGHT);
+
     }
 
     static boolean checkCollision(PlayerMovable player, InteractivePanel gamePanel) {
@@ -54,6 +57,8 @@ public class Chest extends Interactible {
 
                     if (gamePanel.keyHandler.isKeyPressed(KeyEvent.VK_SPACE)) {
                         System.out.println("You opened a chest");
+
+                        giveCards += 1;
                     }
                     return true;
                 }
