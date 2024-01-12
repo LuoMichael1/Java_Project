@@ -296,7 +296,7 @@ public class InteractiveEnemy extends Entity {
 
     public void checkCollision(PlayerMovable player, InteractivePanel gamePanel) {
 
-        if (!player.inVent) {
+        if (!player.inVent && !inBattle) {
 
             if (hitbox.centerX / InteractivePanel.getTileSize() == player.hitbox.centerX
                     / InteractivePanel.getTileSize()
@@ -306,6 +306,7 @@ public class InteractiveEnemy extends Entity {
                 System.out.println("You opened a InteractiveEnemy");
 
                 Main.showCard("CardGame");
+                
                 inBattle = true;
 
             }
