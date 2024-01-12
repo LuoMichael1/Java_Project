@@ -291,9 +291,7 @@ public class Battle extends JPanel implements ActionListener {
                         System.out.println(playersArray[altTurn] + "loses!");
                         isWon = true;
 
-                        // resets health
-                        player.setHealth(player.getMaxHealth());
-                        enemy.setHealth(player.getMaxHealth());
+                        
 
                         // resets the location of the cards so they appear in the right spot in the next
                         // battle
@@ -356,6 +354,14 @@ public class Battle extends JPanel implements ActionListener {
                         else if (DeckBuildPanel.difficulty == 6) { 
                             DeckBuildPanel.difficulty = 8;
                         }
+                        // resets health
+                        for (Battler battler : playersArray) {
+                            battler.setMaxHealth(DeckBuildPanel.difficulty*100);
+                            battler.setHealth(battler.getMaxHealth());
+                        }
+                        //player.setHealth(player.getMaxHealth());
+                        //enemy.setHealth(player.getMaxHealth());
+
                    
                         // the the player loses, they get sent to the menu screen, if they win, they get
                         // sent back to the map

@@ -41,7 +41,7 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
     private int[] recyclingDimensions = {0,420,150,300};  // x:0, y:420, width:150, height:300
     private int numRecycled = 0;
 
-    public static int difficulty = 5; //<-- the number of cards the enemy has
+    public static int difficulty = 5; //<-- the number of cards the enemy has and maxHp = difficulty*100
 
     private JLabel instructionLabel;
 
