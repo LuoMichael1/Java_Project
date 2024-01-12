@@ -37,6 +37,10 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
     private int indexCounter = 0;  // used to finds the original index in the deck the selected card came from 
     private int deckIndex = 0;
 
+    // recycling allows the player to exchange some cards for a new card
+    private int[] recyclingDimensions = {0,420,150,300};  // x:0, y:420, width:150, height:300
+    private int numRecycled = 0;
+
     public static int difficulty = 5; //<-- the number of cards the enemy has
 
     private JLabel instructionLabel;
@@ -52,7 +56,8 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-
+        g.setColor(Color.RED);
+        g.fillRect(recyclingDimensions[0], recyclingDimensions[1], recyclingDimensions[2], recyclingDimensions[3]);
         // anti-alising on font
         Graphics2D g2d = (Graphics2D)g;
         g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
@@ -226,7 +231,28 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
     public void mouseReleased(MouseEvent e) {
 
         if (selected != null) {
-            
+            // little bubble sound effect
+            Music soundeffect = new Music("music/test3.wav", 0);
+
+
+            // check if the card was placed in the recycling
+            if (e.getY() >= recyclingDimensions[1] && e.getX() < recyclingDimensions[2] ) {
+                System.out.println("Placed in recycling");
+                numRecycled++;
+
+                if (numRecycled >= 3) {
+                    player.deck.add(new Cards(0, 420, 30, 70));
+                    numRecycled=0;
+                }
+                
+                if (selected.getSelectionIndex() != -1)
+                    handCards[selected.getSelectionIndex()] = null;
+                else
+                    player.deck.remove(selected);
+                
+                selected = null;
+            }
+            else {
 
             boolean putInBox = false;
             boolean leveled = false;  // prevents replacing the card that leveled up with the card that was used to merge
@@ -338,13 +364,11 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
                 selected.setX(selected.getOriginalX());
                 selected.setY(selected.getOriginalY());   
             }
+        }
 
-            removeGaps();
-            selected = null;
-            repaint();
-
-            // little bubble sound effect
-            Music soundeffect = new Music("music/test3.wav", 0);
+        removeGaps();
+        selected = null;
+        repaint();
         }
 
         // debugging code
@@ -477,4 +501,5 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
     public Cards[] getHandCards() {
         return handCards;
     }
+
 }
