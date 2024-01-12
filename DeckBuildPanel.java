@@ -56,13 +56,20 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.setColor(Color.RED);
-        g.fillRect(recyclingDimensions[0], recyclingDimensions[1], recyclingDimensions[2], recyclingDimensions[3]);
+        
+
         // anti-alising on font
         Graphics2D g2d = (Graphics2D)g;
         g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-        int counter = 1;
+
+        // recycling box
+        g.setColor(Color.RED);
+        g.fillRect(recyclingDimensions[0], recyclingDimensions[1], recyclingDimensions[2], recyclingDimensions[3]);
+        g.setColor(Color.BLACK);
+        g.setFont(Main.Lexend60);
+        g.drawString("" + numRecycled, 50, 560);
+
         //g.drawOval(x - 20, y - 20, 40, 40);
 
         // draw card boxes
@@ -77,8 +84,7 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
             
             // draw the number inside the box
             g.setFont(Main.Lexend60);
-            g.drawString(""+ counter, 165 + i * 130, 295);
-            counter++;
+            g.drawString(""+ (i+1), 165 + i * 130, 295);
         }
 
 
