@@ -303,6 +303,9 @@ public class Battle extends JPanel implements ActionListener {
                             }
                         }
                         */
+
+                        // resets the location of the cards so they appear in the right spot in the next
+                        // battle
                         int tempCardx = 0;
                         int tempCounter = 0;
                         for (int i = 0; i < player.hand.length; i++) {
