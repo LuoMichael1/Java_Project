@@ -30,7 +30,6 @@ public class Chest extends Interactible {
     public static void loadChestStandImage() {
 
         try {
-
             chestStandImage = ImageIO.read(Chest.class.getResourceAsStream(IMAGE_PATH_CHEST_STAND));
 
         } catch (Exception e) {

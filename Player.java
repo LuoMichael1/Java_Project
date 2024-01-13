@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class Player extends Battler {
 
-    private ImageIcon playerSprite = new ImageIcon("images/player2.png");   
+    private ImageIcon playerSprite = new ImageIcon("images/player3.png");   
     private Scanner filesc;
     private String SpriteArray[] = new String[50];      // 50 just to be on the safe side
     private String SpriteAnimArray[] = new String[50];  // 50 just to be on the safe side
