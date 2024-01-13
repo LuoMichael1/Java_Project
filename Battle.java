@@ -303,6 +303,9 @@ public class Battle extends JPanel implements ActionListener {
                             }
                         }
                         */
+
+                        // resets the location of the cards so they appear in the right spot in the next
+                        // battle
                         int tempCardx = 0;
                         int tempCounter = 0;
                         for (int i = 0; i < player.hand.length; i++) {
@@ -371,9 +374,13 @@ public class Battle extends JPanel implements ActionListener {
                         else {
                             Main.showCard("Map");
 
-                            
+                            // removes the enemy that we defeated
+                            for (int i = 0; i < InteractiveEnemy.InteractiveEnemies.size(); i++) {
+                                if (InteractiveEnemy.InteractiveEnemies.get(i).isInBattle())
+                                    InteractiveEnemy.InteractiveEnemies.remove(i);
+                            }  
                         }
-                        
+                        InteractiveEnemy.setInBattle(false);
                         
                         // InteractiveEnemy.inBattle = false;
                     }

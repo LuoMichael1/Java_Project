@@ -14,6 +14,7 @@ public class Enemy extends Battler {
         }
 
         super.setMaxHealth(maxHp);
+        super.setHealth(maxHp);
     }
 
     

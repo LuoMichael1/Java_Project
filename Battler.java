@@ -44,12 +44,10 @@ public abstract class Battler {
 
     // Setters -----------------------------------
     public void setShield(int shield) {
-        this.shield = this.shield + shield;
-        statusNum[0] = this.shield;
+        statusNum[0] = statusNum[0] + shield;
     }
     public void setEnergy(int energy) {
-        this.energy = this.energy + energy;
-        statusNum[1] = this.energy;
+        statusNum[1] = statusNum[1]+ energy;
     }
     public void setHealth(int health) {
         this.health = health;
@@ -58,26 +56,25 @@ public abstract class Battler {
         this.maxHealth = maxHealth;
     }
     public void setVulnerableStacks(int vulnerableStacks) {
-        this.vulnerableStacks = this.vulnerableStacks + vulnerableStacks;
-        statusNum[2] = this.vulnerableStacks;
+        statusNum[2] = statusNum[2] + vulnerableStacks;
     }
     public void setStrengthenStacks(int strengthenStacks) {
-        this.strengthenStacks = this.strengthenStacks + strengthenStacks;
-        statusNum[3] = this.strengthenStacks;
+        statusNum[3] = statusNum[3] + strengthenStacks;
     }
     public void increaseCounter() {
         counter++;
     }
     public void clearStatus() {
-        for (int i = 0; i < statusNum.length; i++)
-            statusNum[i] =0;
+        for (int i = 0; i < statusNum.length; i++) {
+            statusNum[i] = 0;
+        }
     }
     // Getters -----------------------------------
     public int getShield() {
-        return shield;
+        return statusNum[0];
     }
     public int getEnergy() {
-        return energy;
+        return statusNum[1];
     }
     public int getHealth() {
         return health;
@@ -86,10 +83,10 @@ public abstract class Battler {
         return maxHealth;
     }
     public int getVulnerableStacks() {
-        return vulnerableStacks;
+        return statusNum[2];
     }
     public int getStrengthenStacks() {
-        return strengthenStacks;
+        return statusNum[3];
     }
     public int getCounter() {
         return counter;
