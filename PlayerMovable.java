@@ -40,7 +40,7 @@ public class PlayerMovable extends Entity {
 
     public void setDefaultValues() {
 
-        x = 4 * InteractivePanel.getTileSize();
+        x = 34 * InteractivePanel.getTileSize();
         y = 6 * InteractivePanel.getTileSize();
         speed = 6;
         direction = "right";

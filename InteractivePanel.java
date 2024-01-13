@@ -23,11 +23,11 @@ public class InteractivePanel extends JPanel implements Runnable {
     private final Condition condition = lock.newCondition();
 
     private Thread gameThread; // thread to run the game loop
-    KeyHandler keyHandler; // class to handle key inputs
+    private KeyHandler keyHandler; // class to handle key inputs
     private PlayerMovable player;
     private TileManager tile;
 
-    String event;
+    private String event;
 
     public InteractivePanel() {
 
@@ -82,7 +82,13 @@ public class InteractivePanel extends JPanel implements Runnable {
     }
 
     public static int getTileSize() {
+
         return TILE_SIZE;
+    }
+
+    public KeyHandler getKeyHandler() {
+
+        return keyHandler;
     }
 
     public void startGameThread() {
@@ -133,6 +139,7 @@ public class InteractivePanel extends JPanel implements Runnable {
         }
 
         checkCollisions();
+        tile.update();
     }
 
     public void checkCollisions() {

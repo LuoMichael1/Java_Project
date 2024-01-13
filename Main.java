@@ -36,7 +36,7 @@ class Main {
 
         // idk why but keylistener does not work unless I do this
         f.addKeyListener(p2);
-        f.addKeyListener(p3.keyHandler);
+        f.addKeyListener(p3.getKeyHandler());
 
         f.setVisible(true);
         f.setSize(WIDTH, HEIGHT);

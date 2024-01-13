@@ -65,7 +65,7 @@ public class Cutscene1 extends JPanel implements KeyListener, MouseListener {
                 if (frameCounter % 30 == 0) { // Only change the sprite index every 30 frames
                     spriteIndex = (spriteIndex + 1) % carSprites.length;
                 }
-                if (dialogue.index < dialogue.dialogues.size())
+                if (dialogue.index < dialogue.dialogues.size() - 1)
                     dialogue.update();
                 repaint();
                 lastFrameTime = currentTime;
@@ -115,6 +115,7 @@ public class Cutscene1 extends JPanel implements KeyListener, MouseListener {
         } else if (fadingOut) {
             fadeAlpha += 255 / 60; // Decrease alpha over 60 frames for fade-in
             if (fadeAlpha > 255) {
+                startTutorial();
                 fadeAlpha = 255;
             }
         }
@@ -181,6 +182,8 @@ public class Cutscene1 extends JPanel implements KeyListener, MouseListener {
             if (index == displayImageIndex) {
                 g.drawImage(enemyFile, 1280 / 4, 720 / 4, null);
                 return;
+            } else if (index == tutorialStartIndex) {
+                return;
             }
 
             g.setColor(new Color(0, 0, 0, alpha));
@@ -225,7 +228,7 @@ public class Cutscene1 extends JPanel implements KeyListener, MouseListener {
     public void mouseClicked(MouseEvent e) {
         dialogue.next();
         if (dialogue.index == dialogue.tutorialStartIndex) {
-            startTutorial();
+            fadingOut = true;
         } else if (dialogue.index == dialogue.dialogues.size()) {
             fadingOut = true;
         }
@@ -261,7 +264,7 @@ public class Cutscene1 extends JPanel implements KeyListener, MouseListener {
         if (e.getKeyCode() == 32) {
             dialogue.next();
             if (dialogue.index == dialogue.tutorialStartIndex) {
-                startTutorial();
+                fadingOut = true;
             } else if (dialogue.index == dialogue.dialogues.size()) {
                 fadingOut = true;
             }
