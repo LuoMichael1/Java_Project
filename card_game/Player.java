@@ -100,6 +100,7 @@ public class Player extends Battler {
         g.drawString("" + super.getHealth() + "/" + super.getMaxHealth(), 40, 100 + 20);
 
         // shield stat
+        g.setColor(Color.white);
         g.setFont(Main.Lexend12);
         if (super.getShield() > 0) {
             g.drawImage(super.getStatusImage()[0].getImage(), 300, 100, null);
@@ -111,6 +112,11 @@ public class Player extends Battler {
             if (super.getStatusNum()[i] > 0) {
                 yoffset = yoffset + 80;
                 g.drawImage(super.getStatusImage()[i].getImage(), 22, 100 + yoffset, null);
+                
+                g.setColor(new Color(10,10,10));
+                g.fillRoundRect(15, 147 + yoffset, 65, 20, 10, 10);
+
+                g.setColor(Color.white);
                 g.setFont(Main.Lexend12);
                 g.drawString(super.getStatusName()[i], 20, 160 + yoffset);
                 g.setFont(Main.Lexend18);
