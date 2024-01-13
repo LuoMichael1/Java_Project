@@ -4,6 +4,8 @@ package main;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -38,6 +40,19 @@ public class Cutscene1 extends JPanel implements KeyListener, MouseListener {
 
     public Cutscene1() {
         this.setFocusable(true);
+
+        this.addComponentListener(new ComponentListener() {
+            public void componentShown(ComponentEvent e) {
+                requestFocusInWindow();
+            }
+            public void componentResized(ComponentEvent e) {
+            }
+            public void componentMoved(ComponentEvent e) {
+            }
+            public void componentHidden(ComponentEvent e) {
+            }
+        });
+
         // this.requestFocusInWindow();
         try {
             farBackground = ImageIO.read(new File("environment/far-buildings.png"));

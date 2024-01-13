@@ -207,7 +207,7 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener {
                 // KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner());
                 
                 // creates the animations for switching between the title and menu
-                System.out.println("Count: " + count);
+                //System.out.println("Count: " + count);
                 if (isTitle == false) {
                     
                     if (titleY > -100) {
@@ -317,7 +317,7 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener {
     private void swtichtoMenu() {
         isTitle = false;
         count = 0;
-        this.setFocusable(false);
+        //this.setFocusable(false);
     }
     public boolean isTitle() {
         return isTitle;
