@@ -90,7 +90,7 @@ public class OrbStand extends Interactible {
                 if (stand.tileX == currentTileX || stand.tileX + 1 == currentTileX) {
 
                     // Check if the player pressed the spacebar
-                    if (gamePanel.keyHandler.isKeyPressed(KeyEvent.VK_SPACE)) {
+                    if (gamePanel.getKeyHandler().isKeyPressed(KeyEvent.VK_SPACE)) {
 
                         if (stand.hasOrb && !player.hasOrb) {
                             System.out.println("You took an orb");

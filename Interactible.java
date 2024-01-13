@@ -5,9 +5,9 @@ import javax.imageio.ImageIO;
 
 public class Interactible {
 
-    int tileX, tileY;
-    final int WIDTH, HEIGHT;
-    BufferedImage image;
+    protected int tileX, tileY;
+    protected final int WIDTH, HEIGHT;
+    protected BufferedImage image;
 
     public Interactible(int tileX, int tileY, int width, int height) {
 

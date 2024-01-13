@@ -7,16 +7,16 @@ import javax.imageio.ImageIO;
 
 public class Chest extends Interactible {
 
-    static final int WIDTH = 2;
-    static final int HEIGHT = 2;
+    private static final int WIDTH = 2;
+    private static final int HEIGHT = 2;
 
-    static final String IMAGE_PATH = "objects/chest.png";
-    static final String IMAGE_PATH_CHEST_STAND = "objects/chest-stand.png";
+    private static final String IMAGE_PATH = "objects/chest.png";
+    private static final String IMAGE_PATH_CHEST_STAND = "objects/chest-stand.png";
 
-    static final int chestStandX = 30;
-    static final int chestStandY = 2;
+    private static final int chestStandX = 30;
+    private static final int chestStandY = 2;
 
-    static BufferedImage chestStandImage;
+    private static BufferedImage chestStandImage;
 
     static ArrayList<Chest> chests = new ArrayList<>();
 
@@ -52,7 +52,7 @@ public class Chest extends Interactible {
             if (chest.tileY + 1 == currentTileY) {
                 if (chest.tileX == currentTileX || chest.tileX + 1 == currentTileX) {
 
-                    if (gamePanel.keyHandler.isKeyPressed(KeyEvent.VK_SPACE)) {
+                    if (gamePanel.getKeyHandler().isKeyPressed(KeyEvent.VK_SPACE)) {
                         System.out.println("You opened a chest");
                     }
                     return true;

@@ -14,6 +14,7 @@ public class TileManager {
 
     private static final int MAX_ALPHA = 255;
     private static final int MAX_LIGHT_ALPHA = 60;
+    private static final int MAX_DARK_ALPHA = 200;
     private static final int MAX_ILLUMINATION_DISTANCE = 7;
 
     private InteractivePanel gamePanel;
@@ -28,6 +29,8 @@ public class TileManager {
     private Set<Integer> lightSources = new HashSet<>();
     private Set<Integer> nonIlluminable = new HashSet<>();
     private static Set<Integer> collisionTiles = new HashSet<>();
+    private ArrayList<Point> lightSourcePositions = new ArrayList<>();
+    private ArrayList<Integer> lightSourceStatus = new ArrayList<>();
 
     private BufferedImage[] darkImages = new BufferedImage[MAX_ALPHA];
     private BufferedImage[] lightImages = new BufferedImage[MAX_ALPHA];
@@ -35,6 +38,8 @@ public class TileManager {
     private final int NUM_COLS = 63;
     private final int NUM_ROWS = 43;
     private final int NUM_TILES = 134;
+
+    private int frameCounter;
 
     public TileManager(InteractivePanel gamePanel, PlayerMovable player) {
 
@@ -52,6 +57,8 @@ public class TileManager {
         collisionTiles
                 .addAll(Arrays.asList(new Integer[] { 105, 84, 85, 95, 98, 132, 0, 96, 103, 108, 111, 112, 113, 114, 7,
                         91, 94, 106, 107, 133, 134, 130 }));
+
+        frameCounter = 0;
 
         getTileImage();
         loadMap("maps/base-map2.csv");
@@ -191,41 +198,42 @@ public class TileManager {
 
     public void getLighting(int[][] map) {
 
-        ArrayList<Point> lightSourcePositions = new ArrayList<>();
-
         for (int i = 0; i < NUM_ROWS; i++) {
             for (int j = 0; j < NUM_COLS; j++) {
 
                 if (lightSources.contains(map[i][j])) {
 
-                    lightSourcePositions.add(new Point(i, j));
+                    lightSourcePositions.add(new Point(j, i));
+                    lightSourceStatus.add(0);
                 }
 
-                alpha[i][j] = 200;
+                alpha[i][j] = MAX_DARK_ALPHA;
             }
         }
 
         for (Point position : lightSourcePositions) {
 
-            alpha[position.x][position.y] = 0;
-            lightAlpha[position.x][position.y] = MAX_LIGHT_ALPHA;
-            getSurroundingAlpha(position);
+            alpha[position.y][position.x] = 0;
+            lightAlpha[position.y][position.x] = MAX_LIGHT_ALPHA;
+
+            double variation = 0;
+            getSurroundingAlpha(position, variation);
         }
 
         for (int alpha = 0; alpha < MAX_ALPHA; alpha++) {
-            darkImages[alpha] = createImage(alpha, 0, 0, 0);
+            darkImages[alpha] = createImage(alpha, 0, 0, 10);
             lightImages[alpha] = createImage(alpha, 80, 80, 0);
         }
     }
 
-    public void getSurroundingAlpha(Point start) {
+    public void getSurroundingAlpha(Point start, double variation) {
 
         boolean[][] visited = new boolean[NUM_ROWS][NUM_COLS];
         LinkedList<Point> queue = new LinkedList<>();
         Map<Point, Integer> distance = new HashMap<>();
 
         queue.add(start);
-        visited[start.x][start.y] = true;
+        visited[start.y][start.x] = true;
         distance.put(start, 0);
 
         while (!queue.isEmpty()) {
@@ -237,20 +245,20 @@ public class TileManager {
 
             for (Point neighbor : getNeighbors(current)) {
 
-                if (!visited[neighbor.x][neighbor.y]
-                        && !nonIlluminable.contains(map[neighbor.x][neighbor.y])) {
+                if (!visited[neighbor.y][neighbor.x]
+                        && !nonIlluminable.contains(map[neighbor.y][neighbor.x])) {
 
                     int temp = distance.get(current) + 1;
 
                     if (temp < distance.getOrDefault(neighbor, Integer.MAX_VALUE)) {
 
                         distance.put(neighbor, temp);
-                        alpha[neighbor.x][neighbor.y] = alpha[neighbor.x][neighbor.y]
-                                - alpha[neighbor.x][neighbor.y] / temp;
-                        lightAlpha[neighbor.x][neighbor.y] = Math.max(0,
-                                MAX_LIGHT_ALPHA - alpha[neighbor.x][neighbor.y] / 3);
+                        alpha[neighbor.y][neighbor.x] = alpha[neighbor.y][neighbor.x]
+                                - alpha[neighbor.y][neighbor.x] / temp;
+                        lightAlpha[neighbor.y][neighbor.x] = Math.max(0,
+                                MAX_LIGHT_ALPHA - alpha[neighbor.y][neighbor.x] / 3);
 
-                        visited[neighbor.x][neighbor.y] = true;
+                        visited[neighbor.y][neighbor.x] = true;
                         queue.add(neighbor);
                     }
                 }
@@ -266,9 +274,9 @@ public class TileManager {
             neighbors.add(new Point(current.x - 1, current.y));
         if (current.y != 0)
             neighbors.add(new Point(current.x, current.y - 1));
-        if (current.x < NUM_ROWS - 1)
+        if (current.x < NUM_COLS - 1)
             neighbors.add(new Point(current.x + 1, current.y));
-        if (current.y < NUM_COLS - 1)
+        if (current.y < NUM_ROWS - 1)
             neighbors.add(new Point(current.x, current.y + 1));
 
         return neighbors;
@@ -420,6 +428,66 @@ public class TileManager {
                         i * InteractivePanel.getTileSize() - player.y + player.getDrawY(), null);
             }
         }
+    }
+
+    public void update() {
+
+        if (frameCounter >= 10) {
+
+            int chance = (int) (Math.random() * 2);
+
+            if (chance != 0)
+                return;
+
+            int start_i = Math.max(0,
+                    player.y - Main.WIDTH / InteractivePanel.getTileSize() - MAX_ILLUMINATION_DISTANCE);
+            int end_i = Math.min(NUM_ROWS,
+                    player.y + Main.WIDTH / InteractivePanel.getTileSize() + MAX_ILLUMINATION_DISTANCE);
+
+            int start_j = Math.max(0,
+                    player.x - Main.HEIGHT / InteractivePanel.getTileSize() - MAX_ILLUMINATION_DISTANCE);
+            int end_j = Math.min(NUM_ROWS,
+                    player.x + Main.HEIGHT / InteractivePanel.getTileSize() + MAX_ILLUMINATION_DISTANCE);
+
+            for (int i = 0; i < lightSourcePositions.size(); i++) {
+
+                chance = (int) (Math.random() * 3);
+
+                if (chance != 0)
+                    continue;
+
+                Point lightSource = lightSourcePositions.get(i);
+
+                System.out.println(lightSource.x + " " + lightSource.y);
+
+                int variation = (lightSourceStatus.get(i) == 0) ? -5 : 5;
+                lightSourceStatus.set(i, 1 - lightSourceStatus.get(i));
+
+                start_i = Math.max(0, lightSource.y - MAX_ILLUMINATION_DISTANCE);
+                start_j = Math.max(0, lightSource.x - MAX_ILLUMINATION_DISTANCE);
+
+                end_i = Math.min(NUM_ROWS, lightSource.y
+                        + MAX_ILLUMINATION_DISTANCE);
+                end_j = Math.min(NUM_COLS, lightSource.x
+                        + MAX_ILLUMINATION_DISTANCE);
+
+                for (int y = start_i; y < end_i; y++) {
+                    for (int x = start_j; x < end_j; x++) {
+
+                        if (!nonIlluminable.contains(map[y][x])) {
+                            if (alpha[y][x] - variation >= 0)
+                                alpha[y][x] -= variation;
+
+                            if (lightAlpha[y][x] - variation >= 0)
+                                lightAlpha[y][x] -= variation;
+                        }
+                    }
+                }
+
+            }
+            frameCounter = 0;
+        }
+        frameCounter++;
     }
 
     public static Set<Integer> getCollisionTiles() {

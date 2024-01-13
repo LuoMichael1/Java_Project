@@ -44,7 +44,7 @@ public class Vent extends Interactible {
                 if (vent.tileX == currentTileX || vent.tileX + 1 == currentTileX) {
 
                     // Check if the player pressed the spacebar
-                    if (gamePanel.keyHandler.isKeyPressed(KeyEvent.VK_SPACE)) {
+                    if (gamePanel.getKeyHandler().isKeyPressed(KeyEvent.VK_SPACE)) {
                         System.out.println("You entered a vent");
                         player.inVent = (player.inVent == false) ? true : false;
                     }
@@ -52,26 +52,26 @@ public class Vent extends Interactible {
                     if (player.inVent) {
 
                         // Check if the player is pressing WASD keys
-                        if (gamePanel.keyHandler.isKeyPressed(KeyEvent.VK_W)) {
+                        if (gamePanel.getKeyHandler().isKeyPressed(KeyEvent.VK_W)) {
                             // Move the player up inside the vent
                             Vent connectedVent = vent.connections.get("up");
                             if (connectedVent != null) {
                                 //
                             }
-                        } else if (gamePanel.keyHandler.isKeyPressed(KeyEvent.VK_A)) {
+                        } else if (gamePanel.getKeyHandler().isKeyPressed(KeyEvent.VK_A)) {
                             // Move the player left inside the vent
                             Vent connectedVent = vent.connections.get("left");
                             if (connectedVent != null) {
                                 player.setLocation(connectedVent.tileX * InteractivePanel.getTileSize(),
                                         connectedVent.tileY * InteractivePanel.getTileSize());
                             }
-                        } else if (gamePanel.keyHandler.isKeyPressed(KeyEvent.VK_S)) {
+                        } else if (gamePanel.getKeyHandler().isKeyPressed(KeyEvent.VK_S)) {
                             // Move the player down inside the vent
                             Vent connectedVent = vent.connections.get("down");
                             if (connectedVent != null) {
                                 //
                             }
-                        } else if (gamePanel.keyHandler.isKeyPressed(KeyEvent.VK_D)) {
+                        } else if (gamePanel.getKeyHandler().isKeyPressed(KeyEvent.VK_D)) {
                             // Move the player right inside the vent
                             Vent connectedVent = vent.connections.get("right");
                             if (connectedVent != null) {
