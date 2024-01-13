@@ -32,7 +32,16 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener {
     private double size = 0; // the size of the planets (the formula is their normal size multiplied by this)
     private JLabel message;
     private int rgbvalue = 255;
+    private int alpha = 255;
     private boolean brighten = false;
+
+    private boolean isTitle = true;
+    private int titleY = 600;
+    private int switchanimationtime = 40;
+    private double count = 0;
+
+    private MenuButtons menuButtons = new MenuButtons();
+
 
     public MainMenu() {
 
@@ -41,29 +50,24 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener {
             public void componentShown(ComponentEvent e) {
                 MainMenu.this.requestFocusInWindow();
             }
-
             public void componentResized(ComponentEvent e) {
             }
-
             public void componentMoved(ComponentEvent e) {
             }
-
             public void componentHidden(ComponentEvent e) {
             }
         });
 
         setBackground(new Color(10, 10, 10));
-        // setTitle("Main Menu");
-        // setSize(1280, 720);
-        // setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // setLocationRelativeTo(null);
+
         this.setLayout(new BorderLayout());
         this.addMouseListener(this);
 
         JLayeredPane layeredPane = new JLayeredPane();
 
         layeredPane.setPreferredSize(new Dimension(1280, 720));
-        layeredPane.add(new MenuButtons(), new Integer(1));
+        layeredPane.add(new SettingsButton(), new Integer(1));
+        layeredPane.add(menuButtons, new Integer(2));
 
         this.setFocusable(true);
         // this.grabFocus();
@@ -75,33 +79,7 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener {
         message.setBounds(Main.WIDTH / 2 - (100), Main.HEIGHT - 70, 200, 10);
         // message
         this.add(message);
-        // Add a background image to the background layer
-        // JLabel backgroundImage =
-        // createBackgroundLabel("menu/parallax-space-backgound.png", IMAGE_WIDTH,
-        // IMAGE_HEIGHT);
-        // layeredPane.add(backgroundImage, Integer.valueOf(-1)); // Set to -1 for the
-        // background layer
-        // setLayerBounds(layeredPane, backgroundImage, 0, 0, -1);
-
-        // add black bars
-        // JLabel bar1 = createBackgroundLabel("menu/black-bar.png", IMAGE_WIDTH,
-        // IMAGE_HEIGHT / 6);
-        // JLabel bar2 = createBackgroundLabel("menu/black-bar.png", IMAGE_WIDTH,
-        // IMAGE_HEIGHT / 6);
-
-        // layeredPane.add(bar1, 1);
-        // layeredPane.add(bar2, 1);
-
-        // setLayerBounds(layeredPane, bar1, 0, 0, 100);
-        // setLayerBounds(layeredPane, bar2, 0, 564, 100); // later update magic values
-
-        // JLabel background1_1_planets =
-        // createBackgroundLabel("menu/parallax-space-far-planets.png", Main.WIDTH,
-        // Main.HEIGHT);
-        // JLabel background2_1_planets =
-        // createBackgroundLabel("menu/parallax-space-far-planets.png", Main.WIDTH,
-        // Main.HEIGHT);
-
+ 
         // create planets -----------------------------------
         JLabel[] planets = new JLabel[3];
         int[] planetsX = new int[3];
@@ -123,31 +101,6 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener {
             setLayerBounds(layeredPane, planets[i], planetsX[i], planetsY[i], JLayeredPane.DEFAULT_LAYER);
 
         }
-
-        /*
-         * //settingsIcon.setBorderPainted()
-         * JButton btt1 = new JButton(settingsIcon);
-         * //btt1.setContentAreaFilled(false);
-         * btt1.setBorderPainted(false);
-         * //btt1.setBounds(0, 0, 110, 110);
-         * 
-         * 
-         * JPanel container1 = new JPanel(new BorderLayout());
-         * JPanel container2 = new JPanel(new GridBagLayout());
-         * 
-         * for (int i =0; i < 3; i++) {
-         * JPanel empty = new JPanel();
-         * empty.setOpaque(false);
-         * container2.add(empty);
-         * }
-         * container1.setOpaque(false);
-         * container2.setOpaque(false);
-         * 
-         * container1.setBounds(0, 0, Main.WIDTH, Main.HEIGHT);
-         * container1.add(container2, BorderLayout.EAST);
-         * container2.add(btt1);
-         * layeredPane.add(container1, new Integer(1));
-         */
 
         JLabel background1_1_stars = createBackgroundLabel("menu/parallax-space-stars.png", Main.WIDTH, Main.HEIGHT);
         JLabel background2_1_stars = createBackgroundLabel("menu/parallax-space-stars.png", Main.WIDTH, Main.HEIGHT);
@@ -234,10 +187,35 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener {
                     rgbvalue += 2;
                 else
                     rgbvalue -= 2;
-                message.setForeground(new Color(rgbvalue, rgbvalue, rgbvalue));
+
+                // hides the message
+                if (isTitle == false && alpha > 0) {
+                    alpha -= 10;
+                    if (alpha < 0) 
+                        alpha = 0;
+                }
+
+                else if (isTitle == true && alpha < 255) {
+                    alpha += 10;
+                    if (alpha < 255) 
+                        alpha = 255;
+                }
+
+                message.setForeground(new Color(rgbvalue, rgbvalue, rgbvalue, alpha));
 
                 // System.out.println("Focus: " +
                 // KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner());
+                
+                // creates the animations for switching between the title and menu
+                if (isTitle == false) {
+                    
+                    if (titleY > -100) {
+                        titleY = easing(count/(switchanimationtime), -700) + 600;
+                        menuButtons.move((count/(switchanimationtime)));
+                        count++;
+                    }
+                    
+                }
             }
         });
 
@@ -262,26 +240,14 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener {
         layeredPane.setLayer(component, layer);
     }
 
-    // public static void main(String[] args) {
-    // SwingUtilities.invokeLater(new Runnable() {
-    // @Override
-    // public void run() {
-    // new MainMenu().setVisible(true);
-    // }
-    // });
-    // }
-
     public void mouseClicked(MouseEvent e) {
     }
 
     public void mousePressed(MouseEvent e) {
-        // switches to the next card in the layout
-        if (!seenScene1) {
-            this.setFocusable(false);
-            Main.nextCard();
-            seenScene1 = true;
-        } else
-            Main.showCard("CardGame");
+        if (isTitle)
+            swtichtoMenu();
+        //else
+            //switchCard();
     }
 
     public void mouseReleased(MouseEvent e) {
@@ -301,7 +267,7 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener {
 
         g.setColor(Color.white);
         g.setFont(Main.Lexend180);
-        g.drawString("BEFALL", 70, 600);
+        g.drawString("BEFALL", 70, titleY);
     }
 
     public int random(int start, int end) {
@@ -318,12 +284,36 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
-        // switches to the next card in the layout
+        if (isTitle)
+            swtichtoMenu();
+        //else
+            //switchCard();
+    }
+
+
+    // switches to the next card in the layout
+    private void switchCard() {
         this.setFocusable(false);
         if (!seenScene1) {
             Main.nextCard();
             seenScene1 = true;
         } else
             Main.showCard("CardGame");
+    }
+
+    private void swtichtoTitle() {
+        isTitle = true;
+    }
+    private void swtichtoMenu() {
+        isTitle = false;
+        count = 0;
+    }
+    public boolean isTitle() {
+        return isTitle;
+    }
+
+    private int easing(double time, int max) {
+        System.out.println((int)(max*(Math.pow(time,4) * Math.pow(time - 2, 4))));
+        return (int)(max*(Math.pow(time,2) * Math.pow(time - 2, 2)));
     }
 }
