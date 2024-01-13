@@ -1,3 +1,5 @@
+package tile_game;
+
 import java.util.Objects;
 
 class Point {

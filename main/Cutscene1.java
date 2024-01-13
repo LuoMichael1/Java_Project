@@ -1,8 +1,13 @@
+package main;
 // this is the first cutscene in the game. This scene has a car and some dialoge
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -10,6 +15,10 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.Timer;
 
 public class Cutscene1 extends JPanel implements KeyListener, MouseListener {
     private int characterX = 0;
@@ -24,7 +33,6 @@ public class Cutscene1 extends JPanel implements KeyListener, MouseListener {
     private boolean fadingIn = true;
     private boolean fadingOut = false;
 
-    private InteractivePanel gamePanel;
     private JPanel controls = new JPanel(new BorderLayout());
     private JLabel skipText = new JLabel("Press X to skip");
 
@@ -39,7 +47,7 @@ public class Cutscene1 extends JPanel implements KeyListener, MouseListener {
                 carSprites[i] = ImageIO.read(new File("running/car-running" + (i + 2) + ".png"));
             }
             foreground = ImageIO.read(new File("environment/palm-tree.png"));
-            blackBar = ImageIO.read(new File("menu/black-bar.png"));
+            blackBar = ImageIO.read(new File("environment/black-bar.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

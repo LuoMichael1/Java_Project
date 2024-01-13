@@ -1,3 +1,5 @@
+package tile_game;
+
 public class Hitbox {
 
     int top, left, width, height, bot, right, centerX, centerY;

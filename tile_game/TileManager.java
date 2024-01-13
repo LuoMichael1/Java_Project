@@ -1,3 +1,5 @@
+package tile_game;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -9,6 +11,8 @@ import java.util.Map;
 import java.util.Set;
 import java.io.*;
 import javax.imageio.ImageIO;
+
+import main.Main;
 
 public class TileManager {
 
@@ -72,7 +76,7 @@ public class TileManager {
         loadChests("maps/chest-coordinates.csv");
         loadEnemies("maps/enemy-coordinates.csv");
         loadVents("maps/vent-coordinates.csv");
-        OrbStand.loadOrbStands("maps/orb-stands.csv");
+        OrbStand.loadOrbStands("tile_game/maps/orb-stands.csv");
         Chest.loadChestStandImage();
     }
 
@@ -134,7 +138,8 @@ public class TileManager {
 
         try {
             String line;
-            BufferedReader reader = new BufferedReader(new FileReader(file));
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(getClass().getResourceAsStream(file)));
 
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");

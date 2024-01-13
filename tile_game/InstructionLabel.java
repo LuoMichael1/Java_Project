@@ -1,9 +1,11 @@
+package tile_game;
+
 import java.nio.file.*;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
 import java.awt.*;
-import javax.swing.*;
+import main.Main;
 
 public class InstructionLabel {
 

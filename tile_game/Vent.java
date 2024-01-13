@@ -1,3 +1,5 @@
+package tile_game;
+
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.HashMap;

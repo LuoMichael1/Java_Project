@@ -1,3 +1,5 @@
+package main;
+
 import java.io.File;
 import java.awt.Font;
 

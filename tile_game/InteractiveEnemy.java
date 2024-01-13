@@ -1,3 +1,5 @@
+package tile_game;
+
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
@@ -11,6 +13,8 @@ import java.util.Set;
 
 import javax.imageio.ImageIO;
 
+import main.Main;
+
 public class InteractiveEnemy extends Entity {
 
     private BufferedImage image;
@@ -18,7 +22,7 @@ public class InteractiveEnemy extends Entity {
     private static final int InteractiveEnemy_WIDTH = 2;
     private static final int InteractiveEnemy_HEIGHT = 2;
 
-    static ArrayList<InteractiveEnemy> InteractiveEnemies = new ArrayList<>();
+    public static ArrayList<InteractiveEnemy> InteractiveEnemies = new ArrayList<>();
 
     private int frameCounter = 0;
     private Point current = new Point(this.x / 1, this.y / 1);;
@@ -308,15 +312,17 @@ public class InteractiveEnemy extends Entity {
                 System.out.println("You opened a InteractiveEnemy");
 
                 Main.showCard("CardGame");
-                
+
                 inBattle = true;
 
             }
         }
     }
+
     public boolean isInBattle() {
         return inBattle;
     }
+
     public static void setInBattle(boolean bool) {
         inBattle = bool;
     }

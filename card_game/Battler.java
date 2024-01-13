@@ -1,3 +1,5 @@
+package card_game;
+
 // This is the abstract class that encompasses both player and enemy
 
 import java.util.*;
@@ -8,8 +10,8 @@ public abstract class Battler {
 
     public int cardsUsed = 0;
 
-    public ArrayList<Cards> deck = new ArrayList<Cards>();  // the cards that can be put into the hand
-    public Cards[] hand = new Cards[8];  // the cards that will be used in battle
+    public ArrayList<Cards> deck = new ArrayList<Cards>(); // the cards that can be put into the hand
+    public Cards[] hand = new Cards[8]; // the cards that will be used in battle
 
     private ImageIcon energyIcon = new ImageIcon("images/shieldIcon.png");
     private ImageIcon shieldIcon = new ImageIcon("images/shieldIcon.png");
@@ -26,19 +28,19 @@ public abstract class Battler {
     private int strengthenStacks = 0;
     private int counter = 0;
 
-    private int statusNum[] = {shield, energy, vulnerableStacks, strengthenStacks};
-    private String statusName[] = {"Shield", "Energy", "Vulnerable", "Strength"};
-    private ImageIcon statusImage[] = {shieldIcon, energyIcon, vulnerableIcon, strengthenIcon};
-    
-    private ArrayList<Integer> showDamage = new ArrayList<Integer>();   // currently unused
+    private int statusNum[] = { shield, energy, vulnerableStacks, strengthenStacks };
+    private String statusName[] = { "Shield", "Energy", "Vulnerable", "Strength" };
+    private ImageIcon statusImage[] = { shieldIcon, energyIcon, vulnerableIcon, strengthenIcon };
+
+    private ArrayList<Integer> showDamage = new ArrayList<Integer>(); // currently unused
 
     public Battler(String name) {
         this.name = name;
         // create the players deck
         for (int i = 0; i < 5; i++) {
             deck.add(new Cards(i * 120 + 40, 420, 70, 30));
-            //System.out.println(deck);
-            //System.out.println(i);
+            // System.out.println(deck);
+            // System.out.println(i);
         }
     }
 
@@ -46,57 +48,74 @@ public abstract class Battler {
     public void setShield(int shield) {
         statusNum[0] = statusNum[0] + shield;
     }
+
     public void setEnergy(int energy) {
-        statusNum[1] = statusNum[1]+ energy;
+        statusNum[1] = statusNum[1] + energy;
     }
+
     public void setHealth(int health) {
         this.health = health;
     }
+
     public void setMaxHealth(int maxHealth) {
         this.maxHealth = maxHealth;
     }
+
     public void setVulnerableStacks(int vulnerableStacks) {
         statusNum[2] = statusNum[2] + vulnerableStacks;
     }
+
     public void setStrengthenStacks(int strengthenStacks) {
         statusNum[3] = statusNum[3] + strengthenStacks;
     }
+
     public void increaseCounter() {
         counter++;
     }
+
     public void clearStatus() {
         for (int i = 0; i < statusNum.length; i++) {
             statusNum[i] = 0;
         }
     }
+
     // Getters -----------------------------------
     public int getShield() {
         return statusNum[0];
     }
+
     public int getEnergy() {
         return statusNum[1];
     }
+
     public int getHealth() {
         return health;
     }
+
     public int getMaxHealth() {
         return maxHealth;
     }
+
     public int getVulnerableStacks() {
         return statusNum[2];
     }
+
     public int getStrengthenStacks() {
         return statusNum[3];
     }
+
     public int getCounter() {
         return counter;
     }
+
     public int[] getStatusNum() {
         return statusNum;
     }
+
     public String[] getStatusName() {
         return statusName;
     }
+
     public ImageIcon[] getStatusImage() {
         return statusImage;
     }
@@ -108,13 +127,17 @@ public abstract class Battler {
     public void addShowDamage(int damage) {
         showDamage.add(damage);
     }
+
     public ArrayList<Integer> getShowDamage() {
         return showDamage;
     }
 
     abstract public void drawSprite(Graphics g);
+
     abstract public void drawStatus(Graphics g);
+
     abstract public void attackAnim(int frame);
+
     abstract public void attackAnimStop(int frame);
-    
+
 }

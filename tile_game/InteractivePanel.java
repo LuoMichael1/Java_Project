@@ -1,4 +1,9 @@
+package tile_game;
+
 import javax.swing.*;
+
+import main.Main;
+
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
