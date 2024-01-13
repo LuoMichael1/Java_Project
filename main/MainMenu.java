@@ -35,10 +35,10 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener {
     private int alpha = 255;
     private boolean brighten = false;
 
-    private boolean isTitle = true;
+    public static boolean isTitle = true;
     private int titleY = 600;
     private int switchanimationtime = 40;
-    private double count = 0;
+    public static double count = 0;
 
     private MenuButtons menuButtons = new MenuButtons();
 
@@ -207,14 +207,22 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener {
                 // KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner());
                 
                 // creates the animations for switching between the title and menu
+                System.out.println("Count: " + count);
                 if (isTitle == false) {
                     
                     if (titleY > -100) {
                         titleY = easing(count/(switchanimationtime), -700) + 600;
-                        menuButtons.move((count/(switchanimationtime)));
+                        menuButtons.moveIn((count/(switchanimationtime)));
                         count++;
                     }
                     
+                }
+                else if (isTitle) {
+                    if (titleY != 600) {
+                        titleY = (Main.HEIGHT+100) - easing(count/(switchanimationtime), Main.HEIGHT-500);
+                        menuButtons.moveOut((count/(switchanimationtime)));
+                        count++;
+                    }
                 }
             }
         });
@@ -301,19 +309,22 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener {
             Main.showCard("CardGame");
     }
 
-    private void swtichtoTitle() {
+    public static void swtichtoTitle() {
         isTitle = true;
+        count = 0;
+        //titleY = Main.HEIGHT+100;
     }
     private void swtichtoMenu() {
         isTitle = false;
         count = 0;
+        this.setFocusable(false);
     }
     public boolean isTitle() {
         return isTitle;
     }
 
     private int easing(double time, int max) {
-        System.out.println((int)(max*(Math.pow(time,4) * Math.pow(time - 2, 4))));
+        //System.out.println((int)(max*(Math.pow(time,4) * Math.pow(time - 2, 4))));
         return (int)(max*(Math.pow(time,2) * Math.pow(time - 2, 2)));
     }
 }
