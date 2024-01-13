@@ -3,6 +3,7 @@ package card_game;
 
 import javax.swing.*;
 
+import main.FontFactory;
 import main.Main;
 import tile_game.InteractiveEnemy;
 
@@ -50,7 +51,8 @@ public class Battle extends JPanel implements ActionListener {
     private Timer timer;
 
     // images
-    // private ImageIcon background = new ImageIcon("images/background.png");
+    private ImageIcon background = new ImageIcon("images/background.jpg");
+    private ImageIcon backgroundOverlay = new ImageIcon("images/backgroundoverlay.png");
     // private ImageIcon vulnerableIcon = new
     // ImageIcon("images/VulnerableIcon.png");
     // private ImageIcon strenghtIcon = new ImageIcon("images/strenghtIcon.png");
@@ -70,19 +72,22 @@ public class Battle extends JPanel implements ActionListener {
 
         setLayout(new BorderLayout());
 
-        JPanel topUIWrapper = new JPanel(new FlowLayout());
+        JPanel topUIWrapper = new JPanel(new BorderLayout());
+        topUIWrapper.setBackground(new Color(40, 40, 40, 200));
         this.add(topUIWrapper, BorderLayout.NORTH);
 
         instructionLabel = new JLabel(
                 "Automatically playing...");
         instructionLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        instructionLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        topUIWrapper.add(instructionLabel);
+        instructionLabel.setFont(FontFactory.loadFont("fonts/lexend/static/Lexend-Regular.ttf", 16));
+        instructionLabel.setForeground(Color.WHITE);
+        instructionLabel.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
+        topUIWrapper.add(instructionLabel, BorderLayout.WEST);
 
         doubleSpeed = new JButton(">>");
         // doubleSpeed.setHorizontalAlignment(SwingConstants.RIGHT);
         doubleSpeed.addActionListener(this);
-        topUIWrapper.add(doubleSpeed);
+        topUIWrapper.add(doubleSpeed, BorderLayout.EAST);
 
         // space for messages
         // messageLabel = new JLabel("");
@@ -115,7 +120,8 @@ public class Battle extends JPanel implements ActionListener {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-        // g.drawImage(background.getImage(), 0, 0, null);
+        g.drawImage(background.getImage(), 0, 0, null);
+        g.drawImage(backgroundOverlay.getImage(), 0, 0, null);
 
         for (Battler battler : playersArray) {
             battler.drawSprite(g);
