@@ -31,22 +31,27 @@ public class Main {
         JFrame f = new JFrame("BEFALL");
         f.setIconImage(test.getImage());
 
-        MainMenu p1 = new MainMenu();
-        Cutscene1 p2 = new Cutscene1();
-        InteractivePanel p3 = new InteractivePanel();
-        DeckBuildPanel p4 = new DeckBuildPanel();
+        MainMenu mainMenu = new MainMenu();
+        Cutscene1 cutscene1 = new Cutscene1();
+        //InteractivePanel p3 = new InteractivePanel();
+        //InteractivePanel ptest = new InteractivePanel();
+        //DeckBuildPanel p4 = new DeckBuildPanel();
         Settings setting = new Settings();
 
         f.add(p, BorderLayout.CENTER);
-        addCard(p1, "Menu");
-        addCard(p2, "Cutscene1");
-        addCard(p3, "Map");
+        addCard(mainMenu, "Menu");
         addCard(setting, "Settings");
-        addCard(p4, "CardGame");
+        addCard(cutscene1, "Cutscene1");
+        
+        //addCard(p3, "Map");
+        //addCard(p4, "CardGame");
+        
+        //removeCard(p3);
 
+        //addCard(ptest, "Map");
         // idk why but keylistener does not work unless I do this
-        f.addKeyListener(p2);
-        f.addKeyListener(p3.getKeyHandler());
+        //f.addKeyListener(p2);
+        //f.addKeyListener(p3.getKeyHandler());
 
         f.setVisible(true);
         f.setSize(WIDTH, HEIGHT);
@@ -69,6 +74,9 @@ public class Main {
 
     static public void addCard(JPanel jPanel, String name) {
         p.add(jPanel, name);
+    }
+    static public void removeCard(JPanel jPanel) {
+        p.remove(jPanel);
     }
 
     // method to make fonts

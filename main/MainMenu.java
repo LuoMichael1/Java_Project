@@ -303,7 +303,7 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener {
     private void switchCard() {
         this.setFocusable(false);
         if (!seenScene1) {
-            Main.nextCard();
+            Main.showCard("Cutscene1");
             seenScene1 = true;
         } else
             Main.showCard("CardGame");

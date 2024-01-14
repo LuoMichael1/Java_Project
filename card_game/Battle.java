@@ -3,6 +3,7 @@ package card_game;
 
 import javax.swing.*;
 
+import main.Cutscene1;
 import main.FontFactory;
 import main.Main;
 import tile_game.InteractiveEnemy;
@@ -274,9 +275,12 @@ public class Battle extends JPanel implements ActionListener {
                     performAttack(playersArray[turn].hand[(round - 1) / 2 % 8], playersArray[altTurn]);
                 }
 
-                if (frameCounter == 40)
+                if (frameCounter == 40) {
                     player.attackAnimStop(1);
-
+                    
+                    if (playersArray[altTurn].getHealth() <= 0)
+                        doubleTime = false;
+                }
                 player.increaseCounter();
 
                 repaint();
@@ -376,8 +380,10 @@ public class Battle extends JPanel implements ActionListener {
 
                         // the the player loses, they get sent to the menu screen, if they win, they get
                         // sent back to the map
-                        if (playersArray[altTurn] == player)
+                        if (playersArray[altTurn] == player) {
                             Main.showCard("Menu");
+                            Cutscene1.removeGame();
+                        }
                         else {
                             Main.showCard("Map");
 

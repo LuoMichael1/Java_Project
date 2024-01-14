@@ -93,10 +93,12 @@ public class MenuButtons extends JPanel implements ActionListener {
     private void switchCard() {
         this.setFocusable(false);
         if (!seenScene1) {
-            Main.nextCard();
+            Main.showCard("Cutscene1");
             seenScene1 = true;
-        } else
+        } else {
+            Cutscene1.newGame();
             Main.showCard("CardGame");
+        }
     }
 
 }
