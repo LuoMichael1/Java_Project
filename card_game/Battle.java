@@ -222,7 +222,8 @@ public class Battle extends JPanel implements ActionListener {
             playersArray[altTurn].setVulnerableStacks(attackerCard.getVulnerableStacks());
             playersArray[turn].setStrengthenStacks(attackerCard.getStrengthenStacks());
             playersArray[turn].setHealingStacks(attackerCard.getHealingStacks());
-            
+            playersArray[altTurn].setBleedStacks(attackerCard.getBleedStacks());
+
             performHealing();
 
             // deal damage -----------------------------------
@@ -255,11 +256,17 @@ public class Battle extends JPanel implements ActionListener {
                     defender.setHealth(defender.getHealth() - damage);
                     playersArray[turn].attackAnim(1);
 
-                    // prevents health from going below 0
-                    if (defender.getHealth() < 0)
-                        defender.setHealth(0);
+                    
                 }
             }
+            if (performBleed() > 0) {
+                showDamage.add(performBleed());
+                showDamage.add(100 + (showDamage.size() * 10));
+                defender.setHealth(defender.getHealth() - performBleed());
+            }               
+            // prevents health from going below 0
+            if (defender.getHealth() < 0)
+            defender.setHealth(0);
         }
     }
 
@@ -439,6 +446,9 @@ public class Battle extends JPanel implements ActionListener {
         if (target.getVulnerableStacks() > 0) {
             target.setVulnerableStacks(-1);
         }
+        if (target.getHealingStacks() > 0) {
+            target.setHealingStacks(-1);
+        }
     }
 
     private void performHealing() {
@@ -450,11 +460,10 @@ public class Battle extends JPanel implements ActionListener {
             showHealing.add(10);
             showHealing.add(100 + (i * 10)); 
         }
-        if (playersArray[turn].getHealingStacks() > 0) {
-            playersArray[turn].setHealingStacks(-1);
-        }
+    }
 
-        
+    private int performBleed() {
+        return (playersArray[altTurn].getBleedStacks()*10);
     }
 
 }

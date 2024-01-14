@@ -1,0 +1,16 @@
+//Level1
+Enemy gains:Bleed +2
+name Stab     
+bleedStacks 2
+
+//Level2
+Enemy gains:Bleed +4
+name Stab     
+bleedStacks 4
+
+//Level3
+Enemy gains:Bleed +7
+name Stab     
+bleedStacks 7
+
+__

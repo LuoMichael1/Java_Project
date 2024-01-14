@@ -24,6 +24,7 @@ public class Cards implements MouseMotionListener {
     private int healingStacks = 0;
     private int vulnerableStacks = 0;
     private int strengthenStacks = 0;
+    private int bleedStacks = 0;
     private int shield = 0;
     private int multiHit = 1;
     private int originalX, originalY;
@@ -59,7 +60,7 @@ public class Cards implements MouseMotionListener {
             rarity = 0;
             cardImage = new ImageIcon("images/card4.png");
         } else if (rarity <= common + rare) {
-            rand = (int) (Math.random() * 4 + 1);
+            rand = (int) (Math.random() * 5 + 1);
             rarity = 1;
             cardImage = new ImageIcon("images/card5.png");
         }
@@ -140,7 +141,7 @@ public class Cards implements MouseMotionListener {
             } else if (cardDataSplit[0].equals("strengthenStacks")) {
                 strengthenStacks = Integer.parseInt(cardDataSplit[1]);
             } else if (cardDataSplit[0].equals("bleedStacks")) {
-
+                bleedStacks = Integer.parseInt(cardDataSplit[1]);
             } else if (cardDataSplit[0].equals("multiHit")) {
                 multiHit = Integer.parseInt(cardDataSplit[1]);
             } else {
@@ -199,6 +200,10 @@ public class Cards implements MouseMotionListener {
 
     public int getStrengthenStacks() {
         return strengthenStacks;
+    }
+
+    public int getBleedStacks() {
+        return bleedStacks;
     }
 
     public int getMultiHit() {

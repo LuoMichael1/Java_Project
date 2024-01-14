@@ -18,6 +18,7 @@ public abstract class Battler {
     private ImageIcon vulnerableIcon = new ImageIcon("images/vulnerableIcon.png");
     private ImageIcon strengthenIcon = new ImageIcon("images/strenghtIcon.png");
     private ImageIcon healingIcon = new ImageIcon("images/healingIcon.png");
+    private ImageIcon bleedIcon = new ImageIcon("images/bleedIcon.png");
 
     private String name;
     // players stats
@@ -28,11 +29,12 @@ public abstract class Battler {
     private int vulnerableStacks = 0;
     private int strengthenStacks = 0;
     private int healingStacks = 0;
+    private int bleedStacks = 0;
     private int counter = 0;
 
-    private int statusNum[] = {shield, energy, vulnerableStacks, strengthenStacks, healingStacks};
-    private String statusName[] = { "Shield", "Energy", "Vulnerable", "Strength", "Healing"};
-    private ImageIcon statusImage[] = { shieldIcon, energyIcon, vulnerableIcon, strengthenIcon, healingIcon };
+    private int statusNum[] = {shield, energy, vulnerableStacks, strengthenStacks, healingStacks, bleedStacks};
+    private String statusName[] = { "Shield", "Energy", "Vulnerable", "Strength", "Healing", "Bleed"};
+    private ImageIcon statusImage[] = { shieldIcon, energyIcon, vulnerableIcon, strengthenIcon, healingIcon, bleedIcon };
 
     private ArrayList<Integer> showDamage = new ArrayList<Integer>(); // currently unused
 
@@ -75,6 +77,10 @@ public abstract class Battler {
         statusNum[4] = statusNum[4] + healingStacks;
     }
 
+    public void setBleedStacks(int bleedStacks) {
+        statusNum[5] = statusNum[5] + bleedStacks;
+    }
+
     public void increaseCounter() {
         counter++;
     }
@@ -112,6 +118,9 @@ public abstract class Battler {
 
     public int getHealingStacks() {
         return statusNum[4];
+    }
+    public int getBleedStacks() {
+        return statusNum[5];
     }
 
     public int getCounter() {
