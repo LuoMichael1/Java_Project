@@ -33,14 +33,13 @@ public class Main {
 
         MainMenu mainMenu = new MainMenu();
         Cutscene1 cutscene1 = new Cutscene1();
-        //InteractivePanel p3 = new InteractivePanel();
-        //InteractivePanel ptest = new InteractivePanel();
-        //DeckBuildPanel p4 = new DeckBuildPanel();
+        LoseScreen lostScreen = new LoseScreen();
         Settings setting = new Settings();
 
         f.add(p, BorderLayout.CENTER);
         addCard(mainMenu, "Menu");
         addCard(setting, "Settings");
+        addCard(lostScreen, "lostScreen");
         addCard(cutscene1, "Cutscene1");
         
         //addCard(p3, "Map");
