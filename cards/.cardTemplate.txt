@@ -16,9 +16,9 @@ bleedStacks 0
 isWildCard 0
 multiHit 0
 
-// damage based on ambrosia stored
+// damage based on energy stored
 // remove all healing stacks to deal damage based on number of stacks
 // deal damage based on shieldhp
 // stacks decrease every turn
-// card is not used if there is not enough ambrosia (energy)
+// card is not used if there is not enough energy
 // wildcard can level up any card 
