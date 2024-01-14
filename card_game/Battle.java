@@ -382,8 +382,9 @@ public class Battle extends JPanel implements ActionListener {
                         // sent back to the map
                         if (playersArray[altTurn] == player) {
                             Main.showCard("Menu");
-                            Cutscene1.removeGame();
                             DeckBuildPanel.difficulty = 5;
+                            Cutscene1.removeGame();
+                            Enemy.maxHp = (DeckBuildPanel.difficulty * 100);
                         }
                         else {
                             Main.showCard("Map");
