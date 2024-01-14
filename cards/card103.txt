@@ -1,0 +1,16 @@
+//Level1
+Energy +4
+name Charge     
+energyGive 4
+
+//Level2
+Energy +6
+name Charge     
+energyGive 6
+
+//Level3
+Energy +8
+name Charge     
+energyGive 8
+
+__

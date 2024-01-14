@@ -41,7 +41,9 @@ public class Battle extends JPanel implements ActionListener {
     private int damage = 0;
     private int shieldDamage = 0;
     private ArrayList<Integer> showDamage = new ArrayList<Integer>();
+    private ArrayList<Integer> showHealing = new ArrayList<Integer>();
     private int xPos = 0; // for the damage messages
+    private int xPos2 = 0; // for the healing messages
     // space for messages
     // private JLabel messageLabel;
     private JLabel instructionLabel;
@@ -156,6 +158,24 @@ public class Battle extends JPanel implements ActionListener {
                 showDamage.remove(i);
             }
         }
+        g.setColor(Color.green);
+        g.setFont(Main.Lexend30);
+        for (int i = 0; i < showHealing.size() - 1; i = i + 2) {
+            if (turn == 1)
+                xPos2 = 810;
+            else
+                xPos2 = 390;
+
+            if (showHealing.get(i + 1) <= 100)
+                g.drawString("-" + showHealing.get(i), xPos2, 60 + showHealing.get(i + 1));
+
+                showHealing.set(i + 1, showHealing.get(i + 1) - 1);
+
+            if (showHealing.get(i + 1) == 0) {
+                showHealing.remove(i);
+                showHealing.remove(i);
+            }
+        }
 
         // display player's cards
         for (int i = player.hand.length - 1; i >= 0; i--) {
@@ -201,6 +221,9 @@ public class Battle extends JPanel implements ActionListener {
             playersArray[turn].setShield(attackerCard.getShield() * 10);
             playersArray[altTurn].setVulnerableStacks(attackerCard.getVulnerableStacks());
             playersArray[turn].setStrengthenStacks(attackerCard.getStrengthenStacks());
+            playersArray[turn].setHealingStacks(attackerCard.getHealingStacks());
+            
+            performHealing();
 
             // deal damage -----------------------------------
             damage = (attackerCard.getAttack() + playersArray[turn].getStrengthenStacks()) * 10;
@@ -277,6 +300,7 @@ public class Battle extends JPanel implements ActionListener {
 
                 if (frameCounter == 40) {
                     player.attackAnimStop(1);
+                    reduceStacks(playersArray[turn]);
                     
                     if (playersArray[altTurn].getHealth() <= 0)
                         doubleTime = false;
@@ -298,8 +322,8 @@ public class Battle extends JPanel implements ActionListener {
 
                     damage = 0;
 
-                    reduceStacks(playersArray[turn]);
                     showDamage.clear();
+                    showHealing.clear();
 
                     if (playersArray[altTurn].getHealth() <= 0) {
                         System.out.println(playersArray[altTurn] + "loses!");
@@ -415,6 +439,22 @@ public class Battle extends JPanel implements ActionListener {
         if (target.getVulnerableStacks() > 0) {
             target.setVulnerableStacks(-1);
         }
+    }
+
+    private void performHealing() {
+
+        for (int i = 0; i < playersArray[turn].getHealingStacks(); i++) {
+            playersArray[turn].setHealth(playersArray[turn].getHealth() + 10);
+            playersArray[turn].setMaxHealth(playersArray[turn].getMaxHealth() + 10);
+
+            showHealing.add(10);
+            showHealing.add(100 + (i * 10)); 
+        }
+        if (playersArray[turn].getHealingStacks() > 0) {
+            playersArray[turn].setHealingStacks(-1);
+        }
+
+        
     }
 
 }

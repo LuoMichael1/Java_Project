@@ -1,0 +1,19 @@
+//Level1
+Energy +1:Deal 3 DMG 
+name Drink     
+damage 3
+energyGive 1
+
+//Level2
+Energy +2:Deal 5 DMG 
+name Drink     
+damage 5
+energyGive 2
+
+//Level3
+Energy +4:Deal 5 DMG 
+name Drink     
+damage 5
+energyGive 4
+
+__

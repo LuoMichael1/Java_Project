@@ -5,15 +5,15 @@ damage 1
 energyGive 2
 
 //Level2
-Energy +3:Deal 2 DMG 
+Energy +4:Deal 2 DMG 
 name Wand     
 damage 2
-energyGive 3
+energyGive 4
 
 //Level3
-Energy +5:Deal 2 DMG 
+Energy +6:Deal 2 DMG 
 name Wand     
 damage 2
-energyGive 5
+energyGive 6
 
 __

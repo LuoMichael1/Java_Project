@@ -1,0 +1,16 @@
+//Level1
+Healing +2
+name BandAid     
+healingStacks 2
+
+//Level2
+Healing +4
+name BandAid     
+healingStacks 4
+
+//Level3
+Healing +7
+name BandAid     
+healingStacks 7
+
+__

@@ -21,6 +21,7 @@ public class Cards implements MouseMotionListener {
     private int health = 0, attack = 0;
     private int energyCost = 0;
     private int energyGive = 0;
+    private int healingStacks = 0;
     private int vulnerableStacks = 0;
     private int strengthenStacks = 0;
     private int shield = 0;
@@ -54,11 +55,11 @@ public class Cards implements MouseMotionListener {
         // randomly generate a card
         rarity = (int) (Math.random() * 100 + 1);
         if (rarity <= common) {
-            rand = (int) (Math.random() * 6 + 1);
+            rand = (int) (Math.random() * 7 + 1);
             rarity = 0;
             cardImage = new ImageIcon("images/card4.png");
         } else if (rarity <= common + rare) {
-            rand = (int) (Math.random() * 2 + 1);
+            rand = (int) (Math.random() * 4 + 1);
             rarity = 1;
             cardImage = new ImageIcon("images/card5.png");
         }
@@ -129,7 +130,7 @@ public class Cards implements MouseMotionListener {
             } else if (cardDataSplit[0].equals("heal")) {
 
             } else if (cardDataSplit[0].equals("healingStacks")) {
-
+                healingStacks = Integer.parseInt(cardDataSplit[1]);
             } else if (cardDataSplit[0].equals("addMaxHP")) {
 
             } else if (cardDataSplit[0].equals("addShieldHp")) {
@@ -182,6 +183,10 @@ public class Cards implements MouseMotionListener {
 
     public int getEnergy() {
         return energyGive;
+    }
+
+    public int getHealingStacks() {
+        return healingStacks;
     }
 
     public int getShield() {
