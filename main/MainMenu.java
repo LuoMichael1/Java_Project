@@ -306,7 +306,7 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener {
             Main.showCard("Cutscene1");
             seenScene1 = true;
         } else
-            Main.showCard("CardGame");
+            Main.showCard("Map");
     }
 
     public static void swtichtoTitle() {

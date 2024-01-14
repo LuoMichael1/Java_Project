@@ -383,6 +383,7 @@ public class Battle extends JPanel implements ActionListener {
                         if (playersArray[altTurn] == player) {
                             Main.showCard("Menu");
                             Cutscene1.removeGame();
+                            DeckBuildPanel.difficulty = 5;
                         }
                         else {
                             Main.showCard("Map");
@@ -394,7 +395,7 @@ public class Battle extends JPanel implements ActionListener {
                             }
                         }
                         InteractiveEnemy.setInBattle(false);
-
+                        
                         // InteractiveEnemy.inBattle = false;
                     }
                 }

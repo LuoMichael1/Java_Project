@@ -97,7 +97,7 @@ public class MenuButtons extends JPanel implements ActionListener {
             seenScene1 = true;
         } else {
             Cutscene1.newGame();
-            Main.showCard("CardGame");
+            Main.showCard("Map");
         }
     }
 
