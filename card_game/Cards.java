@@ -56,7 +56,7 @@ public class Cards implements MouseMotionListener {
         // randomly generate a card
         rarity = (int) (Math.random() * 100 + 1);
         if (rarity <= common) {
-            rand = (int) (Math.random() * 7 + 1);
+            rand = (int) (Math.random() * 8 + 1);
             rarity = 0;
             cardImage = new ImageIcon("images/card4.png");
         } else if (rarity <= common + rare) {

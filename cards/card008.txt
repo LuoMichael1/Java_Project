@@ -1,0 +1,22 @@
+//Level1
+Deal 2 DMG x 3 
+name Rapid     
+damage 2
+energyCost 1
+multiHit 3
+
+//Level2
+Deal 3 DMG x 3 
+name Rapid     
+damage 3
+energyCost 1
+multiHit 3
+
+//Level3
+Deal 4 DMG x 4
+name Rapid     
+damage 4
+energyCost 1
+multiHit 4
+
+__

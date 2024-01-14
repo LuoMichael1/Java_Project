@@ -18,4 +18,5 @@ name Combo
 damage 6
 energyCost 1
 multiHit 3
+
 __
