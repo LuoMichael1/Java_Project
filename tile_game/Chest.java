@@ -27,9 +27,10 @@ public class Chest extends Interactible {
     static ArrayList<Chest> chests = new ArrayList<>();
     public static int giveCards = 0;
 
-    public static void loadChests() {
+    private boolean isOpened = false;
+    private boolean isObjective = false;
 
-        ArrayList<Point> chestCoordinates = new ArrayList<Point>();
+    public static void loadChests() {
 
         try {
 
@@ -37,21 +38,23 @@ public class Chest extends Interactible {
             BufferedReader reader = new BufferedReader(new FileReader(CHEST_COORDINATES_PATH));
 
             while ((line = reader.readLine()) != null) {
+                
                 String[] parts = line.split(",");
-                chestCoordinates.add(new Point(Integer.parseInt(parts[0]), Integer.parseInt(parts[1])));
+                
+                int x = Integer.parseInt(parts[0]);
+                int y = Integer.parseInt(parts[1]);
+                boolean isObjective = parts[2].equals("objective");
+
+                Chest chest = new Chest(x, y);
+                chest.loadImages();
+                chest.isObjective = isObjective;
+                Chest.chests.add(chest);
             }
 
             reader.close();
 
         } catch (Exception e) {
             e.printStackTrace();
-        }
-
-        for (Point point : chestCoordinates) {
-
-            Chest chest = new Chest(point.x, point.y);
-            chest.loadImages();
-            Chest.chests.add(chest);
         }
     }
     
@@ -88,9 +91,15 @@ public class Chest extends Interactible {
             if (chest.tileY + 1 == currentTileY) {
                 if (chest.tileX == currentTileX || chest.tileX + 1 == currentTileX) {
 
-                    if (gamePanel.getKeyHandler().isKeyPressed(KeyEvent.VK_SPACE)) {
-                        System.out.println("You opened a chest");
+                    if (chest.isObjective && !OrbStand.checkCompletion()) {
+                        
+                        return false;
+                    }
 
+                    if (gamePanel.getKeyHandler().isKeyPressed(KeyEvent.VK_SPACE) && !chest.isOpened) {
+                        
+                        System.out.println("You opened a chest");
+                        chest.isOpened = true;
                         giveCards += 1;
                     }
                     return true;

@@ -120,16 +120,12 @@ public class OrbStand extends Interactible {
                 }
             }
         }
-        checkCompletion();
         return false;
     }
 
-    static void checkCompletion() {
+    public static boolean checkCompletion() {
 
-        if (objectivesCompleted == TARGET_OBJECTIVES) {
-
-            System.out.println("The chest opens");
-        }
+        return objectivesCompleted == TARGET_OBJECTIVES;
     }
 
     public void draw(Graphics2D graphic, PlayerMovable player) {
