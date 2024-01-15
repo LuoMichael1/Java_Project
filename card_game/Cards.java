@@ -1,16 +1,12 @@
 package card_game;
-
-import javax.swing.*;
-
 import main.Main;
 
+import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 import java.io.File;
-import java.io.IOException;
 import java.util.Scanner;
 
-public class Cards implements MouseMotionListener {
+public class Cards {
 
     private int x, y;
     private int id = 1000; // used to compare if two cards are the same for merging | format is (####);
@@ -34,6 +30,8 @@ public class Cards implements MouseMotionListener {
     private String cardDataArray[] = new String[cardDataPoints];
     private String cardDataSplit[];
     private int rarity = 0;
+    private static final int numberOfCommon = 8;  // the number of unique common cards  
+    private static final int numberOfRare = 5;    // the number of unique rare cards
     private int rand; // index of a randomly chosen card
     private int count = 0;
     private String[] description;
@@ -56,11 +54,11 @@ public class Cards implements MouseMotionListener {
         // randomly generate a card
         rarity = (int) (Math.random() * 100 + 1);
         if (rarity <= common) {
-            rand = (int) (Math.random() * 8 + 1);
+            rand = (int) (Math.random() * numberOfCommon + 1);
             rarity = 0;
             cardImage = new ImageIcon("images/card4.png");
         } else if (rarity <= common + rare) {
-            rand = (int) (Math.random() * 5 + 1);
+            rand = (int) (Math.random() * numberOfRare + 1);
             rarity = 1;
             cardImage = new ImageIcon("images/card5.png");
         }
@@ -85,25 +83,7 @@ public class Cards implements MouseMotionListener {
         filesc.close();
     }
 
-    /*
-     * public Cards(int x, int y, int health, int attack, int originalX, int
-     * originalY, int selectionIndex) {
-     * 
-     * cardImage = new ImageIcon("card.png");
-     * 
-     * this.x = x;
-     * this.y = y;
-     * this.health = health;
-     * this.attack = attack;
-     * this.originalX = originalX;
-     * this.originalY = originalY;
-     * this.selectionIndex = selectionIndex;
-     * }
-     * 
-     * public Cards makeCopy() {
-     * return new Cards(x, y, health, attack, originalX, originalY, selectionIndex);
-     * }
-     */
+
     public boolean isInside(int mx, int my) {
         return (x - 10 < mx && y - 10 < my && x + CARDWIDTH > mx && y + CARDHIGHT > my);
     }
@@ -284,22 +264,6 @@ public class Cards implements MouseMotionListener {
             g.drawImage(star.getImage(), getX() + 8, getY() + 28 + i * 22, null);
         }
 
-        // g.drawString(description[0], getX() + 15, getY() + 50);
-        // g.drawString("Attack: " + getAttack(), getX() + 15, getY() + 70);
-    }
-
-    public void mouseDragged(MouseEvent e) {
-        /*
-         * * x = e.getX();
-         * y = e.getY();
-         * System.out.println(x);
-         * System.out.println(y);
-         * 
-         * this.myDraw(g);
-         */
-    }
-
-    public void mouseMoved(MouseEvent e) {
     }
 
     public Image getImage() {

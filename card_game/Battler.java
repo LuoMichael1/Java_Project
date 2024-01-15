@@ -36,15 +36,12 @@ public abstract class Battler {
     private String statusName[] = { "Shield", "Energy", "Vulnerable", "Strength", "Healing", "Bleed"};
     private ImageIcon statusImage[] = { shieldIcon, energyIcon, vulnerableIcon, strengthenIcon, healingIcon, bleedIcon };
 
-    private ArrayList<Integer> showDamage = new ArrayList<Integer>(); // currently unused
 
     public Battler(String name) {
         this.name = name;
         // create the players deck
         for (int i = 0; i < 5; i++) {
             deck.add(new Cards(i * 120 + 40, 420, 70, 30));
-            // System.out.println(deck);
-            // System.out.println(i);
         }
     }
 
@@ -141,14 +138,6 @@ public abstract class Battler {
 
     public String toString() {
         return name;
-    }
-
-    public void addShowDamage(int damage) {
-        showDamage.add(damage);
-    }
-
-    public ArrayList<Integer> getShowDamage() {
-        return showDamage;
     }
 
     abstract public void drawSprite(Graphics g);

@@ -2,9 +2,6 @@
 package card_game;
 
 import javax.swing.*;
-//import javax.swing.border.Border;
-//import javax.swing.border.EmptyBorder;
-import javax.swing.border.Border;
 
 import main.Main;
 import main.Music;
@@ -27,10 +24,6 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
 
     // initialize buttons
     private JButton battleButton; // start battle
-
-    private JButton leftButton; // scroll left
-    private JButton rightButton; // scroll right
-    private int scrollValue = 0;
 
     private JLabel[] cardBoxes = new JLabel[9]; // the slots that a card can be dragged to (the player's hand)
     private Cards[] handCards = new Cards[8]; // the cards actually in the card boxes
@@ -125,7 +118,7 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
         this.addMouseListener(this);
 
         instructionLabel = new JLabel(
-                ("Drag exactly " + deckSize + " cards into the boxes to take into battle, then press Start Battle")
+                ("Drag cards into the boxes to take into battle, then press Start Battle")
                         .toUpperCase());
         instructionLabel.setHorizontalAlignment(SwingConstants.CENTER);
         instructionLabel.setFont(Main.Lexend18);
@@ -171,16 +164,6 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
         battleButton.setBackground(Color.white);
         battleButton.setBorderPainted(false);
         battleButton.setFocusPainted(false);
-    }
-
-    public void scroll(int scrollValue) {
-
-        for (Cards card : player.deck) {
-
-            card.setX(card.getX() + scrollValue);
-        }
-        repaint();
-        this.scrollValue += scrollValue;
     }
 
     private void startBattle() {

@@ -43,7 +43,7 @@ public class InteractiveEnemy extends Entity {
     private int initalX;
     private int initalY;
 
-    static boolean inBattle = false;
+    private boolean inBattle = false;
 
     public void loadImages(String type) {
 
@@ -323,7 +323,7 @@ public class InteractiveEnemy extends Entity {
         return inBattle;
     }
 
-    public static void setInBattle(boolean bool) {
+    public void setInBattle(boolean bool) {
         inBattle = bool;
     }
 }
