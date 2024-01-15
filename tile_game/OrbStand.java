@@ -18,6 +18,7 @@ public class OrbStand extends Interactible {
     static final String IMAGE_PATH_EMPTY = "objects/orb-stand.png";
     static final String IMAGE_PATH_FULL = "objects/orb-stand-full.png";
     static final String IMAGE_PATH_ORB = "objects/orb.png";
+    private static final String ORB_COORDINATES_PATH = "tile_game/maps/orb-stands.csv";
 
     BufferedImage emptyImage;
     BufferedImage fullImage;
@@ -46,19 +47,19 @@ public class OrbStand extends Interactible {
         }
     }
 
-    public static void loadOrbStands(String file) {
+    public static void loadOrbStands() {
 
         try {
             String line;
-            BufferedReader reader = new BufferedReader(new FileReader(file));
+            BufferedReader reader = new BufferedReader(new FileReader(ORB_COORDINATES_PATH));
 
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
                 if (parts.length >= 3) {
                     int tileX = Integer.parseInt(parts[0]);
                     int tileY = Integer.parseInt(parts[1]);
-                    boolean hasOrb = (parts[2].equals("orb")) ? true : false;
-                    boolean objective = (parts[3].equals("objective")) ? true : false;
+                    boolean hasOrb = parts[2].equals("orb");
+                    boolean objective = parts[3].equals("objective");
 
                     OrbStand stand = new OrbStand(tileX, tileY, hasOrb, objective);
                     stand.loadImages();
@@ -67,6 +68,7 @@ public class OrbStand extends Interactible {
             }
 
             reader.close();
+
         } catch (IOException e) {
             e.printStackTrace();
         }

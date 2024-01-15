@@ -3,6 +3,7 @@ package tile_game;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,6 +22,8 @@ public class InteractiveEnemy extends Entity {
 
     private static final int InteractiveEnemy_WIDTH = 2;
     private static final int InteractiveEnemy_HEIGHT = 2;
+
+    private static final String ENEMY_COORDINATES_PATH = "tile_game/maps/enemy-coordinates.csv";
 
     public static ArrayList<InteractiveEnemy> InteractiveEnemies = new ArrayList<>();
 
@@ -44,6 +47,36 @@ public class InteractiveEnemy extends Entity {
     private int initalY;
 
     private boolean inBattle = false;
+
+    public static void loadEnemies() {
+
+        try {
+
+            String line;
+            BufferedReader reader = new BufferedReader(new FileReader(ENEMY_COORDINATES_PATH));
+
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                int x = Integer.parseInt(parts[0]);
+                int y = Integer.parseInt(parts[1]);
+                String type = parts[2];
+
+                ArrayList<Point> triggers = new ArrayList<>();
+                for (int j = 3; j < parts.length; j += 2) {
+
+                    triggers.add(new Point(Integer.parseInt(parts[j]), Integer.parseInt(parts[j + 1])));
+                }
+
+                InteractiveEnemy enemy = new InteractiveEnemy(x, y, type, triggers);
+                InteractiveEnemy.InteractiveEnemies.add(enemy);
+            }
+
+            reader.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public void loadImages(String type) {
 
@@ -73,7 +106,7 @@ public class InteractiveEnemy extends Entity {
         }
     }
 
-    public InteractiveEnemy(int x, int y, InteractivePanel gamePanel, String enemyType, ArrayList<Point> triggerTiles) {
+    public InteractiveEnemy(int x, int y, String enemyType, ArrayList<Point> triggerTiles) {
 
         this.x = x * InteractivePanel.getTileSize();
         this.y = y * InteractivePanel.getTileSize();

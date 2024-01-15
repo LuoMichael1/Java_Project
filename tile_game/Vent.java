@@ -1,6 +1,10 @@
 package tile_game;
 
 import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -10,12 +14,80 @@ public class Vent extends Interactible {
     static final int HEIGHT = 2;
 
     static final String IMAGE_PATH = "objects/vent.png";
+    private static final String VENT_COORDINATE_PATHS = "tile_game/maps/vent-coordinates.csv";
+    private static final String VENT_CONNECTION_PATHS = "tile_game/maps/vent-connections.csv";
 
     static ArrayList<Vent> vents = new ArrayList<>();
 
     HashMap<String, Vent> connections = new HashMap<>();
 
     String name;
+
+    public static void loadVents() {
+
+        try {
+
+            String line;
+            BufferedReader reader = new BufferedReader(new FileReader(VENT_COORDINATE_PATHS));
+
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+
+                int ventX = Integer.parseInt(parts[0]);
+                int ventY = Integer.parseInt(parts[1]);
+                String ventName = parts[2];
+
+                Vent vent = new Vent(ventX, ventY, ventName);
+                vent.loadImages();
+                Vent.vents.add(vent);
+            }
+
+            reader.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        loadVentConnections();
+    }
+
+    public static void loadVentConnections() {
+
+        try {
+            String line;
+            BufferedReader reader = new BufferedReader(new FileReader(VENT_CONNECTION_PATHS));
+
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length >= 3) {
+                    String vent1Name = parts[0];
+                    String direction = parts[1];
+                    String vent2Name = parts[2];
+
+                    Vent vent1 = findVentByName(vent1Name);
+                    Vent vent2 = findVentByName(vent2Name);
+
+                    if (vent1 != null && vent2 != null) {
+                        vent1.connect(direction, vent2);
+                    }
+                }
+            }
+
+            reader.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static Vent findVentByName(String name) {
+        for (Vent vent : Vent.vents) {
+            if (vent.getName().equals(name)) {
+                return vent;
+            }
+        }
+        return null;
+    }
 
     public void loadImages() {
 

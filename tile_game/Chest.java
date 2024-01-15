@@ -3,6 +3,9 @@ package tile_game;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
@@ -14,6 +17,7 @@ public class Chest extends Interactible {
 
     private static final String IMAGE_PATH = "objects/chest.png";
     private static final String IMAGE_PATH_CHEST_STAND = "objects/chest-stand.png";
+    private static final String CHEST_COORDINATES_PATH = "tile_game/maps/chest-coordinates.csv";
 
     private static final int chestStandX = 30;
     private static final int chestStandY = 2;
@@ -23,6 +27,34 @@ public class Chest extends Interactible {
     static ArrayList<Chest> chests = new ArrayList<>();
     public static int giveCards = 0;
 
+    public static void loadChests() {
+
+        ArrayList<Point> chestCoordinates = new ArrayList<Point>();
+
+        try {
+
+            String line;
+            BufferedReader reader = new BufferedReader(new FileReader(CHEST_COORDINATES_PATH));
+
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                chestCoordinates.add(new Point(Integer.parseInt(parts[0]), Integer.parseInt(parts[1])));
+            }
+
+            reader.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        for (Point point : chestCoordinates) {
+
+            Chest chest = new Chest(point.x, point.y);
+            chest.loadImages();
+            Chest.chests.add(chest);
+        }
+    }
+    
     public void loadImages() {
 
         super.loadImages(IMAGE_PATH);
