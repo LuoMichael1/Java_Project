@@ -12,22 +12,11 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener {
     private static final int LAYER_SPEED_PLANETS = 2;
     private static final int LAYER_SPEED_STARS = 1;
 
-    // private static final int IMAGE_WIDTH = 1280;
-    // private static final int IMAGE_HEIGHT = 720;
-
-    // private int layer1X1_planets = 0;
-    // private int layer2X1_planets = Main.WIDTH;
-
-    // private int layer1X2_planets = 0;
-    // private int layer2X2_planets = Main.WIDTH;
-
     private int layer1X1_stars = 0;
     private int layer2X1_stars = Main.WIDTH;
 
     private int layer1X2_stars = 0;
     private int layer2X2_stars = Main.WIDTH;
-
-    private boolean seenScene1 = false; // prevents the cutscene from being played more than once
 
     private double size = 0; // the size of the planets (the formula is their normal size multiplied by this)
     private JLabel message;
@@ -70,8 +59,6 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener {
         layeredPane.add(menuButtons, new Integer(2));
 
         this.setFocusable(true);
-        // this.grabFocus();
-        // this.requestFocusInWindow();
         this.addKeyListener(this);
 
         message = new JLabel("PRESS ANY BUTTON TO START");
@@ -106,15 +93,9 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener {
         JLabel background2_1_stars = createBackgroundLabel("menu/parallax-space-stars.png", Main.WIDTH, Main.HEIGHT);
 
         // Add parallax layers to the background layer
-        // layeredPane.add(background1_1_planets, Integer.valueOf(0));
-        // layeredPane.add(background2_1_planets, Integer.valueOf(0));
         layeredPane.add(background1_1_stars, JLayeredPane.DEFAULT_LAYER);
         layeredPane.add(background2_1_stars, JLayeredPane.DEFAULT_LAYER);
 
-        // setLayerBounds(layeredPane, background1_1_planets, 0, 0,
-        // JLayeredPane.DEFAULT_LAYER);
-        // setLayerBounds(layeredPane, background2_1_planets, Main.WIDTH, 0,
-        // JLayeredPane.DEFAULT_LAYER);
         setLayerBounds(layeredPane, background1_1_stars, 0, 0, JLayeredPane.DEFAULT_LAYER);
         setLayerBounds(layeredPane, background2_1_stars, Main.WIDTH, 0, JLayeredPane.DEFAULT_LAYER);
 
@@ -132,12 +113,7 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener {
                         planetsY[i] = (int) (Math.random() * Main.HEIGHT) + 1;
                     }
                 }
-                // layer1X1_planets -= LAYER_SPEED_PLANETS;
-                // layer2X1_planets -= LAYER_SPEED_PLANETS;
-
-                // layer1X2_planets -= LAYER_SPEED_PLANETS;
-                // layer2X2_planets -= LAYER_SPEED_PLANETS;
-
+        
                 // Update parallax layers for stars
                 layer1X1_stars -= LAYER_SPEED_STARS;
                 layer2X1_stars -= LAYER_SPEED_STARS;
@@ -157,25 +133,14 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener {
                     layer2X2_stars = Main.WIDTH;
                 }
 
-                // if (layer2X1_planets <= -Main.WIDTH) {
-                // layer2X1_planets = Main.WIDTH;
-                // }
+
 
                 for (int i = 0; i < planets.length; i++) {
-                    // countY = (int)(Math.random()*500)+1;
                     setLayerBounds(layeredPane, planets[i], planetsX[i], planetsY[i], JLayeredPane.DEFAULT_LAYER);
                 }
-                // setLayerBounds(layeredPane, background2_1_planets, layer2X1_planets, 0,
-                // JLayeredPane.DEFAULT_LAYER);
+
                 setLayerBounds(layeredPane, background1_1_stars, layer1X1_stars, 0, JLayeredPane.DEFAULT_LAYER);
                 setLayerBounds(layeredPane, background2_1_stars, layer2X1_stars, 0, JLayeredPane.DEFAULT_LAYER);
-
-                // setLayerBounds(layeredPane, background1_1_planets, layer1X2_planets, 0,
-                // JLayeredPane.DEFAULT_LAYER);
-                // setLayerBounds(layeredPane, background2_1_planets, layer2X2_planets, 0,
-                // JLayeredPane.DEFAULT_LAYER);
-                setLayerBounds(layeredPane, background1_1_stars, layer1X2_stars, 0, JLayeredPane.DEFAULT_LAYER);
-                setLayerBounds(layeredPane, background2_1_stars, layer2X2_stars, 0, JLayeredPane.DEFAULT_LAYER);
 
                 // cause the press any button to start message to shimmer
                 if (rgbvalue >= 255)
@@ -203,11 +168,8 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener {
 
                 message.setForeground(new Color(rgbvalue, rgbvalue, rgbvalue, alpha));
 
-                // System.out.println("Focus: " +
-                // KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner());
                 
                 // creates the animations for switching between the title and menu
-                //System.out.println("Count: " + count);
                 if (isTitle == false) {
                     
                     if (titleY > -100) {
@@ -229,8 +191,6 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener {
 
         timer.start();
         this.add(layeredPane, BorderLayout.CENTER);
-        // this.setVisible(true);
-        // setContentPane(layeredPane);
     }
 
     private JLabel createBackgroundLabel(String imagePath, int width, int height) {
@@ -254,8 +214,6 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener {
     public void mousePressed(MouseEvent e) {
         if (isTitle)
             swtichtoMenu();
-        //else
-            //switchCard();
     }
 
     public void mouseReleased(MouseEvent e) {
@@ -294,37 +252,21 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener {
     public void keyReleased(KeyEvent e) {
         if (isTitle)
             swtichtoMenu();
-        //else
-            //switchCard();
-    }
-
-
-    // switches to the next card in the layout
-    private void switchCard() {
-        this.setFocusable(false);
-        if (!seenScene1) {
-            Main.showCard("Cutscene1");
-            seenScene1 = true;
-        } else
-            Main.showCard("Map");
     }
 
     public static void swtichtoTitle() {
         isTitle = true;
         count = 0;
-        //titleY = Main.HEIGHT+100;
     }
     private void swtichtoMenu() {
         isTitle = false;
         count = 0;
-        //this.setFocusable(false);
     }
     public boolean isTitle() {
         return isTitle;
     }
 
     private int easing(double time, int max) {
-        //System.out.println((int)(max*(Math.pow(time,4) * Math.pow(time - 2, 4))));
         return (int)(max*(Math.pow(time,2) * Math.pow(time - 2, 2)));
     }
 }

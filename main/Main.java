@@ -4,15 +4,10 @@ package main;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Font;
-import java.io.File;
-
-// Frame, cardlayout, and some fonts
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import card_game.DeckBuildPanel;
-import tile_game.InteractivePanel;
 import tile_game.Settings;
 
 public class Main {
@@ -42,16 +37,6 @@ public class Main {
         addCard(lostScreen, "lostScreen");
         addCard(cutscene1, "Cutscene1");
         
-        //addCard(p3, "Map");
-        //addCard(p4, "CardGame");
-        
-        //removeCard(p3);
-
-        //addCard(ptest, "Map");
-        // idk why but keylistener does not work unless I do this
-        //f.addKeyListener(p2);
-        //f.addKeyListener(p3.getKeyHandler());
-
         f.setVisible(true);
         f.setSize(WIDTH, HEIGHT);
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -78,24 +63,12 @@ public class Main {
         p.remove(jPanel);
     }
 
-    // method to make fonts
-    public static Font loadFont(String path, float size) {
-        Font font = null;
-        try {
-            font = Font.createFont(Font.TRUETYPE_FONT, new File(path)).deriveFont(size);
-        } catch (Exception e) {
-            System.out.println("Couldn't get font");
-        }
-        return font;
-    }
-
     // Fonts
-    public static final Font Lexend12 = loadFont("fonts/lexend/static/Lexend-Regular.ttf", 12);
-    public static final Font Lexend18 = loadFont("fonts/lexend/static/Lexend-Regular.ttf", 18);
-    public static final Font Lexend24 = loadFont("fonts/lexend/static/Lexend-Regular.ttf", 24);
-    public static final Font Lexend30 = loadFont("fonts/lexend/static/Lexend-Regular.ttf", 30);
-    public static final Font Lexend60 = loadFont("fonts/lexend/static/Lexend-Regular.ttf", 60);
-    public static final Font Lexend180 = loadFont("fonts/lexend/static/Lexend-Regular.ttf", 180);
-
-    public static final Font QuinqueFive = loadFont("QuinqueFive_Font_1_1/QuinqueFive.ttf", 18);
+    public static final Font Lexend12 = FontFactory.loadFont("fonts/lexend/static/Lexend-Regular.ttf", 12);
+    public static final Font Lexend18 = FontFactory.loadFont("fonts/lexend/static/Lexend-Regular.ttf", 18);
+    public static final Font Lexend24 = FontFactory.loadFont("fonts/lexend/static/Lexend-Regular.ttf", 24);
+    public static final Font Lexend30 = FontFactory.loadFont("fonts/lexend/static/Lexend-Regular.ttf", 30);
+    public static final Font Lexend60 = FontFactory.loadFont("fonts/lexend/static/Lexend-Regular.ttf", 60);
+    public static final Font Lexend180 = FontFactory.loadFont("fonts/lexend/static/Lexend-Regular.ttf", 180);
+    public static final Font QuinqueFive = FontFactory.loadFont("QuinqueFive_Font_1_1/QuinqueFive.ttf", 18);
 }

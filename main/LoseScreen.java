@@ -11,7 +11,6 @@ public class LoseScreen extends JPanel implements ActionListener {
     JLabel message;
 
     public LoseScreen() {
-        // this.setO;
         this.setBackground(new Color(10,10,10));
         this.setBounds(0, 0, Main.WIDTH, Main.HEIGHT);
         this.setLayout(null);
@@ -42,17 +41,6 @@ public class LoseScreen extends JPanel implements ActionListener {
         btt2.setFocusable(false);
         this.add(btt2);
 
-        /*
-         * btt2 = new JButton("START");
-         * btt2.setFont(Main.Lexend60);
-         * btt2.setForeground(Color.white);
-         * btt2.setBounds(Main.WIDTH-320, Main.HEIGHT-245, 300, 100);
-         * //btt1.setBorderPainted(false);
-         * btt2.setContentAreaFilled(false);
-         * btt2.addActionListener(this);
-         * this.add(btt2);
-         */
-
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -63,9 +51,5 @@ public class LoseScreen extends JPanel implements ActionListener {
             Cutscene1.newGame();
             Main.showCard("Map");
         }
-        // if (e.getSource() == btt2) {
-        // //start
-        // Main.showCard("Cutscene1");
-        // }
     }
 }

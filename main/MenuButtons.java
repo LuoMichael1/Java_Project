@@ -3,11 +3,9 @@ package main;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
-
 import java.awt.Color;
 
 public class MenuButtons extends JPanel implements ActionListener {
-    //ImageIcon settingsIcon = new ImageIcon("images/Settings.png");
     
     private boolean seenScene1 = false;
 
@@ -49,16 +47,6 @@ public class MenuButtons extends JPanel implements ActionListener {
         back.setFocusable(false);
         this.add(back);
 
-        /*
-         * btt2 = new JButton("START");
-         * btt2.setFont(Main.Lexend60);
-         * btt2.setForeground(Color.white);
-         * btt2.setBounds(Main.WIDTH-320, Main.HEIGHT-245, 300, 100);
-         * //btt1.setBorderPainted(false);
-         * btt2.setContentAreaFilled(false);
-         * btt2.addActionListener(this);
-         * this.add(btt2);
-         */
 
     }
     public void moveIn(double time) {
@@ -79,14 +67,9 @@ public class MenuButtons extends JPanel implements ActionListener {
         if (e.getSource() == back) {
             MainMenu.swtichtoTitle();
         }
-        // if (e.getSource() == btt2) {
-        // //start
-        // Main.showCard("Cutscene1");
-        // }
     }
 
     private int easing(double time, int max) {
-        //System.out.println((int)(max*(Math.pow(time,4) * Math.pow(time - 2, 4))));
         return (int)(max*(Math.pow(time,2) * Math.pow(time - 2, 2)));
     }
 
