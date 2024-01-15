@@ -304,7 +304,7 @@ public class Cutscene1 extends JPanel implements KeyListener, MouseListener {
 
         // skip cutscene if x is pressed
         if (e.getKeyCode() == 88)
-            startTutorial();
+            fadingOut = true;;
         // spacebar works like the mouse
         if (e.getKeyCode() == 32) {
             dialogue.next();
