@@ -11,9 +11,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 
-public class DeckBuildPanel extends JPanel implements MouseMotionListener, MouseListener, ActionListener {
+public class DeckBuildPanel extends JPanel implements MouseMotionListener, MouseListener, ActionListener, ComponentListener {
 
-    private int x, y;
     // private int cardsInDeck = 8;
     public static int deckSize = 8;
     private Cards selected = null;
@@ -27,7 +26,6 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
 
     private JLabel[] cardBoxes = new JLabel[9]; // the slots that a card can be dragged to (the player's hand)
     private Cards[] handCards = new Cards[8]; // the cards actually in the card boxes
-    // private int cardsSelected = 0;
 
     // card columns describe the area that a card can be dropped and return to a
     // specfic part of the deck
@@ -51,25 +49,7 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
         initButtons();
         removeGaps();
 
-        this.addComponentListener(new ComponentListener() {
-            public void componentResized(ComponentEvent e) {
-            }
-
-            public void componentMoved(ComponentEvent e) {
-            }
-
-            public void componentShown(ComponentEvent e) {
-                for (int i = 0; i < Chest.giveCards; i++) {
-                    player.deck.add(new Cards(0, 420, 30, 70));
-                }
-                removeGaps();
-                Chest.giveCards = 0;
-                repaint();
-            }
-
-            public void componentHidden(ComponentEvent e) {
-            }
-        });
+        this.addComponentListener(this);
     }
 
     public void paintComponent(Graphics g) {
@@ -85,8 +65,6 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
         g.setColor(Color.BLACK);
         g.setFont(Main.Lexend60);
         g.drawString("" + numRecycled, 50, 560);
-
-        // g.drawOval(x - 20, y - 20, 40, 40);
 
         // draw card boxes
         for (int i = 0; i < deckSize; i++) {
@@ -128,20 +106,6 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
             cardBoxes[i] = new JLabel();
             cardBoxes[i].setBounds(120 + i * 130, 160, 120, 220);
         }
-
-        /*
-         * cardx = 0;
-         * cardy = 0;
-         * 
-         * create the players deck
-         * player =
-         * deck logic: card from deck remains in deck until put in selectedCards. Then x
-         * values of all remaining cards are updated to remove gaps
-         * 
-         * cardBoxes[i].setBorder(BorderFactory.createLineBorder(Color.BLACK));
-         * this.add(cardBoxes[i]);
-         */
-
     }
 
     private void initButtons() {
@@ -150,7 +114,6 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
         battleButton = new JButton("Start Battle");
 
         battleButton.addActionListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent e) {
                 startBattle();
             }
@@ -167,18 +130,6 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
     }
 
     private void startBattle() {
-        /*
-         * // if you didn't fill out your deck, it will generate some random cards to
-         * use
-         * if (cardsSelected != deckSize) {
-         * for (int i = 0; i < deckSize; i++) {
-         * if (handCards[i] == null) {
-         * handCards[i] = new Cards(0,0,100,0);
-         * cardsSelected++;
-         * }
-         * }
-         * }
-         */
 
         // resizes the nessary arrays so that the number of cards placed is the size of
         // the array
@@ -249,7 +200,7 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
 
             // check if the card was placed in the recycling
             if (e.getY() >= recyclingDimensions[1] && e.getX() < recyclingDimensions[2]) {
-                System.out.println("Placed in recycling");
+                //System.out.println("Placed in recycling");
                 numRecycled++;
 
                 if (numRecycled >= 3) {
@@ -292,19 +243,18 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
                                     player.deck.remove(selected);
                                 selected = null;
                             } else if (handCards[i] == selected) {
-                                System.out.println("WOW");
+                                //System.out.println("WOW");
                                 // nothing happens if someone drops a card in the spot it is already in
-                                // this offsets cardSelected++ lower down
-                                // cardsSelected--;
+
                             } else {
-                                System.out.println("WOWERER");
+                                //System.out.println("WOWERER");
                                 // if the selected card is in the hand already
                                 if (selected.getSelectionIndex() != -1) {
 
                                     player.deck.add(handCards[i]);
 
                                     int temp = selected.getSelectionIndex();
-                                    System.out.println("temp: " + temp);
+                                    //System.out.println("temp: " + temp);
                                     // selected.setSelectionIndex(i);
                                     // handCards[i] = selected;
                                     // handCards[i].setSelectionIndex(i);
@@ -316,9 +266,6 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
 
                                     player.deck.remove(player.deck.size() - 1);
 
-                                    // this offsets cardSelected++ lower down
-                                    // cardsSelected--;
-                                    // leveled = true;
                                 }
                                 // if the selected card comes from the deck
                                 else {
@@ -360,19 +307,16 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
                         // remove the card from the deck
                         player.deck.remove(selected);
                         // removeGaps();
-                        System.out.println("Put in box");
                         putInBox = true;
                     }
                 }
                 // I think this is for if the card selected is from the selectedCards hand and
                 // is dragged off into the deck
                 if (!putInBox) { // remove selected card from selectedCards
-                    System.out.println("not put in box");
 
                     // removes card from hand only if the card is in the hand (as opposed to being
                     // in the deck which would cause an error)
                     if (selected.getSelectionIndex() != -1) {
-                        System.out.println("WOWERERER");
                         removeCard(selected, getCardColumns(e.getX(), e.getY()));
                     }
 
@@ -387,6 +331,7 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
         }
 
         // debugging code
+        /* 
         System.out.println("\nselected-------------------");
         for (Cards card : handCards) {
 
@@ -404,6 +349,7 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
                 System.out.println("null");
         }
         // System.out.println("cardsSelected: " + cardsSelected);
+        */
     }
 
     // remove gaps between cards in the deck as cards are removed. Tries to center
@@ -484,21 +430,21 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
         }
         // if number of columns is greater than 2
         else {
-            System.out.println("I DID A THINGY");
+            //System.out.println("I DID A THINGY");
             widthOfColumns = (numberOfColumns - 2) * 120;
-            System.out.println(widthOfColumns);
+            //System.out.println(widthOfColumns);
 
             int widthOfSideColumns = (Main.WIDTH - widthOfColumns) / 2;
-            System.out.println(widthOfSideColumns);
+            //System.out.println(widthOfSideColumns);
             if (x < widthOfSideColumns) {
                 index = 0;
             } else if (x < widthOfColumns + widthOfSideColumns) {
-                System.out.println("between 1 and end");
+                //System.out.println("between 1 and end");
                 for (int i = 0; i < numberOfColumns - 2; i++) {
                     if (x > widthOfSideColumns + (i) * 120) {
                         index = i + 1;
-                        System.out.println("index:" + index);
-                        System.out.println("I Also DID A THINGY");
+                        //System.out.println("index:" + index);
+                        //System.out.println("I Also DID A THINGY");
 
                     } else
                         break;
@@ -508,7 +454,7 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
                 index = player.deck.size();
             }
         }
-        System.out.println("returned index" + index);
+        //System.out.println("returned index" + index);
         return index;
     }
 
@@ -520,4 +466,18 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
         return handCards;
     }
 
+    public void componentResized(ComponentEvent e) {
+    }
+    public void componentMoved(ComponentEvent e) {
+    }
+    public void componentShown(ComponentEvent e) {
+        for (int i = 0; i < Chest.giveCards; i++) {
+            player.deck.add(new Cards(0, 420, 30, 70));
+        }
+        removeGaps();
+        Chest.giveCards = 0;
+        repaint();
+    }
+    public void componentHidden(ComponentEvent e) {
+    }
 }

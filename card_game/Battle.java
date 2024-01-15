@@ -1,13 +1,11 @@
 // The actual card based auto-battle
 package card_game;
-
-import javax.swing.*;
-
 import main.Cutscene1;
 import main.FontFactory;
 import main.Main;
 import tile_game.InteractiveEnemy;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -89,14 +87,6 @@ public class Battle extends JPanel implements ActionListener {
         // doubleSpeed.setHorizontalAlignment(SwingConstants.RIGHT);
         doubleSpeed.addActionListener(this);
         topUIWrapper.add(doubleSpeed, BorderLayout.EAST);
-
-        // space for messages
-        // messageLabel = new JLabel("");
-        // this.add(messageLabel);
-        // messageLabel.setBounds(580, 60, 300, 20);
-        // messageLabel.setFont(new Font("Arial", Font.BOLD, 16));
-
-        // add(cardPanel, BorderLayout.CENTER);
 
         // get player and cards
         this.player = player;
