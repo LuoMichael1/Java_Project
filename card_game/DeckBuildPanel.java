@@ -5,6 +5,7 @@ import javax.swing.*;
 
 import main.Main;
 import main.Music;
+import main.Settings;
 import tile_game.Chest;
 
 import java.awt.*;
@@ -196,7 +197,10 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
 
         if (selected != null) {
             // little bubble sound effect
-            Music soundeffect = new Music("music/test3.wav", 0);
+            if (Settings.soundEffects) {
+                Music soundeffect = new Music("music/test3.wav", 0);
+                soundeffect.start();
+            }
 
             // check if the card was placed in the recycling
             if (e.getY() >= recyclingDimensions[1] && e.getX() < recyclingDimensions[2]) {

@@ -8,8 +8,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import tile_game.Settings;
-
 public class Main {
 
     // Window size

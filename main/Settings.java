@@ -1,4 +1,4 @@
-package tile_game;
+package main;
 
 //setting go here
 
@@ -7,26 +7,26 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 
-import main.Main;
-import main.Music;
-
 public class Settings extends JPanel implements ActionListener {
     int num_of_rows = 10;
     JPanel[] panelArray = new JPanel[num_of_rows];
     ImageIcon buttonOnIcon = new ImageIcon("images/buttonOff.png");
     ImageIcon buttonOffIcon = new ImageIcon("images/buttonOn.png");
-    JButton bt1 = new JButton(buttonOnIcon);
+    JButton bgMusicButton = new JButton(buttonOffIcon);
+    JButton soundeffectsButton = new JButton(buttonOffIcon);
 
     Music music;
     boolean isMusicPlaying = false;
 
-    JButton[] buttonArray = { bt1, new JButton(buttonOffIcon), new JButton(buttonOffIcon), new JButton(buttonOffIcon),
+    JButton[] buttonArray = { bgMusicButton, soundeffectsButton, new JButton(buttonOffIcon), new JButton(buttonOffIcon),
             new JButton(buttonOffIcon), new JButton(buttonOffIcon), new JButton(buttonOffIcon),
             new JButton(buttonOffIcon), new JButton(buttonOffIcon) };
-    String[] descriptons = { "Background Music", "", "", "", "", "", "", "", "", "" };
+    String[] descriptons = { "Background Music", "Sound Effects", "", "", "", "", "", "", "", "" };
 
     ImageIcon CloseIcon = new ImageIcon("images/CloseButton.png");
     JButton CloseButton = new JButton(CloseIcon);
+
+    public static boolean soundEffects = false;
 
     public Settings() {
 
@@ -34,7 +34,6 @@ public class Settings extends JPanel implements ActionListener {
         // placed music here because the music setting are also here
         try {
             music = new Music("music/bg.wav", -1);
-            isMusicPlaying = true;
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -124,14 +123,23 @@ public class Settings extends JPanel implements ActionListener {
             if (isMusicPlaying) {
                 music.stop();
                 isMusicPlaying = false;
-                bt1.setIcon(buttonOffIcon);
+                buttonArray[0].setIcon(buttonOffIcon);
             } else {
                 music.start();
                 isMusicPlaying = true;
-                bt1.setIcon(buttonOnIcon);
+                buttonArray[0].setIcon(buttonOnIcon);
             }
         }
-        if (e.getSource() == CloseButton) {
+        else if (e.getSource() == buttonArray[1]) {
+            if (soundEffects) {
+                soundEffects = false;
+                buttonArray[1].setIcon(buttonOffIcon);
+            } else {
+                soundEffects = true;
+                buttonArray[1].setIcon(buttonOnIcon);
+            }
+        }
+        else if (e.getSource() == CloseButton) {
             Main.showCard("Menu");
         }
     }

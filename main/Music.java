@@ -24,8 +24,7 @@ public class Music {
                 clip.loop(Clip.LOOP_CONTINUOUSLY);
             else
                 clip.loop(loop);
-
-            start();
+            stop();
         } catch (Exception e) {
             System.out.println("Something went wrong with starting the music" + e);
         }
