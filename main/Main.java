@@ -65,7 +65,5 @@ public class Main {
     // Fonts
     public static final Font Lexend12 = FontFactory.loadFont("fonts/lexend/static/Lexend-Regular.ttf", 12);
     public static final Font Lexend18 = FontFactory.loadFont("fonts/lexend/static/Lexend-Regular.ttf", 18);
-    public static final Font Lexend24 = FontFactory.loadFont("fonts/lexend/static/Lexend-Regular.ttf", 24);
-    public static final Font Lexend30 = FontFactory.loadFont("fonts/lexend/static/Lexend-Regular.ttf", 30);
     public static final Font Lexend60 = FontFactory.loadFont("fonts/lexend/static/Lexend-Regular.ttf", 60);
 }

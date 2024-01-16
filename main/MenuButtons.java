@@ -8,55 +8,34 @@ import java.awt.Color;
 public class MenuButtons extends JPanel implements ActionListener {
     
     private boolean seenScene1 = false;
-
-    JButton start = new JButton("START");
-    JButton tutorial = new JButton("TUTORIAL");
-    JButton back = new JButton("BACK");
+    JButton start;
+    JButton exit;
+    JButton back;
 
     public MenuButtons() {
-        // this.setO;
+
         this.setOpaque(false);
         this.setBounds(0, 0, Main.WIDTH, Main.HEIGHT);
         this.setLayout(null);
         this.setFocusable(false);
 
-        start.setBounds(120, Main.HEIGHT+200, 400, 100);
-        //start.setBorderPainted(false);
-        start.setContentAreaFilled(false);
-        start.setForeground(Color.white);
-        start.setFont(Main.Lexend60);
-        start.addActionListener(this);
-        start.setFocusable(false);
+        start = createButton("START", 120, Main.HEIGHT+200, 400, 100);
+        exit = createButton("EXIT", 120, Main.HEIGHT+350, 400, 100);
+        back = createButton("BACK", 120, Main.HEIGHT+500, 400, 100);
+
         this.add(start);
-
-        tutorial.setBounds(120, Main.HEIGHT+350, 400, 100);
-        //tutorial.setBorderPainted(false);
-        tutorial.setContentAreaFilled(false);
-        tutorial.setForeground(Color.white);
-        tutorial.setFont(Main.Lexend60);
-        tutorial.addActionListener(this);
-        tutorial.setFocusable(false);
-        this.add(tutorial);
-
-        back.setBounds(120, Main.HEIGHT+500, 400, 100);
-        //back.setBorderPainted(false);
-        back.setContentAreaFilled(false);
-        back.setForeground(Color.white);
-        back.setFont(Main.Lexend60);
-        back.addActionListener(this);
-        back.setFocusable(false);
+        this.add(exit);
         this.add(back);
-
-
     }
+
     public void moveIn(double time) {
         start.setBounds(120, (int)(Main.HEIGHT-easing(time,Main.HEIGHT-200)), 400, 100);
-        tutorial.setBounds(120, (int)(Main.HEIGHT-easing(time,Main.HEIGHT-350)), 400, 100);
+        exit.setBounds(120, (int)(Main.HEIGHT-easing(time,Main.HEIGHT-350)), 400, 100);
         back.setBounds(120, (int)(Main.HEIGHT-easing(time,Main.HEIGHT-500)), 400, 100);
     }
     public void moveOut(double time) {
         start.setBounds(120, (int)(200-easing(time,400)), 400, 100);
-        tutorial.setBounds(120, (int)(350-easing(time,550)), 400, 100);
+        exit.setBounds(120, (int)(350-easing(time,550)), 400, 100);
         back.setBounds(120, (int)(500-easing(time,700)), 400, 100);
     }
 
@@ -64,7 +43,10 @@ public class MenuButtons extends JPanel implements ActionListener {
         if (e.getSource() == start) {
             switchCard();
         }
-        if (e.getSource() == back) {
+        else if (e.getSource() == exit) {
+            System.exit(0);
+        }
+        else if (e.getSource() == back) {
             MainMenu.swtichtoTitle();
         }
     }
@@ -82,6 +64,19 @@ public class MenuButtons extends JPanel implements ActionListener {
             Cutscene1.newGame();
             Main.showCard("Map");
         }
+    }
+
+    private JButton createButton(String text, int x, int y, int width, int height) {
+        JButton button = new JButton(text);
+        
+        button.setBounds(x, y, width, height);
+        button.setContentAreaFilled(false);
+        button.setForeground(Color.white);
+        button.setFont(Main.Lexend60);
+        button.addActionListener(this);
+        button.setFocusable(false);
+
+        return button;
     }
 
 }

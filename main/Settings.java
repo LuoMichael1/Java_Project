@@ -67,7 +67,7 @@ public class Settings extends JPanel implements ActionListener {
 
         // adds the SETTING text at the top of the menu
         JLabel title = new JLabel("  SETTINGS");
-        title.setFont(Main.Lexend24);
+        title.setFont(FontFactory.loadFont("fonts/lexend/static/Lexend-Regular.ttf", 24));
         title.setForeground(Color.WHITE);
         paddingN.add(title, BorderLayout.WEST);
 

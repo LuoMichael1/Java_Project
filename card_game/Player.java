@@ -54,6 +54,7 @@ public class Player extends Battler {
         } catch (Exception e) {
             System.out.print(e);
         }
+        filesc.close();
     }
 
     // this gets called every frame during the auto-battling segment (Battle.java)

@@ -472,8 +472,10 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
 
     public void componentResized(ComponentEvent e) {
     }
+    
     public void componentMoved(ComponentEvent e) {
     }
+
     public void componentShown(ComponentEvent e) {
         for (int i = 0; i < Chest.giveCards; i++) {
             player.deck.add(new Cards(0, 420, 30, 70));
@@ -482,6 +484,7 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
         Chest.giveCards = 0;
         repaint();
     }
+
     public void componentHidden(ComponentEvent e) {
     }
 }

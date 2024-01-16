@@ -42,6 +42,9 @@ public class Battle extends JPanel implements ActionListener {
     private int xPos = 0;  // for the damage messages
     private int xPos2 = 0; // for the healing messages
 
+    Cards[] originalHand; // this is soley here because I need to know where the cards where in the array
+                          // so that I can move them back after battle
+                          
     private JLabel instructionLabel;
 
     private JButton doubleSpeed;
@@ -52,12 +55,8 @@ public class Battle extends JPanel implements ActionListener {
     // images
     private ImageIcon background = new ImageIcon("images/background.jpg");
     private ImageIcon backgroundOverlay = new ImageIcon("images/backgroundoverlay.png");
-    // private ImageIcon vulnerableIcon = new
-    // ImageIcon("images/VulnerableIcon.png");
-    // private ImageIcon strenghtIcon = new ImageIcon("images/strenghtIcon.png");
-    // private ImageIcon shieldIcon = new ImageIcon("images/shieldIcon.png");
-    Cards[] originalHand; // this is soley here because I need to know where the cards where in the array
-                          // so that I can move them back after battle
+   
+    
 
     // ------------------------------------------------------------------------------------------
 
@@ -134,7 +133,7 @@ public class Battle extends JPanel implements ActionListener {
         // }
         // System.out.println(showDamage);
         g.setColor(Color.red);
-        g.setFont(Main.Lexend30);
+        g.setFont(FontFactory.loadFont("fonts/lexend/static/Lexend-Regular.ttf", 30));
         for (int i = 0; i < showDamage.size() - 1; i = i + 2) {
             if (turn == 0)
                 xPos = 860;
@@ -152,7 +151,7 @@ public class Battle extends JPanel implements ActionListener {
             }
         }
         g.setColor(Color.green);
-        g.setFont(Main.Lexend30);
+        g.setFont(FontFactory.loadFont("fonts/lexend/static/Lexend-Regular.ttf", 30));
         for (int i = 0; i < showHealing.size() - 1; i = i + 2) {
             if (turn == 1)
                 xPos2 = 810;

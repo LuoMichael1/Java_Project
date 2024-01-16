@@ -30,8 +30,8 @@ public class Cards {
     private String cardDataArray[] = new String[cardDataPoints];
     private String cardDataSplit[];
     private int rarity = 0;
-    private static final int numberOfCommon = 8;  // the number of unique common cards  
-    private static final int numberOfRare = 5;    // the number of unique rare cards
+    private static final int NUMBER_OF_COMMON = 8;  // the number of unique common cards  
+    private static final int NUMBER_OF_RARE = 5;    // the number of unique rare cards
     private int rand; // index of a randomly chosen card
     private int count = 0;
     private String[] description;
@@ -54,11 +54,11 @@ public class Cards {
         // randomly generate a card
         rarity = (int) (Math.random() * 100 + 1);
         if (rarity <= common) {
-            rand = (int) (Math.random() * numberOfCommon + 1);
+            rand = (int) (Math.random() * NUMBER_OF_COMMON + 1);
             rarity = 0;
             cardImage = new ImageIcon("images/card4.png");
         } else if (rarity <= common + rare) {
-            rand = (int) (Math.random() * numberOfRare + 1);
+            rand = (int) (Math.random() * NUMBER_OF_RARE + 1);
             rarity = 1;
             cardImage = new ImageIcon("images/card5.png");
         }
