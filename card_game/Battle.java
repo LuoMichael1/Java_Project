@@ -63,6 +63,11 @@ public class Battle extends JPanel implements ActionListener {
 
     public Battle(Player player, Cards[] playerSelectedCards, int difficulty, Cards[] originalHand) {
 
+        // clear the players hand
+        for (int i = 0; i < player.hand.length; i++) {
+            player.hand[i] = null;
+        }
+        
         // put playerSelectedCards into player.hand
         for (int i = 0; i < playerSelectedCards.length; i++) {
             player.hand[i] = playerSelectedCards[i];
