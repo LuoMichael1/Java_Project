@@ -99,8 +99,8 @@ public class PlayerMovable extends Entity {
                 InteractivePanel.getTileSize() / 4 * 3);
 
         // Get current tile
-        int currentTileY = Math.max(0, hitbox.centerY / InteractivePanel.getTileSize());
-        int currentTileX = Math.max(0, hitbox.centerX / InteractivePanel.getTileSize());
+        int currentTileY = Math.max(0, hitbox.getCenterY() / InteractivePanel.getTileSize());
+        int currentTileX = Math.max(0, hitbox.getCenterX() / InteractivePanel.getTileSize());
 
         Point[] neighbors = new Point[] {
                 new Point(currentTileX, currentTileY - 1),
@@ -179,11 +179,11 @@ public class PlayerMovable extends Entity {
 
     public int getCurrentTileX() {
 
-        return Math.max(0, hitbox.centerX / InteractivePanel.getTileSize());
+        return Math.max(0, hitbox.getCenterX() / InteractivePanel.getTileSize());
     }
 
     public int getCurrentTileY() {
 
-        return Math.max(0, hitbox.centerY / InteractivePanel.getTileSize());
+        return Math.max(0, hitbox.getCenterY() / InteractivePanel.getTileSize());
     }
 }

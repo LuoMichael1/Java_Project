@@ -151,8 +151,8 @@ public class InteractiveEnemy extends Entity {
 
     public void chasingUpdate(PlayerMovable player, InteractivePanel gamePanel) {
 
-        if (hitbox.centerX / InteractivePanel.getTileSize() == initalX / InteractivePanel.getTileSize()
-                && hitbox.centerY / InteractivePanel.getTileSize() == initalY / InteractivePanel.getTileSize()
+        if (hitbox.getCenterX() / InteractivePanel.getTileSize() == initalX / InteractivePanel.getTileSize()
+                && hitbox.getCenterY() / InteractivePanel.getTileSize() == initalY / InteractivePanel.getTileSize()
                 && !chasing) {
 
             System.out.println(
@@ -170,7 +170,7 @@ public class InteractiveEnemy extends Entity {
                 path = calculatePath(gamePanel, initalX, initalY);
             } else {
 
-                path = calculatePath(gamePanel, player.hitbox.centerX, player.hitbox.centerY);
+                path = calculatePath(gamePanel, player.hitbox.getCenterX(), player.hitbox.getCenterY());
             }
             // Reset counter
             frameCounter = 0;
@@ -188,8 +188,8 @@ public class InteractiveEnemy extends Entity {
             }
 
             Point nextStep = path.get(0);
-            int dx = nextStep.x - hitbox.centerX / InteractivePanel.getTileSize();
-            int dy = nextStep.y - hitbox.centerY / InteractivePanel.getTileSize();
+            int dx = nextStep.x - hitbox.getCenterX() / InteractivePanel.getTileSize();
+            int dy = nextStep.y - hitbox.getCenterY() / InteractivePanel.getTileSize();
 
             int speed = 4;
 
@@ -199,8 +199,8 @@ public class InteractiveEnemy extends Entity {
             System.out.println("x: " + dx);
             System.out.println("y: " + dy);
 
-            if (hitbox.centerX / InteractivePanel.getTileSize() == nextStep.x
-                    && hitbox.centerY / InteractivePanel.getTileSize() == nextStep.y) {
+            if (hitbox.getCenterX() / InteractivePanel.getTileSize() == nextStep.x
+                    && hitbox.getCenterY() / InteractivePanel.getTileSize() == nextStep.y) {
                 path.remove(0);
             }
         }
@@ -224,8 +224,8 @@ public class InteractiveEnemy extends Entity {
                 targetY / InteractivePanel.getTileSize());
 
         // add the starting position to openList
-        current = new Point(hitbox.centerX / InteractivePanel.getTileSize(),
-                hitbox.centerY / InteractivePanel.getTileSize());
+        current = new Point(hitbox.getCenterX() / InteractivePanel.getTileSize(),
+                hitbox.getCenterY() / InteractivePanel.getTileSize());
         openList.add(current);
 
         // evaluate all nodes in openList
@@ -274,8 +274,8 @@ public class InteractiveEnemy extends Entity {
         ArrayList<Point> path = new ArrayList<>();
         while (current != null
                 && !current.equals(
-                        new Point(hitbox.centerX / InteractivePanel.getTileSize(),
-                                hitbox.centerY / InteractivePanel.getTileSize()))) {
+                        new Point(hitbox.getCenterX() / InteractivePanel.getTileSize(),
+                                hitbox.getCenterY() / InteractivePanel.getTileSize()))) {
             path.add(0, current);
             current = current.parent;
         }
@@ -337,9 +337,9 @@ public class InteractiveEnemy extends Entity {
 
         if (!player.inVent && !inBattle) {
 
-            if (hitbox.centerX / InteractivePanel.getTileSize() == player.hitbox.centerX
+            if (hitbox.getCenterX() / InteractivePanel.getTileSize() == player.hitbox.getCenterX()
                     / InteractivePanel.getTileSize()
-                    && hitbox.centerY / InteractivePanel.getTileSize() == player.hitbox.centerY
+                    && hitbox.getCenterY() / InteractivePanel.getTileSize() == player.hitbox.getCenterY()
                             / InteractivePanel.getTileSize()) {
 
                 System.out.println("You opened a InteractiveEnemy");

@@ -2,7 +2,7 @@ package tile_game;
 
 public class Hitbox {
 
-    int top, left, width, height, bot, right, centerX, centerY;
+    private int top, left, width, height, bot, right, centerX, centerY;
 
     public Hitbox(int top, int left, int width, int height) {
 
@@ -32,5 +32,37 @@ public class Hitbox {
             return false;
         }
         return true;
+    }
+
+    public int getTop() {
+        return top;
+    }
+
+    public int getLeft() {
+        return left;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public int getBot() {
+        return bot;
+    }
+
+    public int getRight() {
+        return right;
+    }
+
+    public int getCenterX() {
+        return centerX;
+    }
+
+    public int getCenterY() {
+        return centerY;
     }
 }
