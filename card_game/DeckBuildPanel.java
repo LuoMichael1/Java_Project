@@ -49,7 +49,6 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
         initUserInterface();
         initButtons();
         removeGaps();
-
         this.addComponentListener(this);
     }
 
@@ -472,7 +471,7 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
 
     public void componentResized(ComponentEvent e) {
     }
-    
+
     public void componentMoved(ComponentEvent e) {
     }
 

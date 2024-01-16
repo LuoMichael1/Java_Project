@@ -7,7 +7,7 @@ import java.awt.*;
 import java.awt.event.*;
 //import java.awt.event.ActionListener;
 
-public class MainMenu extends JPanel implements MouseListener, KeyListener {
+public class MainMenu extends JPanel implements MouseListener, KeyListener, ComponentListener {
 
     private static final int LAYER_SPEED_PLANETS = 2;
     private static final int LAYER_SPEED_STARS = 1;
@@ -35,17 +35,7 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener {
     public MainMenu() {
 
         // ensures the menu has focus when shown
-        this.addComponentListener(new ComponentListener() {
-            public void componentShown(ComponentEvent e) {
-                MainMenu.this.requestFocusInWindow();
-            }
-            public void componentResized(ComponentEvent e) {
-            }
-            public void componentMoved(ComponentEvent e) {
-            }
-            public void componentHidden(ComponentEvent e) {
-            }
-        });
+        this.addComponentListener(this);
 
         setBackground(new Color(10, 10, 10));
 
@@ -269,4 +259,15 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener {
     private int easing(double time, int max) {
         return (int)(max*(Math.pow(time,2) * Math.pow(time - 2, 2)));
     }
+
+    public void componentShown(ComponentEvent e) {
+        MainMenu.this.requestFocusInWindow();
+    }
+    public void componentResized(ComponentEvent e) {
+    }
+    public void componentMoved(ComponentEvent e) {
+    }
+    public void componentHidden(ComponentEvent e) {
+    }
+
 }

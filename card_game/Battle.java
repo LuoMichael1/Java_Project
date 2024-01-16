@@ -123,15 +123,7 @@ public class Battle extends JPanel implements ActionListener {
             battler.drawStatus(g);
         }
 
-        // if (damage > 0) {
-        // g.setColor(Color.red);
-        // g.setFont(Main.Lexend18);
-        // if (turn == 0)
-        // g.drawString("-" + damage, 880, HEALTHBAR_Y+10);
-        // else
-        // g.drawString("-" + damage, 350, HEALTHBAR_Y+10);
-        // }
-        // System.out.println(showDamage);
+     
         g.setColor(Color.red);
         g.setFont(FontFactory.loadFont("fonts/lexend/static/Lexend-Regular.ttf", 30));
         for (int i = 0; i < showDamage.size() - 1; i = i + 2) {
@@ -320,24 +312,13 @@ public class Battle extends JPanel implements ActionListener {
                     // turn. turn is 0 or 1 to make using an array easier
 
                     damage = 0;
-
                     showDamage.clear();
                     showHealing.clear();
 
                     if (playersArray[altTurn].getHealth() <= 0) {
-                        System.out.println(playersArray[altTurn] + "loses!");
+                        //System.out.println(playersArray[altTurn] + "loses!");
                         isWon = true;
 
-                        // resets the location of the cards so they appear in the right spot in the next
-                        // battle
-                        /*
-                         * for (int i = 0; i < player.hand.length; i++) {
-                         * if (player.hand[i] != null) {
-                         * player.hand[i].setX(i * 130 + 120);
-                         * player.hand[i].setY(260);
-                         * }
-                         * }
-                         */
 
                         // resets the location of the cards so they appear in the right spot in the next
                         // battle
@@ -407,6 +388,7 @@ public class Battle extends JPanel implements ActionListener {
                             Main.showCard("lostScreen");
                             DeckBuildPanel.difficulty = 5;
                             Cutscene1.removeGame();
+                            InteractiveEnemy.InteractiveEnemies.clear();
                             Enemy.maxHp = (DeckBuildPanel.difficulty * 100);
                         }
                         else {
@@ -418,9 +400,7 @@ public class Battle extends JPanel implements ActionListener {
                                     InteractiveEnemy.InteractiveEnemies.remove(i);
                             }
                         }
-                        //InteractiveEnemy.setInBattle(false);
-                        
-                        // InteractiveEnemy.inBattle = false;
+
                     }
                 }
             }

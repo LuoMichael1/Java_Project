@@ -81,30 +81,7 @@ public class Settings extends JPanel implements ActionListener {
             panelArray[i] = createToggle(descriptons[i], buttonArray[i]);
             container.add(panelArray[i]);
         }
-        /*
-         * bt1 =
-         * bt1.addActionListener(this);
-         * panelArray[1].add(bt1, BorderLayout.WEST);
-         * panelArray[1].add(new JLabel("Turn off and on background music"));
-         * 
-         * panelArray[0].add(new JButton("image placeholder"),BorderLayout.WEST);
-         * panelArray[0].add(new JLabel("placeholder text"));
-         * panelArray[2].add(new JButton("image placeholder"),BorderLayout.WEST);
-         * panelArray[2].add(new JLabel("placeholder text"));
-         * panelArray[3].add(new JButton("image placeholder"),BorderLayout.WEST);
-         * panelArray[3].add(new JLabel("placeholder text"));
-         * panelArray[4].add(new JButton("image placeholder"),BorderLayout.WEST);
-         * panelArray[4].add(new JLabel("placeholder text"));
-         * panelArray[5].add(new JButton("image placeholder"),BorderLayout.WEST);
-         * panelArray[5].add(new JLabel("placeholder text"));
-         * panelArray[6].add(new JButton("image placeholder"),BorderLayout.WEST);
-         * panelArray[6].add(new JLabel("placeholder text"));
-         * panelArray[7].add(new JButton("image placeholder"),BorderLayout.WEST);
-         * panelArray[7].add(new JLabel("placeholder text"));
-         * panelArray[8].add(new JButton("image placeholder"),BorderLayout.WEST);
-         * panelArray[8].add(new JLabel("placeholder text"));
-         * 
-         */
+    
         // sends you back to the main menu
         CloseButton.setContentAreaFilled(false);
         CloseButton.setBorderPainted(false);

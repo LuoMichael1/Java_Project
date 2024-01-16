@@ -25,7 +25,7 @@ import javax.swing.Timer;
 import card_game.DeckBuildPanel;
 import tile_game.InteractivePanel;
 
-public class Cutscene1 extends JPanel implements KeyListener, MouseListener {
+public class Cutscene1 extends JPanel implements KeyListener, MouseListener, ComponentListener {
     private int characterX = 0;
     private BufferedImage farBackground, background1, background2, foreground, blackBar;
     private BufferedImage[] carSprites = new BufferedImage[4];
@@ -44,17 +44,7 @@ public class Cutscene1 extends JPanel implements KeyListener, MouseListener {
     public Cutscene1() {
         this.setFocusable(true);
 
-        this.addComponentListener(new ComponentListener() {
-            public void componentShown(ComponentEvent e) {
-                requestFocusInWindow();
-            }
-            public void componentResized(ComponentEvent e) {
-            }
-            public void componentMoved(ComponentEvent e) {
-            }
-            public void componentHidden(ComponentEvent e) {
-            }
-        });
+        this.addComponentListener(this);
 
         // this.requestFocusInWindow();
         try {
@@ -315,4 +305,18 @@ public class Cutscene1 extends JPanel implements KeyListener, MouseListener {
             }
         }
     }
+
+    public void componentShown(ComponentEvent e) {
+        this.requestFocusInWindow();
+    }
+
+    public void componentResized(ComponentEvent e) {
+    }
+
+    public void componentMoved(ComponentEvent e) {
+    }
+
+    public void componentHidden(ComponentEvent e) {
+    }
+
 }
