@@ -10,7 +10,7 @@ public class FontFactory {
     public static Font loadFont(String path, float size) {
         Font font = null;
         try {
-            font = Font.createFont(Font.TRUETYPE_FONT, new File(path)).deriveFont(size);
+            font = Font.createFont(0, new File(path)).deriveFont(size);
         } catch (Exception e) {
             System.out.println("Couldn't get font");
         }

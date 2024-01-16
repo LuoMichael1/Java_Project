@@ -62,7 +62,7 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener {
         this.addKeyListener(this);
 
         message = new JLabel("PRESS ANY BUTTON TO START");
-        message.setFont(Main.Lexend12);
+        message.setFont(FontFactory.loadFont("fonts/lexend/static/Lexend-Regular.ttf", 12));
         message.setBounds(Main.WIDTH / 2 - (100), Main.HEIGHT - 70, 200, 10);
         // message
         this.add(message);
@@ -232,7 +232,7 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener {
         g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
         g.setColor(Color.white);
-        g.setFont(Main.Lexend180);
+        g.setFont(FontFactory.loadFont("fonts/lexend/static/Lexend-Regular.ttf", 180));
         g.drawString("BEFALL", 70, titleY);
     }
 

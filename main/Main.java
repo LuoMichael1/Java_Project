@@ -57,6 +57,7 @@ public class Main {
     static public void addCard(JPanel jPanel, String name) {
         p.add(jPanel, name);
     }
+    
     static public void removeCard(JPanel jPanel) {
         p.remove(jPanel);
     }
@@ -67,6 +68,4 @@ public class Main {
     public static final Font Lexend24 = FontFactory.loadFont("fonts/lexend/static/Lexend-Regular.ttf", 24);
     public static final Font Lexend30 = FontFactory.loadFont("fonts/lexend/static/Lexend-Regular.ttf", 30);
     public static final Font Lexend60 = FontFactory.loadFont("fonts/lexend/static/Lexend-Regular.ttf", 60);
-    public static final Font Lexend180 = FontFactory.loadFont("fonts/lexend/static/Lexend-Regular.ttf", 180);
-    public static final Font QuinqueFive = FontFactory.loadFont("QuinqueFive_Font_1_1/QuinqueFive.ttf", 18);
 }

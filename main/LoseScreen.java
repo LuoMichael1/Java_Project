@@ -23,7 +23,6 @@ public class LoseScreen extends JPanel implements ActionListener {
 
         btt1 = new JButton("Menu");
         btt1.setBounds(300, 500, 250, 100);
-        //btt1.setBorderPainted(false);
         btt1.setContentAreaFilled(false);
         btt1.setForeground(Color.white);
         btt1.setFont(Main.Lexend60);
@@ -33,7 +32,6 @@ public class LoseScreen extends JPanel implements ActionListener {
 
         btt2 = new JButton("Retry");
         btt2.setBounds(700, 500, 250, 100);
-        //btt2.setBorderPainted(false);
         btt2.setContentAreaFilled(false);
         btt2.setForeground(Color.white);
         btt2.setFont(Main.Lexend60);

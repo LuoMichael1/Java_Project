@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.*;
 import java.util.List;
 import java.awt.*;
+
+import main.FontFactory;
 import main.Main;
 
 public class InstructionLabel {
@@ -60,7 +62,7 @@ public class InstructionLabel {
         drawX = Main.WIDTH / 2 - (20 * (lines.get(lineNumber).length() / 2));
 
         graphic.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-        graphic.setFont(Main.QuinqueFive);
+        graphic.setFont(FontFactory.loadFont("QuinqueFive_Font_1_1/QuinqueFive.ttf", 18));
         graphic.setColor(Color.BLACK);
 
         // Draw a black border around the text
