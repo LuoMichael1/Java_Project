@@ -1,5 +1,6 @@
 // The actual card based auto-battle
 package card_game;
+
 import main.Cutscene1;
 import main.FontFactory;
 import main.Main;
@@ -13,23 +14,24 @@ import java.util.ArrayList;
 public class Battle extends JPanel implements ActionListener {
 
     private Battler player; // player is brought in from the deckbuildpanel
-    private Battler enemy;  // this is made in the constructor
+    private Battler enemy; // this is made in the constructor
 
     private Battler playersArray[] = new Battler[2];
 
     private int round = 0; // player goes first in any battle
-    private int turn = 5;  // is either 0 or 1 to signify if it is the player or enemys turn to act
-    private int altTurn;   // the party that is not currently acting
+    private int turn = 5; // is either 0 or 1 to signify if it is the player or enemys turn to act
+    private int altTurn; // the party that is not currently acting
     private boolean isWon = false;
 
     // would probably be more acurate to call these ticks rather than frames
-    private int FPS = 60; // frames per second (use this to change speed cuz some animations are tied to stuff)
+    private int FPS = 60; // frames per second (use this to change speed cuz some animations are tied to
+                          // stuff)
     private int framesPerTurn = 60;
     private int frameCounter = 0;
     private int framesForCardUp = 5; // how many frames for the card up animation
 
     private final int CARDY = 520; // the Y level the cards are drawn at
-    private int cardUpY = CARDY;   // intializing the card up offset
+    private int cardUpY = CARDY; // intializing the card up offset
 
     static final int HEALTHBAR_Y = 100; // the Y level the healthbar is drawn at
     static final int HEALTHBAR_WIDTH = 250;
@@ -39,12 +41,12 @@ public class Battle extends JPanel implements ActionListener {
     private int shieldDamage = 0;
     private ArrayList<Integer> showDamage = new ArrayList<Integer>();
     private ArrayList<Integer> showHealing = new ArrayList<Integer>();
-    private int xPos = 0;  // for the damage messages
+    private int xPos = 0; // for the damage messages
     private int xPos2 = 0; // for the healing messages
 
     Cards[] originalHand; // this is soley here because I need to know where the cards where in the array
                           // so that I can move them back after battle
-                          
+
     private JLabel instructionLabel;
 
     private JButton doubleSpeed;
@@ -55,8 +57,6 @@ public class Battle extends JPanel implements ActionListener {
     // images
     private ImageIcon background = new ImageIcon("images/background.jpg");
     private ImageIcon backgroundOverlay = new ImageIcon("images/backgroundoverlay.png");
-   
-    
 
     // ------------------------------------------------------------------------------------------
 
@@ -66,7 +66,7 @@ public class Battle extends JPanel implements ActionListener {
         for (int i = 0; i < player.hand.length; i++) {
             player.hand[i] = null;
         }
-        
+
         // put playerSelectedCards into player.hand
         for (int i = 0; i < playerSelectedCards.length; i++) {
             player.hand[i] = playerSelectedCards[i];
@@ -123,7 +123,6 @@ public class Battle extends JPanel implements ActionListener {
             battler.drawStatus(g);
         }
 
-     
         g.setColor(Color.red);
         g.setFont(FontFactory.loadFont("fonts/lexend/static/Lexend-Regular.ttf", 30));
         for (int i = 0; i < showDamage.size() - 1; i = i + 2) {
@@ -153,7 +152,7 @@ public class Battle extends JPanel implements ActionListener {
             if (showHealing.get(i + 1) <= 100)
                 g.drawString("-" + showHealing.get(i), xPos2, 60 + showHealing.get(i + 1));
 
-                showHealing.set(i + 1, showHealing.get(i + 1) - 1);
+            showHealing.set(i + 1, showHealing.get(i + 1) - 1);
 
             if (showHealing.get(i + 1) == 0) {
                 showHealing.remove(i);
@@ -240,17 +239,16 @@ public class Battle extends JPanel implements ActionListener {
                     defender.setHealth(defender.getHealth() - damage);
                     playersArray[turn].attackAnim(1);
 
-                    
                 }
             }
             if (performBleed() > 0) {
                 showDamage.add(performBleed());
                 showDamage.add(100 + (showDamage.size() * 10));
                 defender.setHealth(defender.getHealth() - performBleed());
-            }               
+            }
             // prevents health from going below 0
             if (defender.getHealth() < 0)
-            defender.setHealth(0);
+                defender.setHealth(0);
         }
     }
 
@@ -292,7 +290,7 @@ public class Battle extends JPanel implements ActionListener {
                 if (frameCounter == 40) {
                     player.attackAnimStop(1);
                     reduceStacks(playersArray[turn]);
-                    
+
                     if (playersArray[altTurn].getHealth() <= 0)
                         doubleTime = false;
                 }
@@ -316,9 +314,8 @@ public class Battle extends JPanel implements ActionListener {
                     showHealing.clear();
 
                     if (playersArray[altTurn].getHealth() <= 0) {
-                        //System.out.println(playersArray[altTurn] + "loses!");
+                        // System.out.println(playersArray[altTurn] + "loses!");
                         isWon = true;
-
 
                         // resets the location of the cards so they appear in the right spot in the next
                         // battle
@@ -388,10 +385,9 @@ public class Battle extends JPanel implements ActionListener {
                             Main.showCard("lostScreen");
                             DeckBuildPanel.difficulty = 5;
                             Cutscene1.removeGame();
-                            InteractiveEnemy.InteractiveEnemies.clear();
+                            // InteractiveEnemy.InteractiveEnemies.clear();
                             Enemy.maxHp = (DeckBuildPanel.difficulty * 100);
-                        }
-                        else {
+                        } else {
                             Main.showCard("Map");
 
                             // removes the enemy that we defeated
@@ -430,12 +426,12 @@ public class Battle extends JPanel implements ActionListener {
             playersArray[turn].setMaxHealth(playersArray[turn].getMaxHealth() + 10);
 
             showHealing.add(10);
-            showHealing.add(100 + (i * 10)); 
+            showHealing.add(100 + (i * 10));
         }
     }
 
     private int performBleed() {
-        return (playersArray[altTurn].getBleedStacks()*10);
+        return (playersArray[altTurn].getBleedStacks() * 10);
     }
 
 }

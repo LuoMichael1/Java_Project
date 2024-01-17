@@ -147,25 +147,33 @@ public class Cutscene1 extends JPanel implements KeyListener, MouseListener, Com
     private void startTutorial() {
         // switches to the next card in the layout
         this.setFocusable(false);
-        
+
         newGame();
-        
+
     }
 
     public static InteractivePanel p3;
     public static DeckBuildPanel p4;
+    public static boolean interactivePanelBuilt = false;
 
     public static void newGame() {
-        p3 = new InteractivePanel();
+
+        if (!interactivePanelBuilt) {
+
+            p3 = new InteractivePanel();
+            Main.addCard(p3, "Map");
+            interactivePanelBuilt = true;
+        }
+
         p4 = new DeckBuildPanel();
-        
-        Main.addCard(p3, "Map");
+
         Main.addCard(p4, "CardGame");
-        
+
         Main.showCard("Map");
     }
-    public static void removeGame() { 
-        Main.removeCard(p3);
+
+    public static void removeGame() {
+        // Main.removeCard(p3);
         Main.removeCard(p4);
     }
 
@@ -294,7 +302,8 @@ public class Cutscene1 extends JPanel implements KeyListener, MouseListener, Com
 
         // skip cutscene if x is pressed
         if (e.getKeyCode() == 88)
-            fadingOut = true;;
+            fadingOut = true;
+        ;
         // spacebar works like the mouse
         if (e.getKeyCode() == 32) {
             dialogue.next();
