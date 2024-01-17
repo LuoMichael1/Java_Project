@@ -2,28 +2,54 @@ P: We're almost there. Ready, MC?
 
 MC: Sure. Remind me again why we're doing this?
 
-P: We're stealing from CyberCorp. They have a secret project. Worth a fortune.
+P: We're clearing an abandoned laboratory. Experiment went wrong, and now the place is crawling with zombies. 
 
 MC: Risky.
 
-P: That's why we're paid well.
+P: That's why we're paid well. We got a fat reward waiting for us after beating them all.
 
-MC: Who's the boss?
+MC: Sounds great. How will we beat them?
 
-P: The Director. Mysterious, powerful, and dangerous. No one knows their real name, face, or gender. They're like a ghost.
+P: Your abilites are represented as cards. After confronting an enemy, you'll have the chance to choose what cards to battle them with.
 
-MC: Well, what do you know?
+MC: What do the cards do?
 
-P: I did some digging. Look here.
-displayImage()
-MC: Impressive.
+P: Your abilites are varied. You can damage the enemy, heal yourself, collect energy, and do so much more.
 
-P: And scary.
+MC: Okay. What's the bare minimum that I need to know?
 
-MC: How do we stand a chance?
+P: Each card you hold requires one energy to play. Energy is gained only by playing cards that give you energy.
 
-P: You're the world's best hacker and infiltrator. I'm your capable and genius partner. There's nothing we can't do.
+MC: So if my card says, <Energy + 1>, I'll gain 1 energy?
 
-MC: Okay. Let's go
+P: That's right.
 
-startTutorial()
+MC: And every time a card is used, one energy point is depleted?
+
+P: Right again.
+
+MC: I get it. And if I don't have any energy points, I can't play any cards.
+
+P: Exactly.
+
+MC: How exactly do I fight enemies with these cards?
+
+P: After you select the cards you want to take into battle, you'll just move without thinking.
+
+MC: So I'll just watch myself and the enemy battle it out?
+
+P: Yeah, something like that.
+
+MC: You mentioned that I could do so much with these cards. So there's even more to learn?
+
+P: Don't worry, you know all the basics now. You'll pick up the rest as you go.
+
+MC: Okay. Then let's go.
+
+P: WAIT! One more thing. Have you read the tutorial from the menu screen?
+
+MC: The what?
+
+P: There's a detailed guide on how this game's battle system works in the tutorial section of the main menu.
+
+MC: That sounds very useful. I'll be sure to take a look at it if I have any questions.

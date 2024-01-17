@@ -1,3 +1,6 @@
+// This class is responsible for running the main game loop of the map.
+// By Alec
+
 package tile_game;
 
 import javax.swing.*;
@@ -7,44 +10,49 @@ import main.Main;
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.util.HashSet;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 
-public class InteractivePanel extends JPanel {
+public class InteractivePanel extends JPanel implements KeyListener {
 
     private static final int ORIGINAL_TILE_SIZE = 8; // number of pixels in each tile
     private static final int SCALE = 8; // multiplier to make tiles appear bigger
     private static final int TILE_SIZE = ORIGINAL_TILE_SIZE * SCALE; // amount of actual pixels each tile takes up on
                                                                      // screen
 
-    private static final int FPS = 60;
     private static final long NANOSECONDS_PER_SECOND = 1000000000;
-    private static final long FRAME_DURATION = NANOSECONDS_PER_SECOND / FPS;
     private int frameCount = 0;
-    private int updateCount = 0;
     private long lastFrameCounterCheckTime;
-    private long lastUpdateCounterCheckTime;
 
-    final int UPS = 60; // Updates per second
-    final long UPDATE_TIME = NANOSECONDS_PER_SECOND / UPS; // Update time in nanoseconds
+    private final long UPDATE_TIME = NANOSECONDS_PER_SECOND / Main.FPS; // Update time in nanoseconds
 
-    long previousTime = System.nanoTime();
-    double lag = 0.0;
+    private long previousTime = System.nanoTime();
+    private double lag = 0.0;
 
     private Timer timer;
-    private KeyHandler keyHandler; // class to handle key inputs
     private PlayerMovable player;
     private TileManager tile;
+
+    private HashSet<Integer> pressedKeys = new HashSet<>();
+    private HashSet<Integer> handledKeys = new HashSet<>();
 
     private String event;
 
     public InteractivePanel() {
 
-        this.keyHandler = new KeyHandler();
-        this.player = new PlayerMovable(keyHandler);
+        this.player = new PlayerMovable(this);
         this.tile = new TileManager(this, player);
+
+        this.setPreferredSize(new Dimension(Main.WIDTH, Main.HEIGHT));
+        this.setBackground(Color.black);
+        this.setDoubleBuffered(true);
+        this.setFocusable(true);
+        this.addKeyListener(this);
 
         this.addComponentListener(new ComponentListener() {
             public void componentResized(ComponentEvent e) {
@@ -61,13 +69,6 @@ public class InteractivePanel extends JPanel {
             }
 
         });
-
-        this.setPreferredSize(new Dimension(Main.WIDTH, Main.HEIGHT));
-        this.setBackground(Color.black);
-        this.setDoubleBuffered(true); // Improve render performance
-
-        this.setFocusable(true);
-        this.addKeyListener(keyHandler);
 
         addFocusListener(new FocusListener() {
             @Override
@@ -88,6 +89,8 @@ public class InteractivePanel extends JPanel {
         startTimer();
     }
 
+    // semi-fixed timestep loop
+    // reference: https://gafferongames.com/post/fix_your_timestep/
     private void startTimer() {
 
         if (timer == null) {
@@ -103,31 +106,16 @@ public class InteractivePanel extends JPanel {
                     lag += elapsedTime;
 
                     while (lag >= UPDATE_TIME) {
-                        update(); // Update game logic
+
+                        update();
                         lag -= UPDATE_TIME;
-
-                        updateCount++;
-
-                        if (updateCount == FPS) { // fps check every 60 frames
-
-                            // FPS is the amount of frames computed divided by the amount of seconds taken
-                            // to compute them
-                            // 60 / currentTime - lastCheckTime
-
-                            currentTime = System.nanoTime();
-                            double timeTakenInSeconds = (currentTime - lastUpdateCounterCheckTime)
-                                    / (double) NANOSECONDS_PER_SECOND;
-                            System.out.println("update FPS: " + FPS / timeTakenInSeconds);
-                            updateCount = 0;
-                            lastUpdateCounterCheckTime = currentTime;
-                        }
                     }
 
                     repaint(); // Render the game
 
                     frameCount++;
 
-                    if (frameCount == FPS) { // fps check every 60 frames
+                    if (frameCount == Main.FPS) { // fps check every 60 frames
 
                         // FPS is the amount of frames computed divided by the amount of seconds taken
                         // to compute them
@@ -136,7 +124,7 @@ public class InteractivePanel extends JPanel {
                         currentTime = System.nanoTime();
                         double timeTakenInSeconds = (currentTime - lastFrameCounterCheckTime)
                                 / (double) NANOSECONDS_PER_SECOND;
-                        System.out.println("render FPS: " + FPS / timeTakenInSeconds);
+                        System.out.println("render FPS: " + Main.FPS / timeTakenInSeconds);
                         frameCount = 0;
                         lastFrameCounterCheckTime = currentTime;
                     }
@@ -161,38 +149,35 @@ public class InteractivePanel extends JPanel {
         return TILE_SIZE;
     }
 
-    public KeyHandler getKeyHandler() {
-
-        return keyHandler;
-    }
-
-    public void update() {
+    private void update() {
 
         player.update();
 
-        for (InteractiveEnemy enemy : InteractiveEnemy.InteractiveEnemies) {
+        for (InteractiveEnemy enemy : InteractiveEnemy.enemies) {
 
             enemy.update(player, this);
         }
 
         checkCollisions();
-        // tile.update();
     }
 
-    public void checkCollisions() {
+    private void checkCollisions() {
 
-        if (Chest.checkCollision(player, this))
+        int currentTileX = player.getCurrentTileX();
+        int currentTileY = player.getCurrentTileY();
+
+        if (Chest.checkCollision(currentTileX, currentTileY, this))
             event = "chest";
-        else if (Vent.checkCollision(player, this))
+        else if (Vent.checkCollision(currentTileX, currentTileY, player, this))
             event = "vent";
-        else if (OrbStand.checkCollision(player, this))
+        else if (!OrbStand.checkCompletion() && OrbStand.checkCollision(currentTileX, currentTileY, player, this))
             event = "orb";
         else if (Chest.isDisplayWindow())
             event = "openChest";
         else
             event = "walk";
 
-        if (player.inVent)
+        if (player.isInVent())
             event = "inVent";
     }
 
@@ -211,9 +196,9 @@ public class InteractivePanel extends JPanel {
         graphic2d.dispose();
     }
 
-    public void drawEnemies(Graphics2D g) {
+    private void drawEnemies(Graphics2D g) {
 
-        for (InteractiveEnemy enemy : InteractiveEnemy.InteractiveEnemies) {
+        for (InteractiveEnemy enemy : InteractiveEnemy.enemies) {
 
             enemy.draw(g, player);
         }
@@ -222,5 +207,36 @@ public class InteractivePanel extends JPanel {
     public void resetPlayer() {
 
         player.setDefaultLocation();
+    }
+
+    // Methods to handle key inputs
+    @Override
+    public void keyTyped(KeyEvent e) {
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        int code = e.getKeyCode();
+        pressedKeys.add(code);
+        Chest.setDisplayWindow(false);
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        int code = e.getKeyCode();
+        pressedKeys.remove(code);
+        handledKeys.remove(code);
+    }
+
+    public boolean isKeyPressed(int keyCode) {
+        if (pressedKeys.contains(keyCode) && !handledKeys.contains(keyCode)) {
+            handledKeys.add(keyCode);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isKeyHeld(int keyCode) {
+        return pressedKeys.contains(keyCode);
     }
 }

@@ -12,7 +12,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 
-public class DeckBuildPanel extends JPanel implements MouseMotionListener, MouseListener, ActionListener, ComponentListener {
+public class DeckBuildPanel extends JPanel
+        implements MouseMotionListener, MouseListener, ActionListener, ComponentListener {
 
     // private int cardsInDeck = 8;
     public static int deckSize = 8;
@@ -203,7 +204,7 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
 
             // check if the card was placed in the recycling
             if (e.getY() >= recyclingDimensions[1] && e.getX() < recyclingDimensions[2]) {
-                //System.out.println("Placed in recycling");
+                // System.out.println("Placed in recycling");
                 numRecycled++;
 
                 if (numRecycled >= 3) {
@@ -246,18 +247,18 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
                                     player.deck.remove(selected);
                                 selected = null;
                             } else if (handCards[i] == selected) {
-                                //System.out.println("WOW");
+                                // System.out.println("WOW");
                                 // nothing happens if someone drops a card in the spot it is already in
 
                             } else {
-                                //System.out.println("WOWERER");
+                                // System.out.println("WOWERER");
                                 // if the selected card is in the hand already
                                 if (selected.getSelectionIndex() != -1) {
 
                                     player.deck.add(handCards[i]);
 
                                     int temp = selected.getSelectionIndex();
-                                    //System.out.println("temp: " + temp);
+                                    // System.out.println("temp: " + temp);
                                     // selected.setSelectionIndex(i);
                                     // handCards[i] = selected;
                                     // handCards[i].setSelectionIndex(i);
@@ -334,25 +335,25 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
         }
 
         // debugging code
-        /* 
-        System.out.println("\nselected-------------------");
-        for (Cards card : handCards) {
-
-            if (card != null)
-                System.out.println(card.getID());
-            else
-                System.out.println("null");
-        }
-        System.out.println("deck-------------------");
-        for (Cards card : player.deck) {
-
-            if (card != null)
-                System.out.println(card.getID());
-            else
-                System.out.println("null");
-        }
-        // System.out.println("cardsSelected: " + cardsSelected);
-        */
+        /*
+         * System.out.println("\nselected-------------------");
+         * for (Cards card : handCards) {
+         * 
+         * if (card != null)
+         * System.out.println(card.getID());
+         * else
+         * System.out.println("null");
+         * }
+         * System.out.println("deck-------------------");
+         * for (Cards card : player.deck) {
+         * 
+         * if (card != null)
+         * System.out.println(card.getID());
+         * else
+         * System.out.println("null");
+         * }
+         * // System.out.println("cardsSelected: " + cardsSelected);
+         */
     }
 
     // remove gaps between cards in the deck as cards are removed. Tries to center
@@ -433,21 +434,21 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
         }
         // if number of columns is greater than 2
         else {
-            //System.out.println("I DID A THINGY");
+            // System.out.println("I DID A THINGY");
             widthOfColumns = (numberOfColumns - 2) * 120;
-            //System.out.println(widthOfColumns);
+            // System.out.println(widthOfColumns);
 
             int widthOfSideColumns = (Main.WIDTH - widthOfColumns) / 2;
-            //System.out.println(widthOfSideColumns);
+            // System.out.println(widthOfSideColumns);
             if (x < widthOfSideColumns) {
                 index = 0;
             } else if (x < widthOfColumns + widthOfSideColumns) {
-                //System.out.println("between 1 and end");
+                // System.out.println("between 1 and end");
                 for (int i = 0; i < numberOfColumns - 2; i++) {
                     if (x > widthOfSideColumns + (i) * 120) {
                         index = i + 1;
-                        //System.out.println("index:" + index);
-                        //System.out.println("I Also DID A THINGY");
+                        // System.out.println("index:" + index);
+                        // System.out.println("I Also DID A THINGY");
 
                     } else
                         break;
@@ -457,7 +458,7 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
                 index = player.deck.size();
             }
         }
-        //System.out.println("returned index" + index);
+        // System.out.println("returned index" + index);
         return index;
     }
 
@@ -476,11 +477,11 @@ public class DeckBuildPanel extends JPanel implements MouseMotionListener, Mouse
     }
 
     public void componentShown(ComponentEvent e) {
-        for (int i = 0; i < Chest.giveCards; i++) {
+        for (int i = 0; i < Chest.getGiveCards(); i++) {
             player.deck.add(new Cards(0, 420, 30, 70));
         }
         removeGaps();
-        Chest.giveCards = 0;
+        Chest.setGiveCards(0);
         repaint();
     }
 

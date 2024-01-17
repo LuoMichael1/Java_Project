@@ -1,3 +1,6 @@
+// This class is responsible for handling all the orb stands.
+// By Alec
+
 package tile_game;
 
 import java.awt.Graphics2D;
@@ -10,26 +13,26 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
-public class OrbStand extends Interactible {
+public class OrbStand extends Interactable {
 
-    static final int WIDTH = 2;
-    static final int HEIGHT = 2;
+    private static final int WIDTH = 2;
+    private static final int HEIGHT = 2;
 
-    static final String IMAGE_PATH_EMPTY = "objects/orb-stand.png";
-    static final String IMAGE_PATH_FULL = "objects/orb-stand-full.png";
-    static final String IMAGE_PATH_ORB = "objects/orb.png";
+    private static final String IMAGE_PATH_EMPTY = "objects/orb-stand.png";
+    private static final String IMAGE_PATH_FULL = "objects/orb-stand-full.png";
+    private static final String IMAGE_PATH_ORB = "objects/orb.png";
     private static final String ORB_COORDINATES_PATH = "tile_game/maps/orb-stands.csv";
 
-    BufferedImage emptyImage;
-    BufferedImage fullImage;
-    BufferedImage orbImage;
+    private BufferedImage emptyImage;
+    private BufferedImage fullImage;
+    private BufferedImage orbImage;
 
-    static ArrayList<OrbStand> stands = new ArrayList<>();
-    static int objectivesCompleted = 1;
-    static final int TARGET_OBJECTIVES = 3;
+    public static ArrayList<OrbStand> stands = new ArrayList<>();
+    private static int objectivesCompleted = 1;
+    private static final int TARGET_OBJECTIVES = 3;
 
-    boolean hasOrb;
-    boolean objective;
+    private boolean hasOrb;
+    private boolean objective;
 
     public void loadImages() {
 
@@ -49,13 +52,22 @@ public class OrbStand extends Interactible {
 
     public static void loadOrbStands() {
 
+        // reads in orbs in format:
+        // x,y,hasOrb,isObjective
+        // "orb" means hasOrb = true
+        // "objective" means objective = true
+
         try {
+
             String line;
             BufferedReader reader = new BufferedReader(new FileReader(ORB_COORDINATES_PATH));
 
             while ((line = reader.readLine()) != null) {
+
                 String[] parts = line.split(",");
+
                 if (parts.length >= 3) {
+
                     int tileX = Integer.parseInt(parts[0]);
                     int tileY = Integer.parseInt(parts[1]);
                     boolean hasOrb = parts[2].equals("orb");
@@ -74,7 +86,7 @@ public class OrbStand extends Interactible {
         }
     }
 
-    public OrbStand(int x, int y, boolean hasOrb, boolean objective) {
+    private OrbStand(int x, int y, boolean hasOrb, boolean objective) {
 
         super(x, y, WIDTH, HEIGHT);
 
@@ -82,11 +94,8 @@ public class OrbStand extends Interactible {
         this.objective = objective;
     }
 
-    static boolean checkCollision(PlayerMovable player, InteractivePanel gamePanel) {
-
-        // Get current tile
-        int currentTileY = player.getCurrentTileY();
-        int currentTileX = player.getCurrentTileX();
+    public static boolean checkCollision(int currentTileX, int currentTileY, PlayerMovable player,
+            InteractivePanel gamePanel) {
 
         for (OrbStand stand : stands) {
 
@@ -94,22 +103,22 @@ public class OrbStand extends Interactible {
                 if (stand.tileX == currentTileX || stand.tileX + 1 == currentTileX) {
 
                     // Check if the player pressed the spacebar
-                    if (gamePanel.getKeyHandler().isKeyPressed(KeyEvent.VK_SPACE)) {
+                    if (gamePanel.isKeyPressed(KeyEvent.VK_SPACE)) {
 
-                        if (stand.hasOrb && !player.hasOrb) {
+                        if (stand.hasOrb && !player.isHasOrb()) {
                             System.out.println("You took an orb");
                             stand.hasOrb = false;
-                            player.hasOrb = true;
+                            player.setHasOrb(true);
 
                             if (stand.objective) {
                                 objectivesCompleted--;
                             }
 
-                        } else if (player.hasOrb && !stand.hasOrb) {
+                        } else if (player.isHasOrb() && !stand.hasOrb) {
 
                             System.out.println("You placed an orb");
                             stand.hasOrb = true;
-                            player.hasOrb = false;
+                            player.setHasOrb(false);
 
                             if (stand.objective) {
                                 objectivesCompleted++;
@@ -144,7 +153,7 @@ public class OrbStand extends Interactible {
                     InteractivePanel.getTileSize() * HEIGHT, null);
         }
 
-        if (player.hasOrb) {
+        if (player.isHasOrb() && !player.isInVent()) {
 
             int yoffset = -20;
 

@@ -1,12 +1,13 @@
+// This class contains all methods and attributes of the enemies on the map.
+// By Alec
+
 package tile_game;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.PriorityQueue;
@@ -25,30 +26,38 @@ public class InteractiveEnemy extends Entity {
 
     private static final String ENEMY_COORDINATES_PATH = "tile_game/maps/enemy-coordinates.csv";
 
-    public static ArrayList<InteractiveEnemy> InteractiveEnemies = new ArrayList<>();
+    // This public list contains all the enemies.
+    public static ArrayList<InteractiveEnemy> enemies = new ArrayList<>();
 
     private int frameCounter = 0;
     private Point current = new Point(this.x / 1, this.y / 1);;
 
     private ArrayList<Point> path = new ArrayList<>();
 
-    private Set<Integer> collisionTiles = new HashSet<>();
-
-    private int C = 63;
-    private int R = 43;
-    private String[][] map;
+    // Enemy behaviour depends on the state described by these variables.
+    // If none are true, enemy is idle
+    // If a trigger tile is stepped on, enemy starts chasing
+    // If chasing, get shortest path to player every 30 frames and chase player
+    // If chasing but path gets too long, start going home
+    // Continue determining path while away from home
+    // If going home but distance to player decreases again, start chasing again
+    // Become idle again once home is reached
 
     private ArrayList<Point> triggerTiles;
     private boolean chasing = false;
-    private boolean awayFromHome = false;
     private boolean goingHome = false;
 
+    // Default position
     private int initalX;
     private int initalY;
 
     private boolean inBattle = false;
 
     public static void loadEnemies() {
+
+        // reads in enemies in format:
+        // x,y,type,triggertile1X,triggertile1Y,triggertile2X,triggertile2Y
+        // any amount of trigger tiles can be added
 
         try {
 
@@ -68,7 +77,7 @@ public class InteractiveEnemy extends Entity {
                 }
 
                 InteractiveEnemy enemy = new InteractiveEnemy(x, y, type, triggers);
-                InteractiveEnemy.InteractiveEnemies.add(enemy);
+                InteractiveEnemy.enemies.add(enemy);
             }
 
             reader.close();
@@ -78,7 +87,7 @@ public class InteractiveEnemy extends Entity {
         }
     }
 
-    public void loadImages(String type) {
+    private void loadImages(String type) {
 
         try {
 
@@ -92,9 +101,6 @@ public class InteractiveEnemy extends Entity {
                 case "blob":
                     image = ImageIO.read(getClass().getResourceAsStream("objects/blob-zombie.png"));
                     break;
-                case "hugeGreen":
-                    image = ImageIO.read(getClass().getResourceAsStream("objects/huge-green-zombie.png"));
-                    break;
                 default:
                     System.out.println("No image found");
                     break;
@@ -106,8 +112,9 @@ public class InteractiveEnemy extends Entity {
         }
     }
 
-    public InteractiveEnemy(int x, int y, String enemyType, ArrayList<Point> triggerTiles) {
+    private InteractiveEnemy(int x, int y, String enemyType, ArrayList<Point> triggerTiles) {
 
+        // Get actual x and y
         this.x = x * InteractivePanel.getTileSize();
         this.y = y * InteractivePanel.getTileSize();
 
@@ -116,41 +123,17 @@ public class InteractiveEnemy extends Entity {
 
         this.triggerTiles = triggerTiles;
 
-        collisionTiles
-                .addAll(Arrays.asList(new Integer[] { 105, 84, 85, 95, 98, 132, 0, 96, 103, 108, 111, 112, 113, 114, 7,
-                        91, 94, 106, 107, 133, 134, 130 }));
-
-        loadImages(enemyType);
-        loadMap("maps/base-map2.csv");
-
         hitbox = new Hitbox(y + InteractivePanel.getTileSize(),
                 x + InteractivePanel.getTileSize() * InteractiveEnemy_WIDTH / 4,
                 InteractivePanel.getTileSize(),
                 InteractivePanel.getTileSize());
+
+        loadImages(enemyType);
     }
 
-    public void loadMap(String file) {
+    private void chasingUpdate(PlayerMovable player, InteractivePanel gamePanel) {
 
-        map = new String[R][C];
-
-        try {
-
-            BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(file)));
-
-            for (int i = 0; i < R; i++) {
-                map[i] = reader.readLine().split(",");
-                System.out.println(Arrays.toString(map[i]));
-            }
-
-        } catch (Exception e) {
-            System.out.println(":P");
-            e.printStackTrace();
-            ;
-        }
-    }
-
-    public void chasingUpdate(PlayerMovable player, InteractivePanel gamePanel) {
-
+        // Check if arrived at home
         if (hitbox.getCenterX() / InteractivePanel.getTileSize() == initalX / InteractivePanel.getTileSize()
                 && hitbox.getCenterY() / InteractivePanel.getTileSize() == initalY / InteractivePanel.getTileSize()
                 && !chasing) {
@@ -160,9 +143,10 @@ public class InteractiveEnemy extends Entity {
                             + initalY / InteractivePanel.getTileSize());
             chasing = false;
             goingHome = false;
-            awayFromHome = false;
+            return;
         }
 
+        // Calculate path every 30 frames while chasing
         if (frameCounter % 30 == 0) {
 
             if (goingHome) {
@@ -176,17 +160,22 @@ public class InteractiveEnemy extends Entity {
             frameCounter = 0;
         }
 
+        // Follow the path as long as there is one
         if (!path.isEmpty()) {
 
-            if ((path.size() > 8 || player.inVent) && !goingHome) {
+            // Start going home if path is too long
+            if ((path.size() > 8 || player.isInVent()) && !goingHome) {
                 chasing = false;
                 goingHome = true;
                 return;
+
+                // Chase otherwise
             } else {
                 chasing = true;
                 goingHome = false;
             }
 
+            // Move towards next step
             Point nextStep = path.get(0);
             int dx = nextStep.x - hitbox.getCenterX() / InteractivePanel.getTileSize();
             int dy = nextStep.y - hitbox.getCenterY() / InteractivePanel.getTileSize();
@@ -195,9 +184,6 @@ public class InteractiveEnemy extends Entity {
 
             this.x += dx * speed;
             this.y += dy * speed;
-
-            System.out.println("x: " + dx);
-            System.out.println("y: " + dy);
 
             if (hitbox.getCenterX() / InteractivePanel.getTileSize() == nextStep.x
                     && hitbox.getCenterY() / InteractivePanel.getTileSize() == nextStep.y) {
@@ -212,7 +198,7 @@ public class InteractiveEnemy extends Entity {
     // position and a target position
     // video tutorial source by Sebastian Lague (contains pseudocode):
     // https://www.youtube.com/watch?v=-L-WgKMFuhE
-    ArrayList<Point> calculatePath(InteractivePanel gamePanel, int targetX, int targetY) {
+    private ArrayList<Point> calculatePath(InteractivePanel gamePanel, int targetX, int targetY) {
 
         // evaluate nodes in openlist and skip nodes in closedList (already evaluated)
         PriorityQueue<Point> openList = new PriorityQueue<>(Comparator.comparingInt(n -> n.f)); // prioritize nodes with
@@ -245,23 +231,18 @@ public class InteractiveEnemy extends Entity {
                 // if
                 // the node is not traversable
                 if (closedList.contains(neighbor) && neighbor.f <= current.f
-                        || collisionTiles.contains(Integer.parseInt(map[neighbor.y][neighbor.x]))) {
+                        || TileManager.getTiles()[TileManager.getMap()[neighbor.y][neighbor.x]].collision) {
                     continue;
                 }
 
                 if (!openList.contains(neighbor) || neighbor.f > current.f) {
+
                     neighbor.g = current.g + distanceBetween(current, neighbor); // g cost is the estimated distance
                                                                                  // from the initial position
                     neighbor.h = distanceBetween(neighbor, target); // h cost is the estimated distance from the
                                                                     // position to the target
                     neighbor.f = neighbor.g + neighbor.h; // f cost is the sum of g and h costs
                     neighbor.parent = current; // set parent node to find path later
-                    // System.out.println(
-                    // neighbor.x + ", " + neighbor.y + "'s parent is " + current.x + ", " +
-                    // current.y);
-                    // System.out.println(neighbor.x + ", " + neighbor.y + "'s parent is " +
-                    // neighbor.parent.x + ", "
-                    // + neighbor.parent.y);
                     openList.add(neighbor);
                 }
             }
@@ -276,6 +257,7 @@ public class InteractiveEnemy extends Entity {
                 && !current.equals(
                         new Point(hitbox.getCenterX() / InteractivePanel.getTileSize(),
                                 hitbox.getCenterY() / InteractivePanel.getTileSize()))) {
+
             path.add(0, current);
             current = current.parent;
         }
@@ -283,7 +265,8 @@ public class InteractiveEnemy extends Entity {
         return path;
     }
 
-    ArrayList<Point> generateNeighbors(Point current) {
+    private ArrayList<Point> generateNeighbors(Point current) {
+
         ArrayList<Point> neighbors = new ArrayList<>();
 
         neighbors.add(new Point(current.x, current.y - 1));
@@ -294,7 +277,7 @@ public class InteractiveEnemy extends Entity {
         return neighbors;
     }
 
-    public int distanceBetween(Point a, Point b) {
+    private int distanceBetween(Point a, Point b) {
         return (int) (Math.sqrt(Math.abs(a.x - b.x) * Math.abs(a.x - b.x) + Math.abs(a.y - b.y) * Math.abs(a.y - b.y))
                 * 10);
     }
@@ -306,20 +289,22 @@ public class InteractiveEnemy extends Entity {
                 InteractivePanel.getTileSize(),
                 InteractivePanel.getTileSize());
 
+        // Start battle if collision with player
         checkCollision(player, gamePanel);
 
+        // Start chasing if triggered
         for (Point triggerTile : triggerTiles) {
 
             if (player.getCurrentTileX() == triggerTile.x && player.getCurrentTileY() == triggerTile.y
-                    && !player.inVent && !awayFromHome) {
+                    && !player.isInVent() && !chasing && !goingHome) {
                 System.out.println("trigger entered");
                 chasing = true;
-                awayFromHome = true;
                 goingHome = false;
             }
         }
 
-        if (chasing || awayFromHome) {
+        // Calculate path as long as enemy is not at home
+        if (chasing || goingHome) {
 
             chasingUpdate(player, gamePanel);
         }
@@ -335,19 +320,16 @@ public class InteractiveEnemy extends Entity {
 
     public void checkCollision(PlayerMovable player, InteractivePanel gamePanel) {
 
-        if (!player.inVent && !inBattle) {
+        if (!player.isInVent() && !inBattle) {
 
             if (hitbox.getCenterX() / InteractivePanel.getTileSize() == player.hitbox.getCenterX()
                     / InteractivePanel.getTileSize()
                     && hitbox.getCenterY() / InteractivePanel.getTileSize() == player.hitbox.getCenterY()
                             / InteractivePanel.getTileSize()) {
 
-                System.out.println("You opened a InteractiveEnemy");
-
+                System.out.println("Start battle");
                 Main.showCard("CardGame");
-
                 inBattle = true;
-
             }
         }
     }

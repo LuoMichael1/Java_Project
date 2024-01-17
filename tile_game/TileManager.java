@@ -1,3 +1,6 @@
+// This class handles all the tiles and lighting.
+// By Alec
+
 package tile_game;
 
 import java.awt.*;
@@ -26,16 +29,20 @@ public class TileManager {
 
     private static Tile[] tile;
     private static Hitbox[][] tileHitboxes;
-    private int[][] map;
+    private static int[][] map;
+
     private int[][] alpha;
     private int[][] lightAlpha;
 
-    private Set<Integer> lightSources = new HashSet<>();
-    private Set<Integer> nonIlluminable = new HashSet<>();
+    private static Set<Integer> lightSources = new HashSet<>();
+    private static Set<Integer> nonIlluminable = new HashSet<>();
     private static Set<Integer> collisionTiles = new HashSet<>();
+
     private ArrayList<Point> lightSourcePositions = new ArrayList<>();
     private ArrayList<Integer> lightSourceStatus = new ArrayList<>();
 
+    // On top of the tiles are dark images (black images of varying opacity) and
+    // light images (yellow images of varying opacity) to represent lighting
     private BufferedImage[] darkImages = new BufferedImage[MAX_ALPHA];
     private BufferedImage[] lightImages = new BufferedImage[MAX_ALPHA];
 
@@ -43,7 +50,12 @@ public class TileManager {
     private final int NUM_ROWS = 43;
     private final int NUM_TILES = 134;
 
-    private int frameCounter;
+    // Tile class to store image and collision boolean of each tile
+    public class Tile {
+
+        public BufferedImage image;
+        public boolean collision;
+    }
 
     public TileManager(InteractivePanel gamePanel, PlayerMovable player) {
 
@@ -56,13 +68,12 @@ public class TileManager {
         lightAlpha = new int[NUM_ROWS][NUM_COLS];
         tileHitboxes = new Hitbox[NUM_ROWS][NUM_COLS];
 
+        // These are the integer codes of all the tiles that have special attributes
         lightSources.addAll(Arrays.asList(new Integer[] { 114 }));
         nonIlluminable.addAll(Arrays.asList(new Integer[] { 105, 84, 85, 95, 98, 132 }));
         collisionTiles
                 .addAll(Arrays.asList(new Integer[] { 105, 84, 85, 95, 98, 132, 0, 96, 103, 108, 111, 112, 113, 114, 7,
                         91, 94, 106, 107, 133, 134, 130 }));
-
-        frameCounter = 0;
 
         getTileImage();
         loadMap("maps/base-map2.csv");
@@ -71,7 +82,7 @@ public class TileManager {
         getLighting(map);
     }
 
-    public void loadObjects() {
+    private void loadObjects() {
 
         Chest.loadChests();
         InteractiveEnemy.loadEnemies();
@@ -80,7 +91,9 @@ public class TileManager {
         Chest.loadChestStandImage();
     }
 
-    public void getLighting(int[][] map) {
+    // Get lighting by setting the entire map to dark by default, and the light
+    // source squares to bright by default
+    private void getLighting(int[][] map) {
 
         for (int i = 0; i < NUM_ROWS; i++) {
             for (int j = 0; j < NUM_COLS; j++) {
@@ -101,16 +114,20 @@ public class TileManager {
             lightAlpha[position.y][position.x] = MAX_LIGHT_ALPHA;
 
             double variation = 0;
+
+            // Get the darkness and brightness of the squares surrounding a light source
             getSurroundingAlpha(position, variation);
         }
 
+        // Make dark/light images of every single possible opacity
         for (int alpha = 0; alpha < MAX_ALPHA; alpha++) {
+
             darkImages[alpha] = createImage(alpha, 0, 0, 10);
             lightImages[alpha] = createImage(alpha, 80, 80, 0);
         }
     }
 
-    public void getSurroundingAlpha(Point start, double variation) {
+    private void getSurroundingAlpha(Point start, double variation) {
 
         boolean[][] visited = new boolean[NUM_ROWS][NUM_COLS];
         LinkedList<Point> queue = new LinkedList<>();
@@ -150,7 +167,7 @@ public class TileManager {
         }
     }
 
-    public ArrayList<Point> getNeighbors(Point current) {
+    private ArrayList<Point> getNeighbors(Point current) {
 
         ArrayList<Point> neighbors = new ArrayList<>();
 
@@ -166,7 +183,7 @@ public class TileManager {
         return neighbors;
     }
 
-    public void getTileImage() {
+    private void getTileImage() {
 
         try {
 
@@ -183,7 +200,8 @@ public class TileManager {
         }
     }
 
-    public void generateHitboxes() {
+    // Make a hitbox for each tile to detect collision
+    private void generateHitboxes() {
 
         for (int i = 0; i < NUM_ROWS; i++) {
             for (int j = 0; j < NUM_COLS; j++) {
@@ -198,7 +216,8 @@ public class TileManager {
         }
     }
 
-    public void loadMap(String file) {
+    // Loads map from .csv file. Each tile is represented with an integer code.
+    private void loadMap(String file) {
 
         try {
 
@@ -215,10 +234,10 @@ public class TileManager {
 
         } catch (Exception e) {
             e.printStackTrace();
-            ;
         }
     }
 
+    // Creates an image of any colour.
     private BufferedImage createImage(int alpha, int r, int g, int b) {
 
         // Create a new image
@@ -238,13 +257,10 @@ public class TileManager {
     public void draw(Graphics2D graphic) {
 
         drawTiles(graphic);
-        Chest.drawChestStand(graphic, player);
-        drawChests(graphic);
-        drawVents(graphic);
-        drawStands(graphic);
+        drawObjects(graphic);
     }
 
-    public void drawTiles(Graphics2D graphic) {
+    private void drawTiles(Graphics2D graphic) {
 
         // Convert the player's coordinates into the range of visible tiles
         int start_i = Math.max(0, (player.y - player.getDrawY()) / InteractivePanel.getTileSize());
@@ -265,23 +281,19 @@ public class TileManager {
         }
     }
 
-    public void drawChests(Graphics2D g) {
+    private void drawObjects(Graphics2D g) {
+
+        Chest.drawChestStand(g, player);
 
         for (Chest chest : Chest.chests) {
 
             chest.draw(g, player, gamePanel);
         }
-    }
-
-    public void drawVents(Graphics2D g) {
 
         for (Vent vent : Vent.vents) {
 
             vent.draw(g, player, gamePanel);
         }
-    }
-
-    public void drawStands(Graphics2D g) {
 
         for (OrbStand stand : OrbStand.stands) {
 
@@ -314,66 +326,6 @@ public class TileManager {
         }
     }
 
-    public void update() {
-
-        if (frameCounter >= 10) {
-
-            int chance = (int) (Math.random() * 2);
-
-            if (chance != 0)
-                return;
-
-            int start_i = Math.max(0,
-                    player.y - Main.WIDTH / InteractivePanel.getTileSize() - MAX_ILLUMINATION_DISTANCE);
-            int end_i = Math.min(NUM_ROWS,
-                    player.y + Main.WIDTH / InteractivePanel.getTileSize() + MAX_ILLUMINATION_DISTANCE);
-
-            int start_j = Math.max(0,
-                    player.x - Main.HEIGHT / InteractivePanel.getTileSize() - MAX_ILLUMINATION_DISTANCE);
-            int end_j = Math.min(NUM_ROWS,
-                    player.x + Main.HEIGHT / InteractivePanel.getTileSize() + MAX_ILLUMINATION_DISTANCE);
-
-            for (int i = 0; i < lightSourcePositions.size(); i++) {
-
-                chance = (int) (Math.random() * 3);
-
-                if (chance != 0)
-                    continue;
-
-                Point lightSource = lightSourcePositions.get(i);
-
-                System.out.println(lightSource.x + " " + lightSource.y);
-
-                int variation = (lightSourceStatus.get(i) == 0) ? -5 : 5;
-                lightSourceStatus.set(i, 1 - lightSourceStatus.get(i));
-
-                start_i = Math.max(0, lightSource.y - MAX_ILLUMINATION_DISTANCE);
-                start_j = Math.max(0, lightSource.x - MAX_ILLUMINATION_DISTANCE);
-
-                end_i = Math.min(NUM_ROWS, lightSource.y
-                        + MAX_ILLUMINATION_DISTANCE);
-                end_j = Math.min(NUM_COLS, lightSource.x
-                        + MAX_ILLUMINATION_DISTANCE);
-
-                for (int y = start_i; y < end_i; y++) {
-                    for (int x = start_j; x < end_j; x++) {
-
-                        if (!nonIlluminable.contains(map[y][x])) {
-                            if (alpha[y][x] - variation >= 0)
-                                alpha[y][x] -= variation;
-
-                            if (lightAlpha[y][x] - variation >= 0)
-                                lightAlpha[y][x] -= variation;
-                        }
-                    }
-                }
-
-            }
-            frameCounter = 0;
-        }
-        frameCounter++;
-    }
-
     public static Set<Integer> getCollisionTiles() {
         return collisionTiles;
     }
@@ -384,5 +336,9 @@ public class TileManager {
 
     public static Hitbox[][] getTileHitboxes() {
         return tileHitboxes;
+    }
+
+    public static int[][] getMap() {
+        return map;
     }
 }

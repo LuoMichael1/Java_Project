@@ -1,6 +1,7 @@
-package tile_game;
+// This class represents a point containing an x and y coordinate with helpful variables / methods. 
+// By Alec
 
-import java.util.Objects;
+package tile_game;
 
 class Point {
 
@@ -20,10 +21,5 @@ class Point {
 
         Point point = (Point) o;
         return x == point.x && y == point.y;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(x, y);
     }
 }

@@ -1,3 +1,6 @@
+// This is the superclass of all interactable objects on the map.
+// By Alec
+
 package tile_game;
 
 import java.awt.Graphics2D;
@@ -5,13 +8,13 @@ import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
 
-public class Interactible {
+public abstract class Interactable {
 
     protected int tileX, tileY;
     protected final int WIDTH, HEIGHT;
     protected BufferedImage image;
 
-    public Interactible(int tileX, int tileY, int width, int height) {
+    public Interactable(int tileX, int tileY, int width, int height) {
 
         this.tileX = tileX;
         this.tileY = tileY;

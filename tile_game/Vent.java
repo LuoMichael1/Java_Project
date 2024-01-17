@@ -1,3 +1,6 @@
+// This is the vent class the handles the vents on the map that allow the player to quickly move around.
+// By Alec
+
 package tile_game;
 
 import java.awt.event.KeyEvent;
@@ -7,22 +10,27 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Vent extends Interactible {
+public class Vent extends Interactable {
 
-    static final int WIDTH = 2;
-    static final int HEIGHT = 2;
+    private static final int WIDTH = 2;
+    private static final int HEIGHT = 2;
 
-    static final String IMAGE_PATH = "objects/vent.png";
+    private static final String IMAGE_PATH = "objects/vent.png";
     private static final String VENT_COORDINATE_PATHS = "tile_game/maps/vent-coordinates.csv";
     private static final String VENT_CONNECTION_PATHS = "tile_game/maps/vent-connections.csv";
 
     static ArrayList<Vent> vents = new ArrayList<>();
 
-    HashMap<String, Vent> connections = new HashMap<>();
+    private HashMap<String, Vent> connections = new HashMap<>();
+    private String name;
 
-    String name;
+    // Each vent is represented by a name (e.g. 'leftVent'). Connections are
+    // represented as a map for each vent that maps a direction to a different vent
+    // (e.g. <"right", "middleVent">)
 
     public static void loadVents() {
+
+        // Reads vents in format: xCoord,yCoord,name
 
         try {
 
@@ -50,15 +58,22 @@ public class Vent extends Interactible {
         loadVentConnections();
     }
 
-    public static void loadVentConnections() {
+    private static void loadVentConnections() {
+
+        // Reads vent connections in format: vent1,direction,vent2
+        // Then connects vent one to vent two via direction
 
         try {
+
             String line;
             BufferedReader reader = new BufferedReader(new FileReader(VENT_CONNECTION_PATHS));
 
             while ((line = reader.readLine()) != null) {
+
                 String[] parts = line.split(",");
+
                 if (parts.length >= 3) {
+
                     String vent1Name = parts[0];
                     String direction = parts[1];
                     String vent2Name = parts[2];
@@ -79,8 +94,11 @@ public class Vent extends Interactible {
         }
     }
 
+    // Method to find a vent inside the vent list from a name
     private static Vent findVentByName(String name) {
+
         for (Vent vent : Vent.vents) {
+
             if (vent.getName().equals(name)) {
                 return vent;
             }
@@ -88,28 +106,26 @@ public class Vent extends Interactible {
         return null;
     }
 
-    public void loadImages() {
+    private void loadImages() {
 
-        // System.out.println("vent img loaded");
         super.loadImages(IMAGE_PATH);
     }
 
-    public Vent(int x, int y, String name) {
+    private Vent(int x, int y, String name) {
 
         super(x, y, WIDTH, HEIGHT);
 
         this.name = name;
     }
 
-    public void connect(String direction, Vent vent) {
+    // Connect other vent to this by mapping direction to vent
+    private void connect(String direction, Vent vent) {
+
         connections.put(direction, vent);
     }
 
-    static boolean checkCollision(PlayerMovable player, InteractivePanel gamePanel) {
-
-        // Get current tile
-        int currentTileY = player.getCurrentTileY();
-        int currentTileX = player.getCurrentTileX();
+    public static boolean checkCollision(int currentTileX, int currentTileY, PlayerMovable player,
+            InteractivePanel gamePanel) {
 
         for (Vent vent : vents) {
 
@@ -117,34 +133,22 @@ public class Vent extends Interactible {
                 if (vent.tileX == currentTileX || vent.tileX + 1 == currentTileX) {
 
                     // Check if the player pressed the spacebar
-                    if (gamePanel.getKeyHandler().isKeyPressed(KeyEvent.VK_SPACE)) {
+                    if (gamePanel.isKeyPressed(KeyEvent.VK_SPACE)) {
                         System.out.println("You entered a vent");
-                        player.inVent = (player.inVent == false) ? true : false;
+                        player.setInVent((player.isInVent() == false) ? true : false);
                     }
 
-                    if (player.inVent) {
+                    if (player.isInVent()) {
 
-                        // Check if the player is pressing WASD keys
-                        if (gamePanel.getKeyHandler().isKeyPressed(KeyEvent.VK_W)) {
-                            // Move the player up inside the vent
-                            Vent connectedVent = vent.connections.get("up");
-                            if (connectedVent != null) {
-                                //
-                            }
-                        } else if (gamePanel.getKeyHandler().isKeyPressed(KeyEvent.VK_A)) {
+                        // Check if the player is pressing AD keys
+                        if (gamePanel.isKeyPressed(KeyEvent.VK_A)) {
                             // Move the player left inside the vent
                             Vent connectedVent = vent.connections.get("left");
                             if (connectedVent != null) {
                                 player.setLocation(connectedVent.tileX * InteractivePanel.getTileSize(),
                                         connectedVent.tileY * InteractivePanel.getTileSize());
                             }
-                        } else if (gamePanel.getKeyHandler().isKeyPressed(KeyEvent.VK_S)) {
-                            // Move the player down inside the vent
-                            Vent connectedVent = vent.connections.get("down");
-                            if (connectedVent != null) {
-                                //
-                            }
-                        } else if (gamePanel.getKeyHandler().isKeyPressed(KeyEvent.VK_D)) {
+                        } else if (gamePanel.isKeyPressed(KeyEvent.VK_D)) {
                             // Move the player right inside the vent
                             Vent connectedVent = vent.connections.get("right");
                             if (connectedVent != null) {

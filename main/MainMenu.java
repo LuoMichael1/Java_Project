@@ -31,7 +31,6 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener, Comp
 
     private MenuButtons menuButtons = new MenuButtons();
 
-
     public MainMenu() {
 
         // ensures the menu has focus when shown
@@ -45,8 +44,8 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener, Comp
         JLayeredPane layeredPane = new JLayeredPane();
 
         layeredPane.setPreferredSize(new Dimension(1280, 720));
-        layeredPane.add(new SettingsButton(), new Integer(1));
-        layeredPane.add(menuButtons, new Integer(2));
+        layeredPane.add(new SettingsButton());
+        layeredPane.add(menuButtons);
 
         this.setFocusable(true);
         this.addKeyListener(this);
@@ -56,7 +55,7 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener, Comp
         message.setBounds(Main.WIDTH / 2 - (100), Main.HEIGHT - 70, 200, 10);
         // message
         this.add(message);
- 
+
         // create planets -----------------------------------
         JLabel[] planets = new JLabel[3];
         int[] planetsX = new int[3];
@@ -103,7 +102,7 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener, Comp
                         planetsY[i] = (int) (Math.random() * Main.HEIGHT) + 1;
                     }
                 }
-        
+
                 // Update parallax layers for stars
                 layer1X1_stars -= LAYER_SPEED_STARS;
                 layer2X1_stars -= LAYER_SPEED_STARS;
@@ -122,8 +121,6 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener, Comp
                 if (layer2X2_stars <= -Main.WIDTH) {
                     layer2X2_stars = Main.WIDTH;
                 }
-
-
 
                 for (int i = 0; i < planets.length; i++) {
                     setLayerBounds(layeredPane, planets[i], planetsX[i], planetsY[i], JLayeredPane.DEFAULT_LAYER);
@@ -146,33 +143,31 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener, Comp
                 // hides the message
                 if (isTitle == false && alpha > 0) {
                     alpha -= 10;
-                    if (alpha < 0) 
+                    if (alpha < 0)
                         alpha = 0;
                 }
 
                 else if (isTitle == true && alpha < 255) {
                     alpha += 10;
-                    if (alpha < 255) 
+                    if (alpha < 255)
                         alpha = 255;
                 }
 
                 message.setForeground(new Color(rgbvalue, rgbvalue, rgbvalue, alpha));
 
-                
                 // creates the animations for switching between the title and menu
                 if (isTitle == false) {
-                    
+
                     if (titleY > -100) {
-                        titleY = easing(count/(switchanimationtime), -700) + 600;
-                        menuButtons.moveIn((count/(switchanimationtime)));
+                        titleY = easing(count / (switchanimationtime), -700) + 600;
+                        menuButtons.moveIn((count / (switchanimationtime)));
                         count++;
                     }
-                    
-                }
-                else if (isTitle) {
+
+                } else if (isTitle) {
                     if (titleY != 600) {
-                        titleY = (Main.HEIGHT+100) - easing(count/(switchanimationtime), Main.HEIGHT-500);
-                        menuButtons.moveOut((count/(switchanimationtime)));
+                        titleY = (Main.HEIGHT + 100) - easing(count / (switchanimationtime), Main.HEIGHT - 500);
+                        menuButtons.moveOut((count / (switchanimationtime)));
                         count++;
                     }
                 }
@@ -248,25 +243,30 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener, Comp
         isTitle = true;
         count = 0;
     }
+
     private void swtichtoMenu() {
         isTitle = false;
         count = 0;
     }
+
     public boolean isTitle() {
         return isTitle;
     }
 
     private int easing(double time, int max) {
-        return (int)(max*(Math.pow(time,2) * Math.pow(time - 2, 2)));
+        return (int) (max * (Math.pow(time, 2) * Math.pow(time - 2, 2)));
     }
 
     public void componentShown(ComponentEvent e) {
         MainMenu.this.requestFocusInWindow();
     }
+
     public void componentResized(ComponentEvent e) {
     }
+
     public void componentMoved(ComponentEvent e) {
     }
+
     public void componentHidden(ComponentEvent e) {
     }
 
