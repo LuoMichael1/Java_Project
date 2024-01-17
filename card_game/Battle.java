@@ -20,12 +20,13 @@ public class Battle extends JPanel implements ActionListener {
     private Battler playersArray[] = new Battler[2];
 
     private int round = 0; // player goes first in any battle
+    private int displayedRound = 50;  // if this reaches zero and the game is not won, the player loses
     private int turn = 5; // is either 0 or 1 to signify if it is the player or enemys turn to act
     private int altTurn; // the party that is not currently acting
     private boolean isWon = false;
 
     // would probably be more acurate to call these ticks rather than frames
-    private int FPS = 60; // frames per second (use this to change speed cuz some animations are tied to
+    private int FPS = 300; // frames per second (use this to change speed cuz some animations are tied to
                           // stuff)
     private int framesPerTurn = 60;
     private int frameCounter = 0;
@@ -192,6 +193,11 @@ public class Battle extends JPanel implements ActionListener {
             }
             // drawCardInfo(g, enemy.hand[i]);
         }
+
+        // display the number of rounds left
+        g.setFont(Main.Lexend60);
+        g.setColor(Color.WHITE);
+        g.drawString("" + displayedRound, Main.WIDTH/2-30, 660);
     }
 
     private void performAttack(Cards attackerCard, Battler defender) {
@@ -286,6 +292,8 @@ public class Battle extends JPanel implements ActionListener {
 
                 if (frameCounter == 20) {
                     performAttack(playersArray[turn].hand[(round - 1) / 2 % 8], playersArray[altTurn]);
+                    displayedRound--;
+                    repaint();
                 }
 
                 if (frameCounter == 40) {
@@ -305,6 +313,7 @@ public class Battle extends JPanel implements ActionListener {
 
                 // frame 60
                 if (frameCounter == framesPerTurn) {
+
                     frameCounter = 0;
                     cardUpY = CARDY;
                     // if round is even, it is the player's turn, if round is odd, its the enemy's
@@ -314,7 +323,7 @@ public class Battle extends JPanel implements ActionListener {
                     showDamage.clear();
                     showHealing.clear();
 
-                    if (playersArray[altTurn].getHealth() <= 0) {
+                    if (playersArray[altTurn].getHealth() <= 0 || displayedRound == 0) {
                         // System.out.println(playersArray[altTurn] + "loses!");
                         isWon = true;
 
@@ -382,7 +391,7 @@ public class Battle extends JPanel implements ActionListener {
 
                         // the the player loses, they get sent to the menu screen, if they win, they get
                         // sent back to the map
-                        if (playersArray[altTurn] == player) {
+                        if (playersArray[altTurn] == player || displayedRound == 0) {
 
                             // sets the enemy to not being in battle
                             for (int i = 0; i < InteractiveEnemy.InteractiveEnemies.size(); i++) {
