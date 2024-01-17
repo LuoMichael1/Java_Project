@@ -54,24 +54,32 @@ public class InstructionLabel {
             case "walk":
                 lineNumber = 5;
                 break;
+            case "openChest":
+                lineNumber = 6;
+                break;
             default:
                 System.out.println("Invalid input");
                 return;
         }
 
-        drawX = Main.WIDTH / 2 - (20 * (lines.get(lineNumber).length() / 2));
+        displayText(graphic, lines.get(lineNumber));
+    }
+
+    public static void displayText(Graphics2D graphic, String message) {
+
+        drawX = Main.WIDTH / 2 - (20 * (message.length() / 2));
 
         graphic.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         graphic.setFont(FontFactory.loadFont("QuinqueFive_Font_1_1/QuinqueFive.ttf", 18));
         graphic.setColor(Color.BLACK);
 
         // Draw a black border around the text
-        graphic.drawString(lines.get(lineNumber), drawX - BORDER_WIDTH, drawY - BORDER_WIDTH);
-        graphic.drawString(lines.get(lineNumber), drawX + BORDER_WIDTH, drawY + BORDER_WIDTH);
-        graphic.drawString(lines.get(lineNumber), drawX + BORDER_WIDTH, drawY - BORDER_WIDTH);
-        graphic.drawString(lines.get(lineNumber), drawX - BORDER_WIDTH, drawY + BORDER_WIDTH);
+        graphic.drawString(message, drawX - BORDER_WIDTH, drawY - BORDER_WIDTH);
+        graphic.drawString(message, drawX + BORDER_WIDTH, drawY + BORDER_WIDTH);
+        graphic.drawString(message, drawX + BORDER_WIDTH, drawY - BORDER_WIDTH);
+        graphic.drawString(message, drawX - BORDER_WIDTH, drawY + BORDER_WIDTH);
 
         graphic.setColor(Color.WHITE);
-        graphic.drawString(lines.get(lineNumber), drawX, drawY);
+        graphic.drawString(message, drawX, drawY);
     }
 }

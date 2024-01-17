@@ -23,6 +23,8 @@ public class KeyHandler implements KeyListener {
         int code = e.getKeyCode();
 
         pressedKeys.add(code);
+
+        Chest.setDisplayWindow(false);
     }
 
     @Override

@@ -26,6 +26,7 @@ import card_game.DeckBuildPanel;
 import tile_game.InteractivePanel;
 
 public class Cutscene1 extends JPanel implements KeyListener, MouseListener, ComponentListener {
+
     private int characterX = 0;
     private BufferedImage farBackground, background1, background2, foreground, blackBar;
     private BufferedImage[] carSprites = new BufferedImage[4];
@@ -47,18 +48,7 @@ public class Cutscene1 extends JPanel implements KeyListener, MouseListener, Com
         this.addComponentListener(this);
 
         // this.requestFocusInWindow();
-        try {
-            farBackground = ImageIO.read(new File("environment/far-buildings.png"));
-            background1 = ImageIO.read(new File("environment/back-buildings.png"));
-            background2 = ImageIO.read(new File("environment/highway.png"));
-            for (int i = 0; i < 4; i++) {
-                carSprites[i] = ImageIO.read(new File("running/car-running" + (i + 2) + ".png"));
-            }
-            foreground = ImageIO.read(new File("environment/palm-tree.png"));
-            blackBar = ImageIO.read(new File("environment/black-bar.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        loadImages();
 
         dialogue = new Dialogue();
         this.addKeyListener(this);
@@ -88,6 +78,22 @@ public class Cutscene1 extends JPanel implements KeyListener, MouseListener, Com
             }
         });
         timer.start();
+    }
+
+    private void loadImages() {
+
+        try {
+            farBackground = ImageIO.read(new File("environment/far-buildings.png"));
+            background1 = ImageIO.read(new File("environment/back-buildings.png"));
+            background2 = ImageIO.read(new File("environment/highway.png"));
+            for (int i = 0; i < 4; i++) {
+                carSprites[i] = ImageIO.read(new File("running/car-running" + (i + 2) + ".png"));
+            }
+            foreground = ImageIO.read(new File("environment/palm-tree.png"));
+            blackBar = ImageIO.read(new File("environment/black-bar.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     protected void paintComponent(Graphics g) {

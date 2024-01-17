@@ -29,6 +29,8 @@ public class Chest extends Interactible {
     private boolean isOpened = false;
     private boolean isObjective = false;
 
+    private static boolean displayWindow = false;
+
     public static void loadChests() {
 
         try {
@@ -37,9 +39,9 @@ public class Chest extends Interactible {
             BufferedReader reader = new BufferedReader(new FileReader(CHEST_COORDINATES_PATH));
 
             while ((line = reader.readLine()) != null) {
-                
+
                 String[] parts = line.split(",");
-                
+
                 int x = Integer.parseInt(parts[0]);
                 int y = Integer.parseInt(parts[1]);
                 boolean isObjective = parts[2].equals("objective");
@@ -56,7 +58,7 @@ public class Chest extends Interactible {
             e.printStackTrace();
         }
     }
-    
+
     public void loadImages() {
 
         super.loadImages(IMAGE_PATH);
@@ -91,17 +93,17 @@ public class Chest extends Interactible {
                 if (chest.tileX == currentTileX || chest.tileX + 1 == currentTileX) {
 
                     if (chest.isObjective && !OrbStand.checkCompletion()) {
-                        
+
                         return false;
                     }
 
                     if (gamePanel.getKeyHandler().isKeyPressed(KeyEvent.VK_SPACE) && !chest.isOpened) {
-                        
-                        System.out.println("You opened a chest");
+
+                        displayWindow = true;
                         chest.isOpened = true;
                         giveCards += 1;
                     }
-                    return true;
+                    return !chest.isOpened;
                 }
             }
         }
@@ -114,5 +116,13 @@ public class Chest extends Interactible {
                 chestStandY * InteractivePanel.getTileSize() - player.y + player.getDrawY(),
                 InteractivePanel.getTileSize() * WIDTH,
                 InteractivePanel.getTileSize() * HEIGHT + InteractivePanel.getTileSize(), null);
+    }
+
+    public static boolean isDisplayWindow() {
+        return displayWindow;
+    }
+
+    public static void setDisplayWindow(boolean displayWindow) {
+        Chest.displayWindow = displayWindow;
     }
 }

@@ -187,6 +187,8 @@ public class InteractivePanel extends JPanel {
             event = "vent";
         else if (OrbStand.checkCollision(player, this))
             event = "orb";
+        else if (Chest.isDisplayWindow())
+            event = "openChest";
         else
             event = "walk";
 

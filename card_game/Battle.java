@@ -5,8 +5,6 @@ import main.Cutscene1;
 import main.FontFactory;
 import main.Main;
 import tile_game.InteractiveEnemy;
-import tile_game.InteractivePanel;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
