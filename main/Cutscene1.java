@@ -174,6 +174,7 @@ public class Cutscene1 extends JPanel implements KeyListener, MouseListener, Com
 
     public static void removeGame() {
         // Main.removeCard(p3);
+        p3.resetPlayer();
         Main.removeCard(p4);
     }
 

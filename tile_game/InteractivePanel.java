@@ -216,4 +216,9 @@ public class InteractivePanel extends JPanel {
             enemy.draw(g, player);
         }
     }
+
+    public void resetPlayer() {
+
+        player.setDefaultLocation();
+    }
 }

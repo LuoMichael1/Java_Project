@@ -41,6 +41,18 @@ public class PlayerMovable extends Entity {
 
     public void setDefaultValues() {
 
+        map = new String[R][C];
+
+        up = new BufferedImage[5];
+        down = new BufferedImage[5];
+        left = new BufferedImage[5];
+        right = new BufferedImage[5];
+
+        setDefaultLocation();
+    }
+
+    public void setDefaultLocation() {
+
         x = 34 * InteractivePanel.getTileSize();
         y = 6 * InteractivePanel.getTileSize();
         speed = 6;
@@ -48,12 +60,6 @@ public class PlayerMovable extends Entity {
         hitbox = new Hitbox(y + InteractivePanel.getTileSize() / 4, x + InteractivePanel.getTileSize() / 4,
                 InteractivePanel.getTileSize() / 2,
                 InteractivePanel.getTileSize() / 4 * 3);
-        map = new String[R][C];
-
-        up = new BufferedImage[5];
-        down = new BufferedImage[5];
-        left = new BufferedImage[5];
-        right = new BufferedImage[5];
     }
 
     public void getPlayerImage() {
