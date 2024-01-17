@@ -1,0 +1,20 @@
+When you collide with an enemy, you enter battle!, this guild will tell you how the battle system works.
+The first thing you will see is the deck builder, on the bottom are the cards in your deck and the boxes above are spaces for the cards you will bring into the fight. Just drag and drop cards from your
+hand into the boxes and hit the start battle button at the bottom once you are done.
+Cards come in different raritys shown by their color. White cards are more common compared to green cards.
+The red box on the left of the deck builder is the Recycler. Dragging cards into the Recycler will destroy the card but for every 3 cards you recycle, you get a new card.
+Each card has unique stats so make sure that you place them in the best spot to maximise your chances of beating the enemy.
+The number in the top left of a card indicates how much energy it uses. If the card does not get enough energy it will not do anything. If a card does not have an energy cost, it does not require energy
+Some cards will give energy so make sure that you place them before cards that require energy.
+Damage (DMG) indicates how much damage the card will do to the enemy. DMG is 10x so if the card says it does 4 DMG, it actually does 40 damage
+Vulnerable doubles damage taken by the enemy but each stack decreases every turn so make sure to place cards that cast Vulnerable your damage dealing cards. Having multiple stacks does not increase the
+damage multiplier
+Strengthen adds +1 to card DMG and strengthen stacks do not decrease. Some cards do multi-hits and thus benefit a lot from strengthen.
+Shield gives you a shield that absorbes damage. Every Shield gives 10 shield health so shield +2 would create a 20HP shield.
+Bleed does 1 DMG every turn for every stack of bleed. Bleed stacks do not decrease
+Healing gives 10 health every turn. Healing stacks do decrease.
+Dragging a card with the same stats and level on top of each other over in the boxes cause the card to level up. Levels are indicated by the stars on each card
+Higher level cards are stronger, but usually weaker than two lower level cards. 
+
+After clicking the start battle button you enter the fight. It's an auto-battler so you can just relax and watch. If the fights are taking too long, the top right of the screen has a double speed button. 
+The number in the bottom center of the screen are the rounds remaining. If that reaches 0 before someone runs out of health, the player has run of of time and loses.

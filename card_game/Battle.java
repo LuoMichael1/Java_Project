@@ -26,7 +26,7 @@ public class Battle extends JPanel implements ActionListener {
     private boolean isWon = false;
 
     // would probably be more acurate to call these ticks rather than frames
-    private int FPS = 300; // frames per second (use this to change speed cuz some animations are tied to
+    private int FPS = 60; // frames per second (use this to change speed cuz some animations are tied to
                           // stuff)
     private int framesPerTurn = 60;
     private int frameCounter = 0;
