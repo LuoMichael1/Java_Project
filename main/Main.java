@@ -28,12 +28,14 @@ public class Main {
         Cutscene1 cutscene1 = new Cutscene1();
         LoseScreen lostScreen = new LoseScreen();
         Settings setting = new Settings();
+        Tutorial tutorial = new Tutorial();
 
         f.add(p, BorderLayout.CENTER);
         addCard(mainMenu, "Menu");
         addCard(setting, "Settings");
         addCard(lostScreen, "lostScreen");
         addCard(cutscene1, "Cutscene1");
+        addCard(tutorial, "Tutorial");
         
         f.setVisible(true);
         f.setSize(WIDTH, HEIGHT);

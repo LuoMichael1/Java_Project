@@ -23,8 +23,8 @@ public class Settings extends JPanel implements ActionListener {
             new JButton(buttonOffIcon), new JButton(buttonOffIcon) };
     String[] descriptons = { "Background Music", "Sound Effects", "", "", "", "", "", "", "", "" };
 
-    ImageIcon CloseIcon = new ImageIcon("images/CloseButton.png");
-    JButton CloseButton = new JButton(CloseIcon);
+    ImageIcon closeIcon = new ImageIcon("images/CloseButton.png");
+    JButton closeButton = new JButton(closeIcon);
 
     public static boolean soundEffects = false;
 
@@ -83,14 +83,14 @@ public class Settings extends JPanel implements ActionListener {
         }
     
         // sends you back to the main menu
-        CloseButton.setContentAreaFilled(false);
-        CloseButton.setBorderPainted(false);
-        CloseButton.setFocusPainted(false);
-        CloseButton.addActionListener(this);
+        closeButton.setContentAreaFilled(false);
+        closeButton.setBorderPainted(false);
+        closeButton.setFocusPainted(false);
+        closeButton.addActionListener(this);
         // puts the close button at the bottom
         panelArray[num_of_rows - 1] = new JPanel(new BorderLayout());
         panelArray[num_of_rows - 1].setOpaque(false);
-        panelArray[num_of_rows - 1].add(CloseButton, BorderLayout.CENTER);
+        panelArray[num_of_rows - 1].add(closeButton, BorderLayout.CENTER);
         container.add(panelArray[num_of_rows - 1]);
 
     }
@@ -116,7 +116,7 @@ public class Settings extends JPanel implements ActionListener {
                 buttonArray[1].setIcon(buttonOnIcon);
             }
         }
-        else if (e.getSource() == CloseButton) {
+        else if (e.getSource() == closeButton) {
             Main.showCard("Menu");
         }
     }
