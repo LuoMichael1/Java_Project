@@ -142,6 +142,7 @@ public class InteractivePanel extends JPanel {
                     }
                 }
             });
+
             timer.start();
         }
     }

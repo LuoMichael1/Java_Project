@@ -382,6 +382,15 @@ public class Battle extends JPanel implements ActionListener {
                         // the the player loses, they get sent to the menu screen, if they win, they get
                         // sent back to the map
                         if (playersArray[altTurn] == player) {
+
+                            // sets the enemy to not being in battle
+                            for (int i = 0; i < InteractiveEnemy.InteractiveEnemies.size(); i++) {
+                                if (InteractiveEnemy.InteractiveEnemies.get(i).isInBattle()) {
+                                    InteractiveEnemy.InteractiveEnemies.get(i).setInBattle(false);
+                                    break;
+                                }
+                            }
+
                             Main.showCard("lostScreen");
                             DeckBuildPanel.difficulty = 5;
                             Cutscene1.removeGame();
@@ -392,8 +401,10 @@ public class Battle extends JPanel implements ActionListener {
 
                             // removes the enemy that we defeated
                             for (int i = 0; i < InteractiveEnemy.InteractiveEnemies.size(); i++) {
-                                if (InteractiveEnemy.InteractiveEnemies.get(i).isInBattle())
+                                if (InteractiveEnemy.InteractiveEnemies.get(i).isInBattle()) {
                                     InteractiveEnemy.InteractiveEnemies.remove(i);
+                                    break;
+                                }
                             }
                         }
 
