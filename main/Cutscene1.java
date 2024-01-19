@@ -1,7 +1,7 @@
-package main;
-// This is the first cutscene in the game. This scene has a car and some dialogue
+// This is the first cutscene in the game. This scene has a car animation and dialogue that explains how to play the game.
+// By Alec
 
-// Mostly by Alec
+package main;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -64,6 +64,7 @@ public class Cutscene1 extends JPanel implements KeyListener, MouseListener, Com
     private JLabel skipText = new JLabel("Press X to skip");
 
     public Cutscene1() {
+
         this.setFocusable(true);
 
         this.addComponentListener(this);
@@ -83,6 +84,7 @@ public class Cutscene1 extends JPanel implements KeyListener, MouseListener, Com
         skipText.setForeground(new Color(200, 200, 200)); // this is a light gray colour.
         controls.add(skipText);
 
+        // Main game loop
         Timer timer = new Timer(1000 / Main.FPS, new ActionListener() { // 1000 is milliseconds per second; 1000 /
                                                                         // Main.FPS is a delay that aims for 60 FPS
 
@@ -105,6 +107,7 @@ public class Cutscene1 extends JPanel implements KeyListener, MouseListener, Com
         timer.start();
     }
 
+    // This method simply loads all the images
     private void loadImages() {
 
         try {
@@ -126,6 +129,7 @@ public class Cutscene1 extends JPanel implements KeyListener, MouseListener, Com
         }
     }
 
+    // Update all the image positions and draw all the images
     protected void paintComponent(Graphics g) {
 
         // parallax logic: background images continuously scroll left to create an
@@ -174,6 +178,7 @@ public class Cutscene1 extends JPanel implements KeyListener, MouseListener, Com
         if (dialogue.index < dialogue.dialogues.size())
             dialogue.draw(g);
 
+        // Update the transparency of the fade rectanggle
         if (fadingIn) {
 
             fadeAlpha -= 255 / Main.FPS; // Decrease alpha over 60 frames for fade-out
@@ -198,6 +203,9 @@ public class Cutscene1 extends JPanel implements KeyListener, MouseListener, Com
         g.fillRect(0, 0, w, h);
     }
 
+    // These methods were written by Michael
+    // --------------------------------------------------------------------------
+    // Start the game
     private void startTutorial() {
         // switches to the next card in the layout
         this.setFocusable(false);
@@ -209,6 +217,7 @@ public class Cutscene1 extends JPanel implements KeyListener, MouseListener, Com
     public static DeckBuildPanel p4;
     public static boolean interactivePanelBuilt = false;
 
+    // Create a new game
     public static void newGame() {
 
         // create map only once to avoid resetting map each time new game is called
@@ -226,14 +235,23 @@ public class Cutscene1 extends JPanel implements KeyListener, MouseListener, Com
         Main.showCard("Map");
     }
 
+    // Remove the game
     public static void removeGame() {
 
         p3.resetPlayer();
         Main.removeCard(p4);
     }
+    // --------------------------------------------------------------------------
 
+    // This class contains the attributes and methods of the dialogue boxes that
+    // show up in this cutscreen
+    // By Alec
     public class Dialogue {
 
+        // This list stores all the dialogue
+        // Each string array inside the list represents a box of text
+        // The first item in the string array is the speaker's name
+        // The second item is the thing that they say
         private ArrayList<String[]> dialogues = new ArrayList<>();
 
         private static final int BOX_WIDTH = 200;
@@ -251,13 +269,16 @@ public class Cutscene1 extends JPanel implements KeyListener, MouseListener, Com
         private int index = 0;
         private int textIndex = 0;
 
+        // Load all the dialogue from a .txt file
         public Dialogue() {
 
             // read all the dialogue in the format of <speaker name>: <speech body>
             try (Scanner scanner = new Scanner(new File("dialogue/car-ride.txt"))) {
 
                 while (scanner.hasNextLine()) {
+
                     String line = scanner.nextLine();
+
                     if (!line.equals("")) {
 
                         String[] parts = line.split(": ", 2);
@@ -269,6 +290,7 @@ public class Cutscene1 extends JPanel implements KeyListener, MouseListener, Com
             }
         }
 
+        // Display the dialogue box and the text
         public void draw(Graphics g) {
 
             g.setColor(new Color(0, 0, 0, BOX_ALPHA));
@@ -288,10 +310,13 @@ public class Cutscene1 extends JPanel implements KeyListener, MouseListener, Com
 
             // wrap text
             for (String word : words) {
+
                 if (lineCount + word.length() <= MAX_CHARS_PER_LINE) {
+
                     displayText += word + " ";
                     lineCount += word.length();
                 } else {
+
                     displayText += "\n" + word + " ";
                     lineCount = word.length();
                 }
@@ -305,7 +330,9 @@ public class Cutscene1 extends JPanel implements KeyListener, MouseListener, Com
                 g.drawString(lines[i], boxX + TEXT_PADDING_LEFT, BOX_Y + TEXT_PADDING_TOP + (i + 2) * LINE_SPACING);
         }
 
+        // Go the the next text box
         public void next() {
+
             if (index < dialogues.size()) {
                 index++;
                 boxX = (boxX == BOX_X_LEFT) ? BOX_X_RIGHT : BOX_X_LEFT;
@@ -315,13 +342,16 @@ public class Cutscene1 extends JPanel implements KeyListener, MouseListener, Com
 
         // one new character is displayed each frame to create a scrolling text effect.
         public void update() {
+
             if (textIndex < dialogues.get(index)[1].length()) {
                 textIndex++;
             }
         }
     }
 
+    // Move to the next dialogue box when mouse is clicked
     public void mouseClicked(MouseEvent e) {
+
         dialogue.next();
         if (dialogue.index == dialogue.dialogues.size()) {
             fadingOut = true;

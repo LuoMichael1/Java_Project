@@ -1,4 +1,6 @@
 // This class handles all the tiles and lighting.
+// Structure of this class is loosely inspired by this video: https://www.youtube.com/watch?v=ugzxCcpoSdE
+// The code in this class is original and significantly different from the video.
 // By Alec
 
 package tile_game;
@@ -46,6 +48,9 @@ public class TileManager {
     private BufferedImage[] darkImages = new BufferedImage[MAX_ALPHA];
     private BufferedImage[] lightImages = new BufferedImage[MAX_ALPHA];
 
+    // Lighting logic: black tiles are drawn over all tiles to create darkness and
+    // yellow tiles are drawn over lighter tiles to create warm lighting
+
     private final int NUM_COLS = 63;
     private final int NUM_ROWS = 43;
     private final int NUM_TILES = 134;
@@ -82,6 +87,7 @@ public class TileManager {
         getLighting(map);
     }
 
+    // Load all the objects
     private void loadObjects() {
 
         Chest.loadChests();
@@ -127,6 +133,7 @@ public class TileManager {
         }
     }
 
+    // Set the aplha values of the tiles surrounding the light source
     private void getSurroundingAlpha(Point start, double variation) {
 
         boolean[][] visited = new boolean[NUM_ROWS][NUM_COLS];
@@ -167,6 +174,7 @@ public class TileManager {
         }
     }
 
+    // Get the neighboring points of a point
     private ArrayList<Point> getNeighbors(Point current) {
 
         ArrayList<Point> neighbors = new ArrayList<>();
@@ -183,6 +191,7 @@ public class TileManager {
         return neighbors;
     }
 
+    // Fill the tile array with real tiles
     private void getTileImage() {
 
         try {
@@ -254,12 +263,14 @@ public class TileManager {
         return darkImage;
     }
 
+    // Draw everything
     public void draw(Graphics2D graphic) {
 
         drawTiles(graphic);
         drawObjects(graphic);
     }
 
+    // Draw the base tiles
     private void drawTiles(Graphics2D graphic) {
 
         // Convert the player's coordinates into the range of visible tiles
@@ -281,6 +292,7 @@ public class TileManager {
         }
     }
 
+    // Draw all the map's objects
     private void drawObjects(Graphics2D g) {
 
         Chest.drawChestStand(g, player);
@@ -301,6 +313,7 @@ public class TileManager {
         }
     }
 
+    // Draw dark and light tiles over all tiles to create lighting effect
     public void drawLighting(Graphics2D graphic) {
 
         // Convert the player's coordinates into the range of visible tiles
@@ -327,18 +340,22 @@ public class TileManager {
     }
 
     public static Set<Integer> getCollisionTiles() {
+
         return collisionTiles;
     }
 
     public static Tile[] getTiles() {
+
         return tile;
     }
 
     public static Hitbox[][] getTileHitboxes() {
+
         return tileHitboxes;
     }
 
     public static int[][] getMap() {
+
         return map;
     }
 }

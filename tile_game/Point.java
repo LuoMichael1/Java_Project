@@ -5,17 +5,20 @@ package tile_game;
 
 class Point {
 
-    int x, y;
-    int f, g, h;
-    Point parent;
+    int x, y; // Represent posision
+    int f, g, h; // Represent distance cost values for pathfinding
+    Point parent; // Store parent node for pathfinding
 
     Point(int x, int y) {
+
         this.x = x;
         this.y = y;
     }
 
+    // Check if location of two points is equal
     @Override
     public boolean equals(Object o) {
+
         if (this == o)
             return true;
 

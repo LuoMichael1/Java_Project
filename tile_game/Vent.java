@@ -58,10 +58,9 @@ public class Vent extends Interactable {
         loadVentConnections();
     }
 
+    // Reads vent connections in format: vent1,direction,vent2
+    // Then connects vent one to vent two via direction
     private static void loadVentConnections() {
-
-        // Reads vent connections in format: vent1,direction,vent2
-        // Then connects vent one to vent two via direction
 
         try {
 
@@ -124,6 +123,10 @@ public class Vent extends Interactable {
         connections.put(direction, vent);
     }
 
+    // Check if the player is standing on a vent
+    // If yes and spacebar is pressed, enter the vent
+    // Move the player to different vents based on the vent connections and user key
+    // inputs
     public static boolean checkCollision(int currentTileX, int currentTileY, PlayerMovable player,
             InteractivePanel gamePanel) {
 

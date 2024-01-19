@@ -87,6 +87,7 @@ public class InteractiveEnemy extends Entity {
         }
     }
 
+    // Load corresponding image based on the type of zombie
     private void loadImages(String type) {
 
         try {
@@ -131,6 +132,7 @@ public class InteractiveEnemy extends Entity {
         loadImages(enemyType);
     }
 
+    // Update only while is the enemy is away from home.
     private void chasingUpdate(PlayerMovable player, InteractivePanel gamePanel) {
 
         // Check if arrived at home
@@ -265,6 +267,7 @@ public class InteractiveEnemy extends Entity {
         return path;
     }
 
+    // Get the neighboring coodinates fo a tile
     private ArrayList<Point> generateNeighbors(Point current) {
 
         ArrayList<Point> neighbors = new ArrayList<>();
@@ -277,11 +280,14 @@ public class InteractiveEnemy extends Entity {
         return neighbors;
     }
 
+    // Calculate distance bewtween two points using Pythagoras
     private int distanceBetween(Point a, Point b) {
+
         return (int) (Math.sqrt(Math.abs(a.x - b.x) * Math.abs(a.x - b.x) + Math.abs(a.y - b.y) * Math.abs(a.y - b.y))
                 * 10);
     }
 
+    // Run each frame to update enemy hitbox/positions/check for collisions
     public void update(PlayerMovable player, InteractivePanel gamePanel) {
 
         hitbox.update(y + InteractivePanel.getTileSize(),
@@ -310,6 +316,7 @@ public class InteractiveEnemy extends Entity {
         }
     }
 
+    // Draw the player sprite
     public void draw(Graphics2D graphic, PlayerMovable player) {
 
         graphic.drawImage(image, x - player.x + player.getDrawX(),
@@ -318,6 +325,7 @@ public class InteractiveEnemy extends Entity {
                 InteractivePanel.getTileSize() * InteractiveEnemy_HEIGHT, null);
     }
 
+    // Check for collisions with player
     public void checkCollision(PlayerMovable player, InteractivePanel gamePanel) {
 
         if (!player.isInVent() && !inBattle) {
@@ -335,10 +343,12 @@ public class InteractiveEnemy extends Entity {
     }
 
     public boolean isInBattle() {
+
         return inBattle;
     }
 
     public void setInBattle(boolean bool) {
+
         inBattle = bool;
     }
 }

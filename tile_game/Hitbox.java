@@ -42,34 +42,42 @@ public class Hitbox {
     }
 
     public int getTop() {
+
         return top;
     }
 
     public int getLeft() {
+
         return left;
     }
 
     public int getWidth() {
+
         return width;
     }
 
     public int getHeight() {
+
         return height;
     }
 
     public int getBot() {
+
         return bot;
     }
 
     public int getRight() {
+
         return right;
     }
 
     public int getCenterX() {
+
         return centerX;
     }
 
     public int getCenterY() {
+
         return centerY;
     }
 }

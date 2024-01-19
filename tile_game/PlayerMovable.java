@@ -1,4 +1,6 @@
 // This class represents the player that moves on the map.
+// Structure of this class is loosely inspired by this video: https://www.youtube.com/watch?v=wT9uNGzMEM4
+// The code in this class is original and significantly different from the video.
 // By Alec
 
 package tile_game;
@@ -54,6 +56,7 @@ public class PlayerMovable extends Entity {
         setDefaultLocation();
     }
 
+    // Reset the player back to the default location
     public void setDefaultLocation() {
 
         x = STARTING_X * InteractivePanel.getTileSize();
@@ -64,6 +67,7 @@ public class PlayerMovable extends Entity {
                 InteractivePanel.getTileSize() / 4 * 3);
     }
 
+    // Load all player sprite images
     private void getPlayerImage() {
 
         try {
@@ -81,6 +85,7 @@ public class PlayerMovable extends Entity {
         }
     }
 
+    // Update position of the player based on key presses
     public void update() {
 
         // Generate new coordinates of player hitbox to be around the size/shape of the
@@ -116,6 +121,7 @@ public class PlayerMovable extends Entity {
         }
     }
 
+    // Draw the player sprice
     public void draw(Graphics2D graphic) {
 
         if (!inVent) {
@@ -151,12 +157,14 @@ public class PlayerMovable extends Entity {
         }
     }
 
+    // Change the player's location
     public void setLocation(int x, int y) {
 
         this.x = x;
         this.y = y;
     }
 
+    // Get real coordinates of place to draw the player
     public int getDrawX() {
 
         return drawX;
@@ -167,6 +175,7 @@ public class PlayerMovable extends Entity {
         return drawY;
     }
 
+    // Get current tile coordinates
     public int getCurrentTileX() {
 
         return Math.max(0, hitbox.getCenterX() / InteractivePanel.getTileSize());
@@ -177,6 +186,7 @@ public class PlayerMovable extends Entity {
         return Math.max(0, hitbox.getCenterY() / InteractivePanel.getTileSize());
     }
 
+    // These methods check what state the player is in and can modify the state.
     public boolean isInVent() {
 
         return inVent;

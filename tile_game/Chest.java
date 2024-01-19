@@ -125,6 +125,7 @@ public class Chest extends Interactable {
         return false;
     }
 
+    // Draw the stand under the chest
     public static void drawChestStand(Graphics2D graphic, PlayerMovable player) {
 
         graphic.drawImage(chestStandImage, chestStandX * InteractivePanel.getTileSize() - player.x + player.getDrawX(),
@@ -133,19 +134,24 @@ public class Chest extends Interactable {
                 InteractivePanel.getTileSize() * HEIGHT + InteractivePanel.getTileSize(), null);
     }
 
+    // Determine whether or not to display the message "You gained 1 card"
     public static boolean isDisplayWindow() {
+
         return displayWindow;
     }
 
     public static void setDisplayWindow(boolean displayWindow) {
+
         Chest.displayWindow = displayWindow;
     }
 
     public static int getGiveCards() {
+
         return giveCards;
     }
 
     public static void setGiveCards(int giveCards) {
+
         Chest.giveCards = giveCards;
     }
 

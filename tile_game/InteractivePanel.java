@@ -1,4 +1,6 @@
 // This class is responsible for running the main game loop of the map.
+// Structure of this class is loosely inspired by this video: https://www.youtube.com/watch?v=VpH33Uw-_0E
+// The code in this class is original and significantly different from the video.
 // By Alec
 
 package tile_game;
@@ -89,8 +91,9 @@ public class InteractivePanel extends JPanel implements KeyListener {
         startTimer();
     }
 
-    // semi-fixed timestep loop
+    // semi-fixed timestep loop (main game loop)
     // reference: https://gafferongames.com/post/fix_your_timestep/
+    // This code is orignal but inspired by this article.
     private void startTimer() {
 
         if (timer == null) {
@@ -135,6 +138,7 @@ public class InteractivePanel extends JPanel implements KeyListener {
         }
     }
 
+    // Stop the game loop
     private void stopTimer() {
 
         if (timer != null) {
@@ -144,11 +148,13 @@ public class InteractivePanel extends JPanel implements KeyListener {
         }
     }
 
+    // Actual number of pixles each takes up.
     public static int getTileSize() {
 
         return TILE_SIZE;
     }
 
+    // Update game state and check for collisions
     private void update() {
 
         player.update();
@@ -161,6 +167,7 @@ public class InteractivePanel extends JPanel implements KeyListener {
         checkCollisions();
     }
 
+    // Check for collision events
     private void checkCollisions() {
 
         int currentTileX = player.getCurrentTileX();
@@ -181,6 +188,7 @@ public class InteractivePanel extends JPanel implements KeyListener {
             event = "inVent";
     }
 
+    // Draw all game elements
     public void paintComponent(Graphics graphic) {
 
         super.paintComponent(graphic);
@@ -196,6 +204,7 @@ public class InteractivePanel extends JPanel implements KeyListener {
         graphic2d.dispose();
     }
 
+    // Draw all enemies
     private void drawEnemies(Graphics2D g) {
 
         for (InteractiveEnemy enemy : InteractiveEnemy.enemies) {
@@ -204,6 +213,7 @@ public class InteractivePanel extends JPanel implements KeyListener {
         }
     }
 
+    // Reset the player's location
     public void resetPlayer() {
 
         player.setDefaultLocation();
@@ -216,6 +226,7 @@ public class InteractivePanel extends JPanel implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
+
         int code = e.getKeyCode();
         pressedKeys.add(code);
         Chest.setDisplayWindow(false);
@@ -223,12 +234,15 @@ public class InteractivePanel extends JPanel implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
+
         int code = e.getKeyCode();
         pressedKeys.remove(code);
         handledKeys.remove(code);
     }
 
+    // Do not register key input if that key as already been pressed
     public boolean isKeyPressed(int keyCode) {
+
         if (pressedKeys.contains(keyCode) && !handledKeys.contains(keyCode)) {
             handledKeys.add(keyCode);
             return true;
@@ -236,7 +250,9 @@ public class InteractivePanel extends JPanel implements KeyListener {
         return false;
     }
 
+    // Check if key is being held down
     public boolean isKeyHeld(int keyCode) {
+
         return pressedKeys.contains(keyCode);
     }
 }

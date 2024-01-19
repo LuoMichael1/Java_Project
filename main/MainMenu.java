@@ -1,6 +1,21 @@
 package main;
 // main menu screen
 
+// parallax effect by Alec
+
+// parallax logic: background images continuously scroll left to create an
+// illusion of movement to the right. foreground images scroll faster than
+// background images to create an illusion of depth.
+
+// draw two instances of each image. once the left
+// image of the two identical images has gone completely offscreen, the
+// x coordinate resets to 0 to create a seamless scrolling effect.
+// (x coord of right img resets to 0 + w = w)
+
+// JLayeredPanel references:
+// https://www.geeksforgeeks.org/java-jlayeredpane/
+// https://docs.oracle.com/javase/tutorial/uiswing/components/layeredpane.html
+
 import javax.swing.*;
 
 import java.awt.*;

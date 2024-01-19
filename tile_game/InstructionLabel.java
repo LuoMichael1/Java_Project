@@ -35,9 +35,8 @@ public class InstructionLabel {
         }
     }
 
+    // Determine what text to display, then display the text
     public static void drawLine(Graphics2D graphic, String event) {
-
-        // Determine what text to display, then display the text
 
         int lineNumber = -1;
 
@@ -55,12 +54,14 @@ public class InstructionLabel {
         displayText(graphic, lines.get(lineNumber));
     }
 
+    // Display a message
     private static void displayText(Graphics2D graphic, String message) {
 
         // Calculate x position of text by subtracting half of the message width from
         // the window's halfway point
         drawX = Main.WIDTH / 2 - (LETTER_SPACING * (message.length() / 2));
 
+        // Set anti-aliasing for a cleaner look
         graphic.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         graphic.setFont(FontFactory.loadFont("QuinqueFive_Font_1_1/QuinqueFive.ttf", 18));
         graphic.setColor(Color.BLACK);

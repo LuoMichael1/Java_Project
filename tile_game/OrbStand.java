@@ -34,6 +34,7 @@ public class OrbStand extends Interactable {
     private boolean hasOrb;
     private boolean objective;
 
+    // Load all the images
     public void loadImages() {
 
         try {
@@ -94,6 +95,7 @@ public class OrbStand extends Interactable {
         this.objective = objective;
     }
 
+    // Check for collisions and whether or not player is pressing the spacebar
     public static boolean checkCollision(int currentTileX, int currentTileY, PlayerMovable player,
             InteractivePanel gamePanel) {
 
@@ -132,11 +134,13 @@ public class OrbStand extends Interactable {
         return false;
     }
 
+    // Check for completion of objectives
     public static boolean checkCompletion() {
 
         return objectivesCompleted == TARGET_OBJECTIVES;
     }
 
+    // Draw all orb stands and orbs
     public void draw(Graphics2D graphic, PlayerMovable player) {
 
         if (hasOrb) {
