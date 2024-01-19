@@ -42,7 +42,7 @@ public class Settings extends JPanel implements ActionListener {
         this.setBackground(new Color(10, 10, 10));
 
         // Placing some empty panels so that the center panel has some space and doesn't
-        // touch the window edges
+        // touch the window edges, could have used the borderfactory
         JPanel paddingW = new JPanel();
         JPanel paddingE = new JPanel();
         JPanel paddingN = new JPanel(new BorderLayout());
@@ -71,6 +71,7 @@ public class Settings extends JPanel implements ActionListener {
         title.setForeground(Color.WHITE);
         paddingN.add(title, BorderLayout.WEST);
 
+        // adds the buttons to the panel
         for (int i = 0; i < num_of_rows - 1; i++) {
             // panelArray[i] = new JPanel(new BorderLayout());
             // panelArray[i].setOpaque(false);
@@ -82,7 +83,7 @@ public class Settings extends JPanel implements ActionListener {
             container.add(panelArray[i]);
         }
     
-        // sends you back to the main menu
+        // close button sends you back to the main menu
         closeButton.setContentAreaFilled(false);
         closeButton.setBorderPainted(false);
         closeButton.setFocusPainted(false);
@@ -121,6 +122,7 @@ public class Settings extends JPanel implements ActionListener {
         }
     }
 
+    // each row in the settings is one of these
     private JPanel createToggle(String text, JButton button) {
         JPanel TogglePanel = new JPanel(new BorderLayout(10, 0));
         JLabel description = new JLabel(text);

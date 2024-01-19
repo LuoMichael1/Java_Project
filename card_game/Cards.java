@@ -26,7 +26,7 @@ public class Cards {
     private int originalX, originalY;
     private int selectionIndex = -1;
     private Scanner filesc;
-    private int cardDataPoints = 30; // the number of different pieces of data stored in a card template
+    private int cardDataPoints = 30; // the number of different abilitys that a card could have
     private String cardDataArray[] = new String[cardDataPoints];
     private String cardDataSplit[];
     private int rarity = 0;
@@ -63,6 +63,7 @@ public class Cards {
             cardImage = new ImageIcon("images/card5.png");
         }
 
+        // create the ID number based on the card generated
         id += (rarity * 100) + rand;
 
         try {
@@ -77,7 +78,7 @@ public class Cards {
             System.out.println("here" + e);
         }
 
-        // assign the data from the file to variables in the class
+        // assign the data from the file to an array in the class
         updateInfo();
 
         filesc.close();
@@ -109,11 +110,11 @@ public class Cards {
             } else if (cardDataSplit[0].equals("energyGive")) {
                 energyGive = Integer.parseInt(cardDataSplit[1]);
             } else if (cardDataSplit[0].equals("heal")) {
-
+                // this has been replaced with healing stacks
             } else if (cardDataSplit[0].equals("healingStacks")) {
                 healingStacks = Integer.parseInt(cardDataSplit[1]);
             } else if (cardDataSplit[0].equals("addMaxHP")) {
-
+                // this has been replaced with healing stacks
             } else if (cardDataSplit[0].equals("addShieldHp")) {
                 shield = Integer.parseInt(cardDataSplit[1]);
             } else if (cardDataSplit[0].equals("vulnerableStacks")) {
@@ -230,7 +231,7 @@ public class Cards {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-        // cardtest.paintIcon(null, g, x - 60, y - 100);
+        
         g.drawImage(cardImage.getImage(), x, y, null);
 
         // Draw the health and attack values

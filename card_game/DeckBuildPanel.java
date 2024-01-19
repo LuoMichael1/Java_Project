@@ -82,6 +82,7 @@ public class DeckBuildPanel extends JPanel
             g.drawString("" + (i + 1), 165 + i * 130, 295);
         }
 
+        // draw cards
         for (Cards card : handCards) {
             if (card != null)
                 card.myDraw(g);
@@ -247,21 +248,15 @@ public class DeckBuildPanel extends JPanel
                                     player.deck.remove(selected);
                                 selected = null;
                             } else if (handCards[i] == selected) {
-                                // System.out.println("WOW");
                                 // nothing happens if someone drops a card in the spot it is already in
 
                             } else {
-                                // System.out.println("WOWERER");
                                 // if the selected card is in the hand already
                                 if (selected.getSelectionIndex() != -1) {
 
                                     player.deck.add(handCards[i]);
 
                                     int temp = selected.getSelectionIndex();
-                                    // System.out.println("temp: " + temp);
-                                    // selected.setSelectionIndex(i);
-                                    // handCards[i] = selected;
-                                    // handCards[i].setSelectionIndex(i);
 
                                     handCards[temp] = player.deck.get(player.deck.size() - 1);
                                     handCards[temp].setSelectionIndex(temp);
@@ -304,13 +299,10 @@ public class DeckBuildPanel extends JPanel
                             selected.setSelectionIndex(i);
 
                             handCards[i] = selected;
-                            // cardsSelected++;
                         }
 
-                        // cardsSelected++;
                         // remove the card from the deck
                         player.deck.remove(selected);
-                        // removeGaps();
                         putInBox = true;
                     }
                 }
@@ -333,27 +325,6 @@ public class DeckBuildPanel extends JPanel
             selected = null;
             repaint();
         }
-
-        // debugging code
-        /*
-         * System.out.println("\nselected-------------------");
-         * for (Cards card : handCards) {
-         * 
-         * if (card != null)
-         * System.out.println(card.getID());
-         * else
-         * System.out.println("null");
-         * }
-         * System.out.println("deck-------------------");
-         * for (Cards card : player.deck) {
-         * 
-         * if (card != null)
-         * System.out.println(card.getID());
-         * else
-         * System.out.println("null");
-         * }
-         * // System.out.println("cardsSelected: " + cardsSelected);
-         */
     }
 
     // remove gaps between cards in the deck as cards are removed. Tries to center
@@ -380,7 +351,6 @@ public class DeckBuildPanel extends JPanel
         handCards[card.getSelectionIndex()] = null;
 
         card.setSelectionIndex(-1);
-        // cardsSelected--;
 
         // add card back to deck
         if (index == player.deck.size()) {
@@ -390,7 +360,6 @@ public class DeckBuildPanel extends JPanel
             System.out.println("Placing card at: " + index);
             player.deck.add(index, card);
         }
-        // removeGaps(); <-- moved this to the end of the mouse released method
     }
 
     public void mouseDragged(MouseEvent e) {
@@ -434,12 +403,10 @@ public class DeckBuildPanel extends JPanel
         }
         // if number of columns is greater than 2
         else {
-            // System.out.println("I DID A THINGY");
+            // widthOfColumns would be more acurately called width of all center columns, each center column is the width of a card, just offset by half a card
             widthOfColumns = (numberOfColumns - 2) * 120;
-            // System.out.println(widthOfColumns);
-
             int widthOfSideColumns = (Main.WIDTH - widthOfColumns) / 2;
-            // System.out.println(widthOfSideColumns);
+
             if (x < widthOfSideColumns) {
                 index = 0;
             } else if (x < widthOfColumns + widthOfSideColumns) {
@@ -447,18 +414,14 @@ public class DeckBuildPanel extends JPanel
                 for (int i = 0; i < numberOfColumns - 2; i++) {
                     if (x > widthOfSideColumns + (i) * 120) {
                         index = i + 1;
-                        // System.out.println("index:" + index);
-                        // System.out.println("I Also DID A THINGY");
 
                     } else
                         break;
-
                 }
             } else {
                 index = player.deck.size();
             }
         }
-        // System.out.println("returned index" + index);
         return index;
     }
 

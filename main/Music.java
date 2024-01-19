@@ -1,7 +1,5 @@
 package main;
-// Use to play music
-
-// MP3s will probably not work
+// Use to play music and sound effects
 
 // used this website for help with the music
 // https://www.geeksforgeeks.org/play-audio-file-using-java/

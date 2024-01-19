@@ -37,6 +37,7 @@ public class Tutorial extends JPanel implements ActionListener {
             System.out.println(e);
         }
 
+        // each line of text is added to another row in the grid layout
         textPanel = new JPanel(new GridLayout(text.size(),1));
         textPanel.setOpaque(false);
         textPanel.setBorder(BorderFactory.createEmptyBorder(40, 40, 40, 40));
