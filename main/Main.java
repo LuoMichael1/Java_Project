@@ -19,7 +19,6 @@ public class Main {
     static JPanel p = new JPanel(new CardLayout());
 
     public static void main(String[] args) {
-        // JPanel p;
         ImageIcon test = new ImageIcon("images/favicon.png");
 
         JFrame f = new JFrame("BEFALL");
@@ -47,11 +46,9 @@ public class Main {
         f.setSize(WIDTH, HEIGHT);
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setResizable(false);
-        // f.setFocusable(false);
 
         cardLayout = (CardLayout) p.getLayout();
         showCard("Menu");
-
     }
 
     static public void nextCard() {

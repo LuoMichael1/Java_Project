@@ -1,5 +1,7 @@
 package main;
 
+// the button that brings up the settings which is shown on the title and menu
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;

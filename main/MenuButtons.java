@@ -31,12 +31,14 @@ public class MenuButtons extends JPanel implements ActionListener {
         this.add(back);
     }
 
+    // moves the buttons into view
     public void moveIn(double time) {
         start.setBounds(120, (int)(Main.HEIGHT-easing(time,Main.HEIGHT-150)), 400, 100);
         tutorial.setBounds(120, (int)(Main.HEIGHT-easing(time,Main.HEIGHT-270)), 400, 100);
         exit.setBounds(120, (int)(Main.HEIGHT-easing(time,Main.HEIGHT-390)), 400, 100);
         back.setBounds(120, (int)(Main.HEIGHT-easing(time,Main.HEIGHT-510)), 400, 100);
     }
+    // moves the buttons back out of view
     public void moveOut(double time) {
         start.setBounds(120, (int)(150-easing(time,350)), 400, 100);
         tutorial.setBounds(120, (int)(270-easing(time,470)), 400, 100);
@@ -74,6 +76,7 @@ public class MenuButtons extends JPanel implements ActionListener {
         }
     }
 
+    // method to set up and style the buttons
     private JButton createButton(String text, int x, int y, int width, int height) {
         JButton button = new JButton(text);
         

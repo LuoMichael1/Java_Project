@@ -53,10 +53,11 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener, Comp
         message = new JLabel("PRESS ANY BUTTON TO START");
         message.setFont(FontFactory.loadFont("fonts/lexend/static/Lexend-Regular.ttf", 12));
         message.setBounds(Main.WIDTH / 2 - (100), Main.HEIGHT - 70, 200, 10);
+        
         // message
         this.add(message);
 
-        // create planets -----------------------------------
+        // --------------------- create planets -----------------------------------
         JLabel[] planets = new JLabel[3];
         int[] planetsX = new int[3];
         int[] planetsY = new int[3];
@@ -71,11 +72,11 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener, Comp
             planets[i] = createBackgroundLabel("menu/parallax_planets_00" + rand + ".png", (int) (Main.WIDTH * size),
                     (int) (Main.HEIGHT * size));
 
+            // places the planets on the screen at a random position
             planetsX[i] = (int) (Math.random() * Main.WIDTH) + 1;
             planetsY[i] = (int) (Math.random() * Main.HEIGHT) + 1;
             layeredPane.add(planets[i], JLayeredPane.DEFAULT_LAYER);
             setLayerBounds(layeredPane, planets[i], planetsX[i], planetsY[i], JLayeredPane.DEFAULT_LAYER);
-
         }
 
         JLabel background1_1_stars = createBackgroundLabel("menu/parallax-space-stars.png", Main.WIDTH, Main.HEIGHT);
@@ -140,13 +141,13 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener, Comp
                 else
                     rgbvalue -= 2;
 
-                // hides the message
+                // hides the message when switched to the menu
                 if (isTitle == false && alpha > 0) {
                     alpha -= 10;
                     if (alpha < 0)
                         alpha = 0;
                 }
-
+                // unhides the message when switching back to the title
                 else if (isTitle == true && alpha < 255) {
                     alpha += 10;
                     if (alpha < 255)

@@ -75,6 +75,7 @@ public class Battle extends JPanel implements ActionListener {
 
         setLayout(new BorderLayout());
 
+
         JPanel topUIWrapper = new JPanel(new BorderLayout());
         topUIWrapper.setBackground(new Color(40, 40, 40, 200));
         this.add(topUIWrapper, BorderLayout.NORTH);
@@ -88,13 +89,11 @@ public class Battle extends JPanel implements ActionListener {
         topUIWrapper.add(instructionLabel, BorderLayout.WEST);
 
         doubleSpeed = new JButton(">>");
-        // doubleSpeed.setHorizontalAlignment(SwingConstants.RIGHT);
         doubleSpeed.addActionListener(this);
         topUIWrapper.add(doubleSpeed, BorderLayout.EAST);
 
         // get player and cards
         this.player = player;
-        // this.playerSelectedCards = playerSelectedCards;
 
         // create player array
         playersArray[0] = player;
@@ -123,6 +122,7 @@ public class Battle extends JPanel implements ActionListener {
             battler.drawStatus(g);
         }
 
+        // draws the damage messages
         g.setColor(Color.red);
         g.setFont(FontFactory.loadFont("fonts/lexend/static/Lexend-Regular.ttf", 30));
         for (int i = 0; i < showDamage.size() - 1; i = i + 2) {
@@ -141,6 +141,7 @@ public class Battle extends JPanel implements ActionListener {
                 showDamage.remove(i);
             }
         }
+        // draws the healing messages
         g.setColor(Color.green);
         g.setFont(FontFactory.loadFont("fonts/lexend/static/Lexend-Regular.ttf", 30));
         for (int i = 0; i < showHealing.size() - 1; i = i + 2) {
@@ -172,7 +173,6 @@ public class Battle extends JPanel implements ActionListener {
 
                 player.hand[i].myDraw(g);
             }
-            // drawCardInfo(g, player.hand[i]);
         }
 
         // display enemy's cards
@@ -181,15 +181,12 @@ public class Battle extends JPanel implements ActionListener {
                 enemy.hand[i].setX(1140 + i * -62);
                 enemy.hand[i].setY(CARDY);
 
-                // System.out.println("round: " + round);
-
                 // moves the currently acting card upwards 20px to make it more visible
                 if (turn == 1 && i == ((round - 1) / 2) % 8)
                     enemy.hand[i].setY(cardUpY);
 
                 enemy.hand[i].myDraw(g);
             }
-            // drawCardInfo(g, enemy.hand[i]);
         }
 
         // display the number of rounds left
@@ -199,12 +196,13 @@ public class Battle extends JPanel implements ActionListener {
     }
 
     private void performAttack(Cards attackerCard, Battler defender) {
-        // gets ambrosia from card
+        // gets energy from card
         playersArray[turn].setEnergy(attackerCard.getEnergy());
 
-        // checks if the character has enough ambrosia to use this card
+        // checks if the character has enough energy to use this card
         if (attackerCard.getEnergyCost() <= playersArray[turn].getEnergy()) {
-
+            
+            // applies the acting card's effects
             playersArray[turn].setEnergy(-1 * (attackerCard.getEnergyCost()));
             playersArray[turn].setShield(attackerCard.getShield() * 10);
             playersArray[altTurn].setVulnerableStacks(attackerCard.getVulnerableStacks());
@@ -268,13 +266,15 @@ public class Battle extends JPanel implements ActionListener {
 
                 // first frame of turn
                 if (frameCounter == 1) {
+                    // if round is even, it is the player's turn, if round is odd, its the enemy's
+                    // turn. turn is 0 or 1 to make using an array easier
                     altTurn = (round + 1) % 2;
                     if (round % 2 == 0) {
                         turn = 0;
-                        // messageLabel.setText("Player attacks");
+                        // Player turn
                     } else {
                         turn = 1;
-                        // messageLabel.setText("Enemy attacks");
+                        // Enemy turn
                     }
                     round++;
 
@@ -309,20 +309,18 @@ public class Battle extends JPanel implements ActionListener {
                     // moves the acting card back down
                     cardUpY = cardUpY + (150 / framesForCardUp);
 
-                // frame 60
+                // frame 60, this is the last tick in the turn
                 if (frameCounter == framesPerTurn) {
 
                     frameCounter = 0;
                     cardUpY = CARDY;
-                    // if round is even, it is the player's turn, if round is odd, its the enemy's
-                    // turn. turn is 0 or 1 to make using an array easier
 
                     damage = 0;
                     showDamage.clear();
                     showHealing.clear();
 
+                    // checks if someone won
                     if (playersArray[altTurn].getHealth() <= 0 || displayedRound == 0) {
-                        // System.out.println(playersArray[altTurn] + "loses!");
                         isWon = true;
 
                         // resets the location of the cards so they appear in the right spot in the next
@@ -356,7 +354,7 @@ public class Battle extends JPanel implements ActionListener {
                             }
                         }
 
-                        // centers the cards in deck ---------------------
+                        // ------------- Centers the cards in deck ---------------------
                         // gets the center of the screen
                         int deckX = (Main.WIDTH) / 2;
 
@@ -371,17 +369,14 @@ public class Battle extends JPanel implements ActionListener {
                             deckX += 120;
                         }
 
-                        // reset the enemy ----------------------------
+                        // increases the max health in the next battle
                         if (DeckBuildPanel.difficulty == 5) {
                             DeckBuildPanel.difficulty = 6;
                         } else if (DeckBuildPanel.difficulty == 6) {
                             DeckBuildPanel.difficulty = 8;
                         }
+
                         // resets health
-                        // for (Battler battler : playersArray) {
-                        // battler.setMaxHealth(DeckBuildPanel.difficulty*100);
-                        // battler.setHealth(battler.getMaxHealth());
-                        // }
                         player.setMaxHealth(DeckBuildPanel.difficulty * 100);
                         player.setHealth(player.getMaxHealth());
                         player.clearStatus();
@@ -435,6 +430,7 @@ public class Battle extends JPanel implements ActionListener {
         }
     }
 
+
     private void reduceStacks(Battler target) {
         if (target.getVulnerableStacks() > 0) {
             target.setVulnerableStacks(-1);
@@ -445,11 +441,12 @@ public class Battle extends JPanel implements ActionListener {
     }
 
     private void performHealing() {
-
+        // addes health to the player
         for (int i = 0; i < playersArray[turn].getHealingStacks(); i++) {
             playersArray[turn].setHealth(playersArray[turn].getHealth() + 10);
             playersArray[turn].setMaxHealth(playersArray[turn].getMaxHealth() + 10);
 
+            // addes the amount healed to any arraylist so that they can be displayed
             showHealing.add(10);
             showHealing.add(100 + (i * 10));
         }
